@@ -27,13 +27,17 @@ var carriers []byte
 //go:embed constant/tax.json
 var tax []byte
 
+//go:embed constant/country_timezone.json
+var country_timezone []byte
+
 var Countries []mResource.Country
 var Timezones []mResource.Timezone
 var Currencies []mResource.Currency
 var Languages []string
 var Categories []mResource.Category
 var Carriers []mResource.Carrier
-var Tax []mResource.Tax
+var Taxs []mResource.Tax
+var CountryTimezones []mResource.CountryTimeZone
 
 func InitResource() error {
 	// 分类
@@ -61,8 +65,13 @@ func InitResource() error {
 		return err
 	}
 	// 税率
-	if err := json.Unmarshal(tax, &Tax); err != nil {
+	if err := json.Unmarshal(tax, &Taxs); err != nil {
 		return err
 	}
+	// 国家时区
+	if err := json.Unmarshal(country_timezone, &CountryTimezones); err != nil {
+		return err
+	}
+
 	return nil
 }

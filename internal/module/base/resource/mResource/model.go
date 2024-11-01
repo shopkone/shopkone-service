@@ -36,3 +36,9 @@ type Tax struct {
 	CountryCode string  `json:"country_code"`
 	Tax         float64 `json:"tax"`
 }
+
+/*时区-国家*/
+type CountryTimeZone struct {
+	CountryCode string `json:"country_code"`
+	Timezone    string `json:"timezone"`
+}

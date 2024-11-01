@@ -4,7 +4,6 @@ import (
 	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/module/base/resource"
 	"shopkone-service/internal/module/base/resource/mResource"
-	"strings"
 )
 
 type ITimezone interface {
@@ -26,19 +25,20 @@ func (s *sTimezone) List() []mResource.Timezone {
 }
 
 func (s *sTimezone) TimezoneByCountry(c string) (string, error) {
-	country, err := NewCountry().CountryByCode(c)
-	if err != nil {
-		return "Etc/GMT+12", err
-	}
-	if country.Timezones == nil || len(country.Timezones) == 0 {
+	data := slice.Filter(resource.CountryTimezones, func(index int, item mResource.CountryTimeZone) bool {
+		return item.CountryCode == c
+	})
+	if len(data) == 0 {
 		return "Etc/GMT+12", nil
 	}
-	countryTimezone := country.Timezones[0]
-	timezone, ok := slice.FindBy(s.List(), func(index int, item mResource.Timezone) bool {
-		return strings.Contains(item.Description, countryTimezone)
+	find, ok := slice.FindBy(data, func(index int, item mResource.CountryTimeZone) bool {
+		_, o := slice.FindBy(resource.Timezones, func(index int, i mResource.Timezone) bool {
+			return item.Timezone == i.OlsonName
+		})
+		return o
 	})
 	if !ok {
 		return "Etc/GMT+12", nil
 	}
-	return timezone.OlsonName, nil
+	return find.Timezone, nil
 }

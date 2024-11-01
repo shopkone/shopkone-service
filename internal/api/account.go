@@ -59,7 +59,7 @@ func (s *aAccountApi) Register(ctx g.Ctx, req *vo.RegisterReq) (res vo.RegisterR
 		createTrialIn := iShop.CreateTrialIn{
 			Email:   req.Email,
 			UserId:  user.ID,
-			Country: "CN",
+			Country: "US",
 			Zone:    "",
 		}
 		if _, err = sShop.NewShop(tx).CreateTrial(createTrialIn); err != nil {

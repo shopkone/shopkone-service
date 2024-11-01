@@ -1,0 +1,3 @@
+# shopkone-service/internal/module/base/resource/sResource
+internal\module\base\resource\sResource\timezone.go:34:2: find declared and not used
+internal\module\base\resource\sResource\timezone.go:43:14: data.Timezone undefined (type []mResource.CountryTimeZone has no field or method Timezone)

@@ -50,6 +50,5 @@ type Country struct {
 	Zones             []CountryZone     `json:"zones"`             // 省份
 	Flag              CountryFlag       `json:"flag"`              // 国旗
 	Currencies        []string          `json:"currencies"`        // 货币
-	Timezones         []string          `json:"timezones"`         // 时区
 	PostalCodeConfig  PostalCodeConfig  `json:"postalCode"`        // 邮编配置
 }

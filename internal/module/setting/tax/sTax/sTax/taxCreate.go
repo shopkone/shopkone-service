@@ -31,7 +31,7 @@ func (s *sTax) TaxCreate(countryCodes []string) (err error) {
 	}
 
 	taxs = slice.Map(countryCodes, func(index int, code string) mTax.Tax {
-		find, ok := slice.FindBy(resource.Tax, func(index int, item mResource.Tax) bool {
+		find, ok := slice.FindBy(resource.Taxs, func(index int, item mResource.Tax) bool {
 			return item.CountryCode == code
 		})
 		i := mTax.Tax{}
