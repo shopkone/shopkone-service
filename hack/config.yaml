@@ -1,0 +1,41 @@
+admin:
+  address: ":8080"
+
+logger:
+  level : "all"
+  stdout: true
+
+# 数据库配置
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: 123456
+  dbname: shopkone
+  timezone: Local
+
+# shopkone 邮箱配置
+email:
+  host: smtp.office365.com
+  port: 587
+  user: shopkone@hotmail.com
+  pass: sunboy94@
+  from: shopkone@hotmail.com
+  fromName: Shopkone
+
+# Redis 配置
+redis:
+  host: 127.0.0.1
+  port : 6379
+
+# mongodb 配置
+mongodb:
+  host: 127.0.0.1
+  port: 27017
+  dbname: shopkone
+
+# 阿里云 sts 配置
+aliyun:
+  accessKeyId: LTAI5tDh3gwQBng8JKaqDusk
+  accessKeySecret: WjJvRaeOv3DEJwKheMCNwM0Fm4zcTo
+  endPoint: sts.us-west-1.aliyuncs.com
