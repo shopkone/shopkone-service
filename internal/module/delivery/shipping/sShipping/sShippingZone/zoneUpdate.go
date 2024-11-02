@@ -41,7 +41,9 @@ func (s *sShippingZone) ZoneUpdate(zones []vo.BaseShippingZone, shippingId uint)
 		return ok
 	})
 	if len(baseInsert) > 0 {
-		return s.ZoneCreate(baseInsert, shippingId)
+		if err = s.ZoneCreate(baseInsert, shippingId); err != nil {
+			return err
+		}
 	}
 
 	// 更新区域费用
