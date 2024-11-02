@@ -16,18 +16,33 @@ type TaxListRes struct {
 }
 
 type BaseTax struct {
-	ID          uint           `json:"id"`
-	TaxRate     float64        `json:"tax_rate" v:"required" dc:"税率"`
-	HasNote     bool           `json:"has_note"`
-	Note        string         `json:"note"`
-	Status      mTax.TaxStatus `json:"status"`
-	CountryCode string         `json:"country_code"`
+	ID          uint              `json:"id"`
+	TaxRate     float64           `json:"tax_rate" v:"required" dc:"税率"`
+	HasNote     bool              `json:"has_note"`
+	Note        string            `json:"note"`
+	Status      mTax.TaxStatus    `json:"status"`
+	CountryCode string            `json:"country_code"`
+	Zones       []BaseTaxZone     `json:"zones"`
+	Customers   []BaseCustomerTax `json:"customers"`
 }
 type BaseTaxZone struct {
 	ID       uint   `json:"id"`
-	Name     string `json:"name"`
-	ZoneCode string `json:"zone_code"`
+	Name     string `json:"name" v:"required:true"`
+	ZoneCode string `json:"zone_code" v:"required:true"`
 	TaxRate  float64
+}
+type BaseCustomerTax struct {
+	ID           uint                  `json:"id"`
+	CollectionID uint                  `json:"collection_id"`
+	Zones        []BaseCustomerTaxZone `json:"zones"`
+	Type         mTax.CustomerTaxType  `json:"type"`
+}
+
+type BaseCustomerTaxZone struct {
+	ID       uint    `json:"id"`
+	Name     string  `json:"name" v:"required:true"`
+	AreaCode string  `json:"area_code" v:"required:true"`
+	TaxRate  float64 `json:"tax_rate"`
 }
 
 type TaxInfoReq struct {
@@ -36,5 +51,4 @@ type TaxInfoReq struct {
 }
 type TaxInfoRes struct {
 	BaseTax
-	Zones []BaseTaxZone `json:"zones"`
 }

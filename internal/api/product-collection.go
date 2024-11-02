@@ -51,6 +51,8 @@ func (a *aProductCollection) Update(ctx g.Ctx, req *vo.UpdateProductCollectionRe
 }
 
 func (a *aProductCollection) CollectionOptions(ctx g.Ctx, req *vo.CollectionOptionsReq) (res []vo.CollectionOptionsRes, err error) {
-	res, err = sCollection.NewCollection(sOrm.NewDb(), 0).CollectionOptions()
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	res, err = sCollection.NewCollection(sOrm.NewDb(), shop.ID).CollectionOptions()
 	return res, err
 }

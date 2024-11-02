@@ -9,6 +9,13 @@ const (
 	Inactive TaxStatus = 2
 )
 
+type CustomerTaxType uint8
+
+const (
+	CustomerTaxTypeCollection CustomerTaxType = 1 // 自定义-系列
+	CustomerTaxTypeDelivery   CustomerTaxType = 2 // 自定义-配送
+)
+
 type Tax struct {
 	mOrm.Model
 	CountryCode string    `gorm:"index;not null"`
@@ -24,4 +31,19 @@ type TaxZone struct {
 	Name     string  `gorm:"size:200"`
 	TaxRate  float64 `gorm:"default:0"`
 	TaxId    uint    `gorm:"index;not null"`
+}
+
+type CustomerTax struct {
+	mOrm.Model
+	Type         CustomerTaxType
+	TaxID        uint `gorm:"index;not null"`
+	CollectionID uint `gorm:"index"`
+}
+
+type CustomerTaxZone struct {
+	mOrm.Model
+	AreaCode      string  `gorm:"index;not null"`
+	Name          string  `gorm:"size:200"`
+	TaxRate       float64 `gorm:"default:0"`
+	CustomerTaxID uint    `gorm:"index;not null"`
 }
