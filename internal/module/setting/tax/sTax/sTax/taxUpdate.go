@@ -3,6 +3,7 @@ package sTax
 import (
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/tax/mTax"
+	"shopkone-service/internal/module/setting/tax/sTax/sCustomerTax"
 )
 
 func (s *sTax) TaxUpdate(in vo.TaxUpdateReq) (err error) {
@@ -22,5 +23,6 @@ func (s *sTax) TaxUpdate(in vo.TaxUpdateReq) (err error) {
 		return err
 	}
 
-	return err
+	// 更新自定义税率
+	return sCustomerTax.NewCustomerTax(s.orm, s.shopId).CustomerTaxUpdate(in.Customers, in.ID)
 }

@@ -90,4 +90,6 @@ var migrate = Migrate{
 	// 税率
 	mTax.Tax{},
 	mTax.TaxZone{},
+	mTax.CustomerTax{},
+	mTax.CustomerTaxZone{},
 }

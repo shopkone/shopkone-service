@@ -1,9 +1,12 @@
 package api
 
 import (
+	"github.com/duke-git/lancet/v2/slice"
 	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
+	"shopkone-service/internal/module/product/collection/sCollection"
+	"shopkone-service/internal/module/setting/tax/mTax"
 	"shopkone-service/internal/module/setting/tax/sTax/sTax"
 	ctx2 "shopkone-service/utility/ctx"
 )
@@ -39,5 +42,17 @@ func (a *aTax) TaxUpdate(ctx g.Ctx, req *vo.TaxUpdateReq) (res vo.TaxUpdateRes, 
 		return
 	}
 	shop := auth.Shop
-	return res, sTax.NewTax(sOrm.NewDb(), shop.ID).TaxUpdate(*req)
+	orm := sOrm.NewDb()
+	// 校验collectionIds是否都存在
+	collectionIds := slice.Map(req.Customers, func(_ int, item vo.BaseCustomerTax) uint {
+		if item.Type == mTax.CustomerTaxTypeCollection {
+			return item.CollectionID
+		}
+		return 0
+	})
+	if err = sCollection.NewCollection(orm, shop.ID).CheckAllExist(collectionIds); err != nil {
+		return res, err
+	}
+	// 更新
+	return res, sTax.NewTax(orm, shop.ID).TaxUpdate(*req)
 }
