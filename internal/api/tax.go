@@ -32,3 +32,12 @@ func (a *aTax) Info(ctx g.Ctx, req *vo.TaxInfoReq) (res vo.TaxInfoRes, err error
 	shop := auth.Shop
 	return sTax.NewTax(sOrm.NewDb(), shop.ID).TaxInfo(req.Id)
 }
+
+func (a *aTax) TaxUpdate(ctx g.Ctx, req *vo.TaxUpdateReq) (res vo.TaxUpdateRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return
+	}
+	shop := auth.Shop
+	return res, sTax.NewTax(sOrm.NewDb(), shop.ID).TaxUpdate(*req)
+}

@@ -27,3 +27,6 @@ func productError(code int, message string) error {
 func shippingError(code int, message string) error {
 	return err(6000+code, message)
 }
+func taxError(code int, message string) error {
+	return err(7000+code, message)
+}

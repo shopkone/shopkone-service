@@ -20,5 +20,9 @@ func (s *sTax) TaxInfo(id uint) (res vo.TaxInfoRes, err error) {
 	res.Note = data.Note
 	res.Status = data.Status
 
+	if res.Zones, err = s.TaxZonesByTaxId(res.ID); err != nil {
+		return vo.TaxInfoRes{}, err
+	}
+
 	return res, err
 }

@@ -26,10 +26,10 @@ type BaseTax struct {
 	Customers   []BaseCustomerTax `json:"customers"`
 }
 type BaseTaxZone struct {
-	ID       uint   `json:"id"`
-	Name     string `json:"name" v:"required:true"`
-	ZoneCode string `json:"zone_code" v:"required:true"`
-	TaxRate  float64
+	ID       uint    `json:"id"`
+	Name     string  `json:"name" v:"required:true"`
+	ZoneCode string  `json:"zone_code" v:"required:true"`
+	TaxRate  float64 `json:"tax_rate"`
 }
 type BaseCustomerTax struct {
 	ID           uint                  `json:"id"`
@@ -51,4 +51,12 @@ type TaxInfoReq struct {
 }
 type TaxInfoRes struct {
 	BaseTax
+}
+
+type TaxUpdateReq struct {
+	g.Meta `path:"/tax/update" method:"post" tags:"Tax" summary:"更新税率"`
+	BaseTax
+	ID uint `json:"id" v:"required" dc:"ID"`
+}
+type TaxUpdateRes struct {
 }
