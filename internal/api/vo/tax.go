@@ -59,4 +59,5 @@ type TaxUpdateReq struct {
 	ID uint `json:"id" v:"required" dc:"ID"`
 }
 type TaxUpdateRes struct {
+	TaxInfoRes
 }

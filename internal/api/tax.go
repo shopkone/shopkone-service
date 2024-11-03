@@ -54,5 +54,14 @@ func (a *aTax) TaxUpdate(ctx g.Ctx, req *vo.TaxUpdateReq) (res vo.TaxUpdateRes, 
 		return res, err
 	}
 	// 更新
-	return res, sTax.NewTax(orm, shop.ID).TaxUpdate(*req)
+	s := sTax.NewTax(orm, shop.ID)
+	if err = s.TaxUpdate(*req); err != nil {
+		return vo.TaxUpdateRes{}, err
+	}
+	// 校验错误
+	res.TaxInfoRes, err = s.CheckError(req.ID)
+	if err != nil {
+		return vo.TaxUpdateRes{}, err
+	}
+	return res, err
 }
