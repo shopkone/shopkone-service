@@ -40,11 +40,17 @@ func (s *sCustomerTax) CustomerTaxUpdate(in []vo.BaseCustomerTax, taxId uint) (e
 	}
 
 	// 差异
-	insert, _, _, err := handle.DiffUpdate(newCustomerTax, oldCustomerTax)
+	insert, update, remove, err := handle.DiffUpdate(newCustomerTax, oldCustomerTax)
 	if err != nil {
 		return err
 	}
 	if err = s.CustomerTaxCreate(insert, in); err != nil {
+		return err
+	}
+	if err = s.CustomerTaxRemove(remove); err != nil {
+		return err
+	}
+	if err = s.CustomerTaxUpdateBatch(update, oldCustomerTax, in); err != nil {
 		return err
 	}
 

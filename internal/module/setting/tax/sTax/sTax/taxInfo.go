@@ -3,6 +3,7 @@ package sTax
 import (
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/tax/mTax"
+	"shopkone-service/internal/module/setting/tax/sTax/sCustomerTax"
 )
 
 func (s *sTax) TaxInfo(id uint) (res vo.TaxInfoRes, err error) {
@@ -21,6 +22,10 @@ func (s *sTax) TaxInfo(id uint) (res vo.TaxInfoRes, err error) {
 	res.Status = data.Status
 
 	if res.Zones, err = s.TaxZonesByTaxId(res.ID); err != nil {
+		return vo.TaxInfoRes{}, err
+	}
+
+	if res.Customers, err = sCustomerTax.NewCustomerTax(s.orm, s.shopId).CustomerTaxListByTaxId(res.ID); err != nil {
 		return vo.TaxInfoRes{}, err
 	}
 
