@@ -75,3 +75,12 @@ type TaxRemoveReq struct {
 }
 type TaxRemoveRes struct {
 }
+
+type TaxActiveReq struct {
+	g.Meta `path:"/tax/active" method:"post" tags:"Tax" summary:"启用税率"`
+	ID     uint `json:"id" v:"required" dc:"ID"`
+	Active bool `json:"active"`
+}
+type TaxActiveRes struct {
+	List []TaxListRes `json:"list"`
+}

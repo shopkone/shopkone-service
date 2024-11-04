@@ -86,7 +86,25 @@ func (a *aTax) TaxRemove(ctx g.Ctx, req *vo.TaxRemoveReq) (res vo.TaxRemoveRes, 
 	}
 	shop := auth.Shop
 	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
-		return sTax.NewTax(tx, shop.ID).TaxRemoveByIds(req.Ids)
+		s := sTax.NewTax(tx, shop.ID)
+		return s.TaxRemoveByIds(req.Ids)
+	})
+	return res, err
+}
+
+func (a *aTax) TaxActive(ctx g.Ctx, req *vo.TaxActiveReq) (res vo.TaxActiveRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return
+	}
+	shop := auth.Shop
+	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+		s := sTax.NewTax(tx, shop.ID)
+		if err = s.TaxActive(*req); err != nil {
+			return err
+		}
+		res.List, err = s.TaxList()
+		return err
 	})
 	return res, err
 }

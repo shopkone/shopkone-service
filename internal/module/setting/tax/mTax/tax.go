@@ -5,8 +5,8 @@ import "shopkone-service/internal/module/base/orm/mOrm"
 type TaxStatus uint8
 
 const (
-	Active   TaxStatus = 1
-	Inactive TaxStatus = 2
+	TaxStatusActive   TaxStatus = 1
+	TaxStatusInactive TaxStatus = 2
 )
 
 type CustomerTaxType uint8

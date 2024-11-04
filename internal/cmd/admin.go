@@ -138,5 +138,6 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(taxApi.TaxUpdate)
 		group.Bind(taxApi.TaxCreate)
 		group.Bind(taxApi.TaxRemove)
+		group.Bind(taxApi.TaxActive)
 	})
 }
