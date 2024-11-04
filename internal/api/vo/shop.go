@@ -71,3 +71,18 @@ type ShopUpdateGeneralReq struct {
 
 type ShopUpdateGeneralRes struct {
 }
+
+type ShopTaxSwitchShippingReq struct {
+	g.Meta `path:"/shop/tax/shipping/switch" method:"post" summary:"Shop Tax Switch" tags:"Shop"`
+}
+type ShopTaxSwitchShippingRes struct {
+	TaxShipping bool `json:"tax_shipping"` // 对运费收的税包含在运费中
+}
+
+// 更新运费税
+type ShopTaxSwitchShippingUpdateReq struct {
+	g.Meta      `path:"/shop/tax/shipping/update" method:"post" summary:"Update Shop Tax Switch" tags:"Shop"`
+	TaxShipping bool `json:"tax_shipping"` // 对运费收的税包含在运费中
+}
+type ShopTaxSwitchShippingUpdateRes struct {
+}

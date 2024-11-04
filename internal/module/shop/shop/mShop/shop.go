@@ -58,4 +58,5 @@ type Shop struct {
 	PasswordMessage      string             `gorm:"size:500"`                   // 密码保护提示
 	Uuid                 string             `gorm:"index"`                      // UUID
 	Country              string             `gorm:"size:50"`                    // 国家
+	TaxShipping          bool               `gorm:"default:false"`              // 对运费收的税包含在运费中
 }

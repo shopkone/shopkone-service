@@ -32,9 +32,11 @@ func registerAdminRoutes(s *ghttp.Server) {
 	s.Group("/api", func(group *ghttp.RouterGroup) {
 		group.Middleware(middleware.AuthMiddleware)
 		// 店铺
-		group.Bind(shopApi.Info)          // 获取店铺信息
-		group.Bind(shopApi.General)       // 获取店铺设置
-		group.Bind(shopApi.UpdateGeneral) // 更新店铺设置
+		group.Bind(shopApi.Info)                        // 获取店铺信息
+		group.Bind(shopApi.General)                     // 获取店铺设置
+		group.Bind(shopApi.UpdateGeneral)               // 更新店铺设置
+		group.Bind(shopApi.TaxSwitchShipping)           // 对运费收的税包含在运费中
+		group.Bind(shopApi.ShopTaxSwitchShippingUpdate) // 更新对运费收的税包含在运费中
 
 		// 用户
 		group.Bind(userApi.Info)       // 获取用户信息

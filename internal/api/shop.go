@@ -95,3 +95,25 @@ func (a *aShopApi) UpdateGeneral(ctx g.Ctx, req *vo.ShopUpdateGeneralReq) (res v
 	})
 	return res, err
 }
+
+func (a *aShopApi) TaxSwitchShipping(ctx g.Ctx, req *vo.ShopTaxSwitchShippingReq) (res vo.ShopTaxSwitchShippingRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	res.TaxShipping = shop.TaxShipping
+	return res, err
+}
+
+func (s *aShopApi) ShopTaxSwitchShippingUpdate(ctx g.Ctx, req *vo.ShopTaxSwitchShippingUpdateReq) (res vo.ShopTaxSwitchShippingUpdateRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+		return sShop.NewShop(tx).ShopUpdateTaxShipping(shop.ID, req.TaxShipping)
+	})
+	return res, err
+}
