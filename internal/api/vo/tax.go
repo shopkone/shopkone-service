@@ -61,3 +61,17 @@ type TaxUpdateReq struct {
 type TaxUpdateRes struct {
 	TaxInfoRes
 }
+
+type TaxCreateReq struct {
+	g.Meta       `path:"/tax/create" method:"post" tags:"Tax" summary:"创建税率"`
+	CountryCodes []string `json:"country_codes" v:"required" dc:"国家代码"`
+}
+type TaxCreateRes struct {
+}
+
+type TaxRemoveReq struct {
+	g.Meta `path:"/tax/remove" method:"post" tags:"Tax" summary:"删除税率"`
+	Ids    []uint `json:"ids" v:"required" dc:"ID"`
+}
+type TaxRemoveRes struct {
+}

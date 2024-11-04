@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/duke-git/lancet/v2/slice"
 	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/product/collection/sCollection"
@@ -63,5 +64,29 @@ func (a *aTax) TaxUpdate(ctx g.Ctx, req *vo.TaxUpdateReq) (res vo.TaxUpdateRes, 
 	if err != nil {
 		return vo.TaxUpdateRes{}, err
 	}
+	return res, err
+}
+
+func (a *aTax) TaxCreate(ctx g.Ctx, req *vo.TaxCreateReq) (res vo.TaxCreateRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return
+	}
+	shop := auth.Shop
+	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+		return sTax.NewTax(tx, shop.ID).TaxCreate(req.CountryCodes)
+	})
+	return res, err
+}
+
+func (a *aTax) TaxRemove(ctx g.Ctx, req *vo.TaxRemoveReq) (res vo.TaxRemoveRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return
+	}
+	shop := auth.Shop
+	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+		return sTax.NewTax(tx, shop.ID).TaxRemoveByIds(req.Ids)
+	})
 	return res, err
 }

@@ -77,7 +77,6 @@ func (s *sShippingZone) CodesUpdate(zones []vo.BaseShippingZone) error {
 		if err := handle.BatchUpdateById(batchIn, &change.Update); err != nil {
 			return err
 		}
-		return s.CodesUpdateTaxs(change.Update)
 	}
 
 	return nil
