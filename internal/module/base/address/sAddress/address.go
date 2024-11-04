@@ -109,6 +109,7 @@ func (s *sAddress) UpdateById(address mAddress.Address) (err error) {
 			"postal_code",
 			"zone",
 			"legal_business_name",
+			"email",
 		).
 		Updates(&address).Error
 	return err

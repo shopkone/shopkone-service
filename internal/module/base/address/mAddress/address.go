@@ -21,4 +21,5 @@ type Address struct {
 	Phone             Phone  `json:"phone" gorm:"serializer:json"`        // 电话
 	PostalCode        string `json:"postal_code" gorm:"size:200"`         // 邮编
 	Zone              string `json:"zone" gorm:"size:200"`                // 省份
+	Email             string `json:"email" gorm:"size:200"`               // 邮箱
 }
