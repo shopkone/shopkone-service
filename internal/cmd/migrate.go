@@ -13,6 +13,7 @@ import (
 	"shopkone-service/internal/module/product/purchase/mPurchase"
 	"shopkone-service/internal/module/product/transfer/mTransfer"
 	"shopkone-service/internal/module/setting/file/mFile"
+	"shopkone-service/internal/module/setting/language/mLanguage"
 	"shopkone-service/internal/module/setting/location/mLocation"
 	"shopkone-service/internal/module/setting/market/mMarket"
 	"shopkone-service/internal/module/setting/tax/mTax"
@@ -97,4 +98,8 @@ var migrate = Migrate{
 	// 市场
 	mMarket.Market{},
 	mMarket.MarketCountry{},
+	mMarket.MarketLanguage{},
+
+	// 语言
+	mLanguage.Language{},
 }

@@ -38,6 +38,7 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 	if res.RemoveNames, err = s.MarketCheck(in.Force, data.ID, data.Name); err != nil {
 		return res, err
 	}
+
 	res.ID = data.ID
 	return res, err
 }

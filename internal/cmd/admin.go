@@ -24,6 +24,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 	inStorePickUpApi := api.NewInStorePickup()
 	taxApi := api.NewTaxApi()
 	marketApi := api.NewMarketApi()
+	langaugesApi := api.NewLanguageApi()
 
 	s.Group("/api", func(group *ghttp.RouterGroup) {
 		group.Middleware(middleware.UserMiddleware)
@@ -148,5 +149,8 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(marketApi.List)
 		group.Bind(marketApi.Info)
 		group.Bind(marketApi.Update)
+
+		// 语言
+		group.Bind(langaugesApi.List)
 	})
 }

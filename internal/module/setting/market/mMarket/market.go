@@ -21,3 +21,9 @@ type MarketCountry struct {
 	MarketID    uint   `gorm:"not null;uniqueIndex:id_country_code"`
 	CountryCode string `gorm:"size:3;uniqueIndex:id_country_code"`
 }
+
+type MarketLanguage struct {
+	mOrm.Model
+	MarketID   uint `gorm:"not null;uniqueIndex:id_language_code"`
+	LanguageID uint `gorm:"size:10;uniqueIndex:id_language_code"`
+}
