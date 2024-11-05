@@ -154,5 +154,6 @@ func registerAdminRoutes(s *ghttp.Server) {
 
 		// 语言
 		group.Bind(langaugesApi.List)
+		group.Bind(langaugesApi.Create)
 	})
 }

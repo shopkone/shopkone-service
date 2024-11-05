@@ -21,6 +21,7 @@ func (s *sLanguage) LanguageCreate(languages []string, isDefault bool) (ids []ui
 	// 判断语言是否已经存在于该店铺
 	var count int64
 	if err = s.orm.Model(&mLanguage.Language{}).Where("shop_id = ?", s.shopId).
+		Where("code IN ?", languages).
 		Count(&count).Error; err != nil {
 		return ids, err
 	}

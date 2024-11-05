@@ -12,3 +12,10 @@ type LanguageListRes struct {
 	MarketIds []uint `json:"market_ids"`
 	IsActive  bool   `json:"is_active"`
 }
+
+type LanguageCreateReq struct {
+	g.Meta `path:"/setting/language/create" method:"post" tags:"Setting" summary:"创建语言"`
+	Codes  []string `json:"codes" v:"required"`
+}
+type LanguageCreateRes struct {
+}

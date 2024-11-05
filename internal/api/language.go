@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/duke-git/lancet/v2/slice"
 	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/setting/language/mLanguage"
@@ -59,4 +60,21 @@ func (a *aLanguage) List(ctx g.Ctx, req *vo.LanguageListReq) (res []vo.LanguageL
 			IsActive:  item.IsActive,
 		}
 	}), nil
+}
+
+func (a *aLanguage) Create(ctx g.Ctx, req *vo.LanguageCreateReq) (res vo.LanguageCreateRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+
+	shop := auth.Shop
+	orm := sOrm.NewDb()
+
+	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+		_, err = sLanguage.NewLanguage(orm, shop.ID).LanguageCreate(req.Codes, false)
+		return err
+	})
+
+	return res, err
 }
