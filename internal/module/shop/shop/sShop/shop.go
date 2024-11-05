@@ -9,6 +9,7 @@ import (
 	"shopkone-service/internal/module/base/address/sAddress"
 	"shopkone-service/internal/module/base/resource/sResource"
 	"shopkone-service/internal/module/setting/location/sLocation"
+	"shopkone-service/internal/module/setting/market/sMarket/sMarket"
 	"shopkone-service/internal/module/setting/tax/sTax/sTax"
 	"shopkone-service/internal/module/shop/shop/iShop"
 	"shopkone-service/internal/module/shop/shop/mShop"
@@ -82,6 +83,11 @@ func (s *sShop) CreateTrial(in iShop.CreateTrialIn) (shopId uint, err error) {
 	locationCreateIn := vo.LocationAddReq{
 		Name:    "Default",
 		Address: address,
+	}
+	// 创建主要市场
+	marketCreateIn := vo.MarketCreateReq{Name: shop.Country, CountryCodes: []string{shop.Country}, IsMain: true}
+	if _, err = sMarket.NewMarket(s.orm, shop.ID).MarketCreate(marketCreateIn); err != nil {
+		return 0, err
 	}
 	if _, err = sLocation.NewLocation(s.orm, shop.ID).Create(locationCreateIn, shop.TimeZone); err != nil {
 		return 0, err

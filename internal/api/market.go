@@ -25,3 +25,15 @@ func (a *aMarket) Create(ctx g.Ctx, req *vo.MarketCreateReq) (res vo.MarketCreat
 	})
 	return res, err
 }
+
+func (a *aMarket) List(ctx g.Ctx, req *vo.MarketListReq) (res []vo.MarketListRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	return sMarket.NewMarket(sOrm.NewDb(), shop.ID).MarketList()
+}
+
+func (a *aMarket) Info(ctx g.Ctx, req *vo.MarketInfoReq) (res vo.MarketInfoRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	return sMarket.NewMarket(sOrm.NewDb(), shop.ID).MarketInfo(req.ID)
+}

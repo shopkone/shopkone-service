@@ -11,3 +11,24 @@ type MarketCreateReq struct {
 type MarketCreateRes struct {
 	ID uint `json:"id"`
 }
+
+type MarketListReq struct {
+	g.Meta `path:"/market/list" method:"post" summary:"Market List" tags:"Market"`
+}
+type MarketListRes struct {
+	ID           uint     `json:"id"`
+	IsMain       bool     `json:"is_main"`
+	Name         string   `json:"name"`
+	CountryCodes []string `json:"country_codes"`
+}
+
+type MarketInfoReq struct {
+	g.Meta `path:"/market/info" method:"post" summary:"Market Info" tags:"Market"`
+	ID     uint `json:"id" v:"required"`
+}
+type MarketInfoRes struct {
+	ID           uint     `json:"id"`
+	IsMain       bool     `json:"is_main"`
+	Name         string   `json:"name"`
+	CountryCodes []string `json:"country_codes"`
+}
