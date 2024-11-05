@@ -30,3 +30,6 @@ func shippingError(code int, message string) error {
 func taxError(code int, message string) error {
 	return err(7000+code, message)
 }
+func SettingError(code int, message string) error {
+	return err(8000+code, message)
+}

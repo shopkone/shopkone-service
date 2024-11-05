@@ -14,6 +14,7 @@ import (
 	"shopkone-service/internal/module/product/transfer/mTransfer"
 	"shopkone-service/internal/module/setting/file/mFile"
 	"shopkone-service/internal/module/setting/location/mLocation"
+	"shopkone-service/internal/module/setting/market/mMarket"
 	"shopkone-service/internal/module/setting/tax/mTax"
 	"shopkone-service/internal/module/shop/shop/mShop"
 	"shopkone-service/internal/module/shop/staff/mStaff"
@@ -92,4 +93,8 @@ var migrate = Migrate{
 	mTax.TaxZone{},
 	mTax.CustomerTax{},
 	mTax.CustomerTaxZone{},
+
+	// 市场
+	mMarket.Market{},
+	mMarket.MarketCountry{},
 }

@@ -23,6 +23,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 	localDeliveryApi := api.NewLocalDeliveryApi()
 	inStorePickUpApi := api.NewInStorePickup()
 	taxApi := api.NewTaxApi()
+	marketApi := api.NewMarketApi()
 
 	s.Group("/api", func(group *ghttp.RouterGroup) {
 		group.Middleware(middleware.UserMiddleware)
@@ -141,5 +142,8 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(taxApi.TaxCreate)
 		group.Bind(taxApi.TaxRemove)
 		group.Bind(taxApi.TaxActive)
+
+		// 市场
+		group.Bind(marketApi.Create)
 	})
 }
