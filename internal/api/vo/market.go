@@ -43,3 +43,12 @@ type MarketUpdateReq struct {
 type MarketUpdateRes struct {
 	RemoveNames []string `json:"remove_names"`
 }
+
+type MarketOptionsReq struct {
+	g.Meta `path:"/market/options" method:"post" summary:"Market Options" tags:"Market"`
+}
+type MarketOptionsRes struct {
+	Label  string `json:"label"`
+	Value  uint   `json:"value"`
+	IsMain bool   `json:"is_main"`
+}

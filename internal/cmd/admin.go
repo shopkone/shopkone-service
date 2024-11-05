@@ -52,6 +52,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(baseApi.CurrencyList) // 获取货币列表
 		group.Bind(baseApi.CategoryList) // 获取商品分类列表
 		group.Bind(baseApi.CarrierList)  // 获取物流公司列表
+		group.Bind(baseApi.LanguageList) // 获取语言列表
 
 		// 文件
 		group.Bind(fileApi.GetUploadToken)         // 获取上传token
@@ -149,6 +150,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(marketApi.List)
 		group.Bind(marketApi.Info)
 		group.Bind(marketApi.Update)
+		group.Bind(marketApi.Options)
 
 		// 语言
 		group.Bind(langaugesApi.List)

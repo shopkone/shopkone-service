@@ -106,3 +106,9 @@ func (a *aBaseApi) CarrierList(ctx g.Ctx, req *vo.CarrierListReq) (res []vo.Carr
 	})
 	return res, err
 }
+
+// 获取语言列表
+func (a *aBaseApi) LanguageList(ctx g.Ctx, req *vo.LanguagesReq) (res vo.LanguagesRes, err error) {
+	res.List = resource.Languages
+	return res, err
+}

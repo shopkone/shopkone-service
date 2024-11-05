@@ -47,3 +47,9 @@ func (a *aMarket) Update(ctx g.Ctx, req *vo.MarketUpdateReq) (res vo.MarketUpdat
 	})
 	return res, err
 }
+
+func (a *aMarket) Options(ctx g.Ctx, req *vo.MarketOptionsReq) (res []vo.MarketOptionsRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	return sMarket.NewMarket(sOrm.NewDb(), shop.ID).MarketOptions()
+}

@@ -87,3 +87,10 @@ type CarrierListRes struct {
 	DisplayName              string `json:"display_name"`
 	SupportsShipmentTracking bool   `json:"supports_shipment_tracking"`
 }
+
+type LanguagesReq struct {
+	g.Meta `path:"/base/language-list" method:"post" summary:"获取语言列表" tags:"Base"`
+}
+type LanguagesRes struct {
+	List []string `json:"list"`
+}
