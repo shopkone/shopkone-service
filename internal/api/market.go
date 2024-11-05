@@ -37,3 +37,13 @@ func (a *aMarket) Info(ctx g.Ctx, req *vo.MarketInfoReq) (res vo.MarketInfoRes, 
 	shop := auth.Shop
 	return sMarket.NewMarket(sOrm.NewDb(), shop.ID).MarketInfo(req.ID)
 }
+
+func (a *aMarket) Update(ctx g.Ctx, req *vo.MarketUpdateReq) (res vo.MarketUpdateRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+		res, err = sMarket.NewMarket(tx, shop.ID).MarketUpdate(*req)
+		return err
+	})
+	return res, err
+}

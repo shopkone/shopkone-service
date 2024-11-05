@@ -147,5 +147,6 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(marketApi.Create)
 		group.Bind(marketApi.List)
 		group.Bind(marketApi.Info)
+		group.Bind(marketApi.Update)
 	})
 }

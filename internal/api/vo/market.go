@@ -34,3 +34,12 @@ type MarketInfoRes struct {
 	Name         string   `json:"name"`
 	CountryCodes []string `json:"country_codes"`
 }
+
+type MarketUpdateReq struct {
+	g.Meta `path:"/market/update" method:"post" summary:"Market Update" tags:"Market"`
+	MarketCreateReq
+	ID uint `json:"id" v:"required"`
+}
+type MarketUpdateRes struct {
+	RemoveNames []string `json:"remove_names"`
+}

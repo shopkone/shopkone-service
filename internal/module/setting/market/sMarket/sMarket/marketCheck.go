@@ -6,7 +6,7 @@ import (
 	"shopkone-service/utility/code"
 )
 
-func (s *sMarket) MarketCheck(force bool) (res []string, err error) {
+func (s *sMarket) MarketCheck(force bool, id uint, name string) (res []string, err error) {
 	// 查看没有国家的市场
 	noCountryMarkets, err := s.MarketListByUnCountry()
 	if err != nil {
@@ -38,6 +38,14 @@ func (s *sMarket) MarketCheck(force bool) (res []string, err error) {
 	}
 
 	// 校验名称是否重复
+	var count int64
+	if err = s.orm.Model(mMarket.Market{}).Where("name = ? AND id != ? AND shop_id = ?", name, id, s.shopId).
+		Select("id").Count(&count).Error; err != nil {
+		return res, err
+	}
+	if count > 0 {
+		return res, code.MarketNameExist
+	}
 
 	return res, err
 }

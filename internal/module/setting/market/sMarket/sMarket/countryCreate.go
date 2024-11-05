@@ -6,6 +6,10 @@ import (
 )
 
 func (s *sMarket) CountryCreate(codes []string, marketID uint) (err error) {
+	if len(codes) == 0 {
+		return err
+	}
+
 	// 删除原有的
 	if err = s.CountryRemove(codes); err != nil {
 		return err
