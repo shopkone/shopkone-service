@@ -7,9 +7,11 @@ type MarketCreateReq struct {
 	Name         string   `json:"name" v:"required"`
 	CountryCodes []string `json:"countryCodes" v:"required"`
 	IsMain       bool     `json:"-"`
+	Force        bool     `json:"force"`
 }
 type MarketCreateRes struct {
-	ID uint `json:"id"`
+	ID          uint     `json:"id"`
+	RemoveNames []string `json:"remove_names"`
 }
 
 type MarketListReq struct {

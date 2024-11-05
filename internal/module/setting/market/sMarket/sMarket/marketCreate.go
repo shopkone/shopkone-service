@@ -6,16 +6,16 @@ import (
 	"shopkone-service/utility/code"
 )
 
-func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (id uint, err error) {
+func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, err error) {
 	// 如果是主市场，则判断著市场是否已经存在
 	if in.IsMain {
 		var Main mMarket.Market
 		if err = s.orm.Model(&Main).Where("shop_id = ? AND is_main = ?", s.shopId, true).
 			Select("id").Find(&Main).Error; err != nil {
-			return 0, err
+			return res, err
 		}
 		if Main.ID != 0 {
-			return 0, code.MarketMainExist
+			return res, code.MarketMainExist
 		}
 	}
 
@@ -26,9 +26,17 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (id uint, err error) {
 	data.ShopId = s.shopId
 	data.Status = mMarket.MarketStatusActive
 	if err = s.orm.Create(&data).Error; err != nil {
-		return 0, err
+		return res, err
 	}
 
 	// 创建国家
-	return data.ID, s.CountryCreate(in.CountryCodes, data.ID)
+	if err = s.CountryCreate(in.CountryCodes, data.ID); err != nil {
+		return res, err
+	}
+
+	if res.RemoveNames, err = s.MarketCheck(in.Force); err != nil {
+		return res, err
+	}
+	res.ID = data.ID
+	return res, err
 }

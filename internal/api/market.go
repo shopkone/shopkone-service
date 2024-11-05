@@ -20,7 +20,7 @@ func (a *aMarket) Create(ctx g.Ctx, req *vo.MarketCreateReq) (res vo.MarketCreat
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
-		res.ID, err = sMarket.NewMarket(tx, shop.ID).MarketCreate(*req)
+		res, err = sMarket.NewMarket(tx, shop.ID).MarketCreate(*req)
 		return err
 	})
 	return res, err

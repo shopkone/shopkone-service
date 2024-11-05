@@ -85,7 +85,7 @@ func (s *sShop) CreateTrial(in iShop.CreateTrialIn) (shopId uint, err error) {
 		Address: address,
 	}
 	// 创建主要市场
-	marketCreateIn := vo.MarketCreateReq{Name: shop.Country, CountryCodes: []string{shop.Country}, IsMain: true}
+	marketCreateIn := vo.MarketCreateReq{Name: shop.Country, CountryCodes: []string{shop.Country}, IsMain: true, Force: true}
 	if _, err = sMarket.NewMarket(s.orm, shop.ID).MarketCreate(marketCreateIn); err != nil {
 		return 0, err
 	}
