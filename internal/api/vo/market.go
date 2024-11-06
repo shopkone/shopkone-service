@@ -56,13 +56,14 @@ type MarketOptionsRes struct {
 }
 
 type LanguageBindItem struct {
-	LanguageId uint   `json:"language_id"`
-	MarketIds  []uint `json:"market_ids"`
+	LanguageId uint `json:"language_id"`
+	MarketId   uint `json:"market_id"`
 }
 
 type MarketBindLangReq struct {
 	g.Meta `path:"/market/bind-lang" method:"post" summary:"Market Bind Lang" tags:"Market"`
-	LanguageBindItem
+	Bind   []LanguageBindItem `json:"bind"`
+	UnBind []LanguageBindItem `json:"un_bind"`
 }
 type MarketBindLangRes struct {
 }

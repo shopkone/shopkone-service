@@ -1,7 +1,6 @@
 package sMarket
 
 import (
-	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/market/mMarket"
@@ -41,8 +40,11 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 	if err != nil {
 		return res, err
 	}
-	g.Dump(defaultLanguage)
-	bindIn := LanguageBindIn{LanguageId: defaultLanguage.ID, MarketIds: []uint{data.ID}}
+	bindIn := vo.MarketBindLangReq{}
+	bindIn.Bind = []vo.LanguageBindItem{{
+		LanguageId: defaultLanguage.ID,
+		MarketId:   data.ID,
+	}}
 	if err = s.LanguageBind(bindIn); err != nil {
 		return res, err
 	}

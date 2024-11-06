@@ -60,11 +60,7 @@ func (a *aMarket) BindLang(ctx g.Ctx, req *vo.MarketBindLangReq) (res vo.MarketB
 	shop := auth.Shop
 	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
 		s := sMarket.NewMarket(tx, shop.ID)
-		in := sMarket.LanguageBindIn{
-			LanguageId: req.LanguageId,
-			MarketIds:  req.MarketIds,
-		}
-		return s.LanguageBind(in)
+		return s.LanguageBind(*req)
 	})
 	return res, err
 }

@@ -2,6 +2,7 @@ package sMarket
 
 import (
 	"github.com/duke-git/lancet/v2/slice"
+	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/market/mMarket"
 	"shopkone-service/utility/code"
@@ -20,6 +21,8 @@ func (s *sMarket) LanguageCheck() (err error) {
 	if err != nil {
 		return err
 	}
+
+	g.Dump(languages, marketIds)
 
 	// 市场必须要有一个语言
 	isAllHas := slice.Every(marketIds, func(index int, item uint) bool {
