@@ -53,3 +53,18 @@ func (a *aMarket) Options(ctx g.Ctx, req *vo.MarketOptionsReq) (res []vo.MarketO
 	shop := auth.Shop
 	return sMarket.NewMarket(sOrm.NewDb(), shop.ID).MarketOptions()
 }
+
+// 绑定语言
+func (a *aMarket) BindLang(ctx g.Ctx, req *vo.MarketBindLangReq) (res vo.MarketBindLangRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+		s := sMarket.NewMarket(tx, shop.ID)
+		in := sMarket.LanguageBindIn{
+			LanguageId: req.LanguageId,
+			MarketIds:  req.MarketIds,
+		}
+		return s.LanguageBind(in)
+	})
+	return res, err
+}

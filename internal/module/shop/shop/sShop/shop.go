@@ -11,7 +11,6 @@ import (
 	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/location/sLocation"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarket"
-	"shopkone-service/internal/module/setting/market/sMarket/sMarketLanguage"
 	"shopkone-service/internal/module/setting/tax/sTax/sTax"
 	"shopkone-service/internal/module/shop/shop/iShop"
 	"shopkone-service/internal/module/shop/shop/mShop"
@@ -81,19 +80,13 @@ func (s *sShop) CreateTrial(in iShop.CreateTrialIn) (shopId uint, err error) {
 	if err != nil {
 		return 0, err
 	}
+	// 创建默认语言
+	if _, err = sLanguage.NewLanguage(s.orm, shop.ID).LanguageCreate([]string{"en"}, true); err != nil {
+		return 0, err
+	}
 	// 创建主要市场
 	marketCreateIn := vo.MarketCreateReq{Name: shop.Country, CountryCodes: []string{shop.Country}, IsMain: true, Force: true}
-	market, err := sMarket.NewMarket(s.orm, shop.ID).MarketCreate(marketCreateIn)
-	if err != nil {
-		return 0, err
-	}
-	// 创建默认语言
-	languageIds, err := sLanguage.NewLanguage(s.orm, shop.ID).LanguageCreate([]string{"en"}, true)
-	if err != nil {
-		return 0, err
-	}
-	// 为主要市场绑定默认语言
-	if err = sMarketLanguage.NewMarketLanguage(s.orm, shop.ID).LanguageBind(languageIds[0], market.ID); err != nil {
+	if _, err = sMarket.NewMarket(s.orm, shop.ID).MarketCreate(marketCreateIn); err != nil {
 		return 0, err
 	}
 	// 初始化地点(这里的address与上面的address是两个不同的addrsss，只是初始化的时候使用为了方便使用了同一个)

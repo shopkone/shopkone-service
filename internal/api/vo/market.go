@@ -1,6 +1,8 @@
 package vo
 
-import "github.com/gogf/gf/v2/frame/g"
+import (
+	"github.com/gogf/gf/v2/frame/g"
+)
 
 type MarketCreateReq struct {
 	g.Meta       `path:"/market/create" method:"post" summary:"Create Market" tags:"Market"`
@@ -51,4 +53,16 @@ type MarketOptionsRes struct {
 	Label  string `json:"label"`
 	Value  uint   `json:"value"`
 	IsMain bool   `json:"is_main"`
+}
+
+type LanguageBindItem struct {
+	LanguageId uint   `json:"language_id"`
+	MarketIds  []uint `json:"market_ids"`
+}
+
+type MarketBindLangReq struct {
+	g.Meta `path:"/market/bind-lang" method:"post" summary:"Market Bind Lang" tags:"Market"`
+	LanguageBindItem
+}
+type MarketBindLangRes struct {
 }

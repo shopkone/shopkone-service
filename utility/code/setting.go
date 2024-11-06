@@ -7,4 +7,5 @@ var (
 	MarketNameExist      = SettingError(4, "市场名称已经存在")
 	LanguageRepeat       = SettingError(5, "存在重复的语言")
 	LanguageValid        = SettingError(6, "无效的语言")
+	MarketMustLanguage   = SettingError(7, "市场必须绑定语言")
 )

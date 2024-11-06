@@ -1,7 +1,9 @@
 package sMarket
 
 import (
+	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/api/vo"
+	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/market/mMarket"
 	"shopkone-service/utility/code"
 )
@@ -31,6 +33,17 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 
 	// 创建国家
 	if err = s.CountryCreate(in.CountryCodes, data.ID); err != nil {
+		return res, err
+	}
+
+	// 绑定默认语言
+	defaultLanguage, err := sLanguage.NewLanguage(s.orm, s.shopId).LanguageDefault()
+	if err != nil {
+		return res, err
+	}
+	g.Dump(defaultLanguage)
+	bindIn := LanguageBindIn{LanguageId: defaultLanguage.ID, MarketIds: []uint{data.ID}}
+	if err = s.LanguageBind(bindIn); err != nil {
 		return res, err
 	}
 
