@@ -37,7 +37,7 @@ func (s *sOss) GetUploadToken(shopUUID string) (token string, err error) {
 		Policy:          tea.String(convertor.ToString(policy)),
 	}
 	// 获取临时凭证
-	ret, err := client.AssumeRole(assumeRoleRequest)
+	ret, err := stsClient.AssumeRole(assumeRoleRequest)
 	access := ret.Body.Credentials
 	info := map[string]interface{}{
 		"id":     access.AccessKeyId,

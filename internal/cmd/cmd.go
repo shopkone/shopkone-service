@@ -29,7 +29,7 @@ var (
 				return err
 			}
 			// 初始化阿里云服务
-			if err := sAli.SetClient(); err != nil {
+			if err := sAli.AliYunClient(); err != nil {
 				return err
 			}
 			// 初始化服务

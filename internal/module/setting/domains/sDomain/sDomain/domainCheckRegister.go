@@ -2,14 +2,22 @@ package sDomain
 
 import (
 	"golang.org/x/net/publicsuffix"
+	"shopkone-service/internal/module/base/ali/sAli"
 	"shopkone-service/utility/code"
 )
 
 func (s *sDomain) DomainIsRegister(domain string) error {
-	// 判断是否是子域名
-	if true {
+	mainDomain, err := publicsuffix.EffectiveTLDPlusOne(domain)
+	if err != nil {
+		return err
+	}
+	isRegister, err := sAli.DomainIsRegister(mainDomain)
+	if err != nil {
+		return err
+	}
+	// 如果未注册，则报错
+	if !isRegister {
 		return code.DomainNotRegistered
 	}
-	publicsuffix.PublicSuffix(domain)
 	return nil
 }

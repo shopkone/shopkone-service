@@ -10,4 +10,5 @@ var (
 	MarketMustLanguage     = SettingError(7, "市场必须绑定语言")
 	DomainAlreadyConnected = SettingError(8, "该域名已被使用，请绑定其他域名")
 	DomainNotRegistered    = SettingError(9, "该域名还未注册")
+	DomainUnknown          = SettingError(10, "该域名异常")
 )

@@ -11,7 +11,7 @@ import (
 func (s *sDomain) GeneralShopkoneDomain() (domain string, err error) {
 	//生成子域名前缀，预计12位
 	prefix := generateSubdomain(12)
-	domain = prefix + "." + "shopkone.com"
+	domain = prefix + "." + "shopkone.top"
 	for i := 0; i < 1000; i++ {
 		// 判断是否重复了，重复则重新生成
 		var count int64

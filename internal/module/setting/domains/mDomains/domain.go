@@ -8,7 +8,7 @@ const (
 	DomainStatusConnectPre     DomainStatus = iota + 1 // 预连接
 	DomainStatusConnectSuccess                         // 连接成功
 	DomainStatusConnectFailed                          // 连接失败
-	DomainStatusDisconnect                             // 取消连接
+	DomainStatusDisconnect                             // 连接断开
 )
 
 type Domain struct {
