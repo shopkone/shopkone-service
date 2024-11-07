@@ -16,6 +16,7 @@ type Domain struct {
 	IsMain     bool         `gorm:"index"`
 	Domain     string       `gorm:"size:500"`
 	Status     DomainStatus `gorm:"default:0"`
-	Ip         string       `gorm:"index"`
+	BindIp     string       `gorm:"index"`
+	BindDomain string       `gorm:"index"`
 	IsShopKone bool         `gorm:"false"`
 }

@@ -160,5 +160,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 
 		// 域名
 		group.Bind(domainApi.List)
+		group.Bind(domainApi.PreCheck)
+		group.Bind(domainApi.ConnectCheck)
 	})
 }

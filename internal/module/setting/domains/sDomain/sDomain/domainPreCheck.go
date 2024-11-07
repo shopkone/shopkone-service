@@ -5,20 +5,16 @@ import (
 	"shopkone-service/utility/code"
 )
 
-type PreCheckOut struct {
-	IP string
-}
-
-func (s *sDomain) PreCheck(domain string) (data PreCheckOut, err error) {
+func (s *sDomain) PreCheck(domain string) (data DomainBindInfoOut, err error) {
 	// 判断域名是否在服务商处已注册
 	if err = s.DomainIsRegister(domain); err != nil {
-		return PreCheckOut{}, err
+		return data, err
 	}
 
 	// 域名是否已被连接
 	var count int64
 	if err = s.orm.Model(&mDomains.Domain{}).Where("domain = ?", domain).
-		Where("status = ?", mDomains.DomainStatusConnectPre).
+		Where("status = ?", mDomains.DomainStatusConnectSuccess).
 		Count(&count).Error; err != nil {
 		return data, err
 	}
@@ -27,12 +23,10 @@ func (s *sDomain) PreCheck(domain string) (data PreCheckOut, err error) {
 	}
 
 	// 获取可用的ip
-	ip, err := s.GetIP()
+	data, err = s.DomainBindInfo()
 	if err != nil {
 		return data, err
 	}
 
-	// 创建域名连接
-	data.IP = ip
 	return data, err
 }

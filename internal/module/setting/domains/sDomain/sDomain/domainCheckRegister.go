@@ -9,7 +9,7 @@ import (
 func (s *sDomain) DomainIsRegister(domain string) error {
 	mainDomain, err := publicsuffix.EffectiveTLDPlusOne(domain)
 	if err != nil {
-		return err
+		return code.DomainValid
 	}
 	isRegister, err := sAli.DomainIsRegister(mainDomain)
 	if err != nil {

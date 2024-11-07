@@ -14,9 +14,13 @@ func (s *sDomain) CreateShopkone() error {
 		return err
 	}
 
-	// 绑定域名
+	// TODO:绑定域名
 	g.Dump(data)
 
 	// 校验域名是否已经绑定
-	return s.ConnectCheck(domain, data.IP, true)
+	checkIn := ConnectCheckIn{
+		Domain:     domain,
+		IsShopkone: true,
+	}
+	return s.ConnectCheck(checkIn)
 }
