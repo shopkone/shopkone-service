@@ -12,4 +12,5 @@ var (
 	ZoneCodeUnknown     = baseError(9, "不支持的省份代码")
 	ErrAddressId        = baseError(10, "地址ID错误")
 	IdMissing           = baseError(11, "缺少参数")
+	SystemError         = baseError(12, "系统错误")
 )

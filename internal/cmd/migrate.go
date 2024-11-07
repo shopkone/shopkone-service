@@ -12,6 +12,7 @@ import (
 	"shopkone-service/internal/module/product/product/mProduct"
 	"shopkone-service/internal/module/product/purchase/mPurchase"
 	"shopkone-service/internal/module/product/transfer/mTransfer"
+	"shopkone-service/internal/module/setting/domains/mDomains"
 	"shopkone-service/internal/module/setting/file/mFile"
 	"shopkone-service/internal/module/setting/language/mLanguage"
 	"shopkone-service/internal/module/setting/location/mLocation"
@@ -102,4 +103,7 @@ var migrate = Migrate{
 
 	// 语言
 	mLanguage.Language{},
+
+	// 域名
+	mDomains.Domain{},
 }
