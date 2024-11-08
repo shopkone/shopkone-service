@@ -49,14 +49,18 @@ func (a *aLanguage) List(ctx g.Ctx, req *vo.LanguageListReq) (res []vo.LanguageL
 		currentMarketLanguages := slice.Filter(marketLanguages, func(index int, m mMarket.MarketLanguage) bool {
 			return m.LanguageID == item.ID
 		})
-		marketIds := slice.Map(currentMarketLanguages, func(index int, item mMarket.MarketLanguage) uint {
-			return item.MarketID
+		markets := slice.Map(currentMarketLanguages, func(index int, item mMarket.MarketLanguage) vo.LanguageMarket {
+			i := vo.LanguageMarket{
+				MarketID:  item.MarketID,
+				IsDefault: item.IsDefault,
+			}
+			return i
 		})
 		return vo.LanguageListRes{
 			ID:        item.ID,
 			IsDefault: item.IsDefault,
 			Language:  item.Code,
-			MarketIds: marketIds,
+			Markets:   markets,
 			IsActive:  item.IsActive,
 		}
 	}), nil
