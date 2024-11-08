@@ -22,7 +22,7 @@ func (a *aDomain) List(ctx g.Ctx, req *vo.DomainListReq) (res []vo.DomainListRes
 		return nil, err
 	}
 	shop := auth.Shop
-	return sDomain.NewDomain(sOrm.NewDb(), shop.ID).DomainList()
+	return sDomain.NewDomain(sOrm.NewDb(), shop.ID).DomainList(req)
 }
 
 func (a *aDomain) PreCheck(ctx g.Ctx, req *vo.DomainPreCheckReq) (res []vo.DomainPreCheckRes, err error) {

@@ -64,3 +64,14 @@ func (a *aMarket) BindLang(ctx g.Ctx, req *vo.MarketBindLangReq) (res vo.MarketB
 	})
 	return res, err
 }
+
+// 更新市场域名设置
+func (a *aMarket) UpDomain(ctx g.Ctx, req *vo.MarketUpDomainReq) (res vo.MarketUpDomainRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+		s := sMarket.NewMarket(tx, shop.ID)
+		return s.MarketUpdateDomain(*req)
+	})
+	return res, err
+}

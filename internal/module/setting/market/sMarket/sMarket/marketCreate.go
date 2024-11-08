@@ -26,6 +26,7 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 	data.Name = in.Name
 	data.ShopId = s.shopId
 	data.Status = mMarket.MarketStatusActive
+	data.DomainType = mMarket.DomainTypeMain
 	if err = s.orm.Create(&data).Error; err != nil {
 		return res, err
 	}
@@ -44,6 +45,7 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 	bindIn.Bind = []vo.LanguageBindItem{{
 		LanguageId: defaultLanguage.ID,
 		MarketId:   data.ID,
+		IsDefault:  true,
 	}}
 	if err = s.LanguageBind(bindIn); err != nil {
 		return res, err

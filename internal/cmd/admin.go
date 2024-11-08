@@ -153,6 +153,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(marketApi.Update)
 		group.Bind(marketApi.Options)
 		group.Bind(marketApi.BindLang)
+		group.Bind(marketApi.UpDomain)
 
 		// 语言
 		group.Bind(langaugesApi.List)

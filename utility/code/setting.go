@@ -12,4 +12,6 @@ var (
 	DomainNotRegistered    = SettingError(9, "该域名还未注册")
 	DomainUnknown          = SettingError(10, "该域名异常")
 	DomainValid            = SettingError(11, "无效的域名")
+	MarketMustSubDomain    = SettingError(12, "请选择一个可用的子域名")
+	MarketMustPrefixDomain = SettingError(13, "请填写域名后缀")
 )

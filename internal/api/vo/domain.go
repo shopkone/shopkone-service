@@ -7,6 +7,7 @@ import (
 
 type DomainListReq struct {
 	g.Meta `path:"/domain/list" method:"post" tags:"Domain" summary:"获取域名列表"`
+	Status []mDomains.DomainStatus `json:"status"`
 }
 type DomainListRes struct {
 	ID         uint                  `json:"id"`

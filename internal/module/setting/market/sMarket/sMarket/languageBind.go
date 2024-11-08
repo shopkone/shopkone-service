@@ -26,6 +26,7 @@ func (s *sMarket) LanguageBind(in vo.MarketBindLangReq) (err error) {
 			i.MarketID = item.MarketId
 			i.LanguageID = item.LanguageId
 			i.ShopId = s.shopId
+			i.IsDefault = item.IsDefault
 			return i
 		})
 		if err = s.orm.Create(&insertData).Error; err != nil {

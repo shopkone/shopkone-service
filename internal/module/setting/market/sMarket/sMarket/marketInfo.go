@@ -25,5 +25,8 @@ func (s *sMarket) MarketInfo(id uint) (out vo.MarketInfoRes, err error) {
 	out.CountryCodes = slice.Map(countries, func(index int, item mMarket.MarketCountry) string {
 		return item.CountryCode
 	})
+	out.DomainType = data.DomainType
+	out.DomainSuffix = data.DomainSuffix
+	out.SubDomainID = data.SubDomainID
 	return out, err
 }

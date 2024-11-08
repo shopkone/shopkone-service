@@ -2,6 +2,7 @@ package vo
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
+	"shopkone-service/internal/module/setting/market/mMarket"
 )
 
 type MarketCreateReq struct {
@@ -31,10 +32,13 @@ type MarketInfoReq struct {
 	ID     uint `json:"id" v:"required"`
 }
 type MarketInfoRes struct {
-	ID           uint     `json:"id"`
-	IsMain       bool     `json:"is_main"`
-	Name         string   `json:"name"`
-	CountryCodes []string `json:"country_codes"`
+	ID           uint               `json:"id"`
+	IsMain       bool               `json:"is_main"`
+	Name         string             `json:"name"`
+	CountryCodes []string           `json:"country_codes"`
+	DomainType   mMarket.DomainType `json:"domain_type"`
+	DomainSuffix string             `json:"domain_suffix"`
+	SubDomainID  uint               `json:"sub_domain_id"`
 }
 
 type MarketUpdateReq struct {
@@ -58,6 +62,7 @@ type MarketOptionsRes struct {
 type LanguageBindItem struct {
 	LanguageId uint `json:"language_id"`
 	MarketId   uint `json:"market_id"`
+	IsDefault  bool `json:"is_default"`
 }
 
 type MarketBindLangReq struct {
@@ -66,4 +71,14 @@ type MarketBindLangReq struct {
 	UnBind []LanguageBindItem `json:"un_bind"`
 }
 type MarketBindLangRes struct {
+}
+
+type MarketUpDomainReq struct {
+	g.Meta       `path:"/market/up-domain" method:"post" summary:"Market Up Domain" tags:"Market"`
+	ID           uint               `json:"id" v:"required"`
+	DomainType   mMarket.DomainType `json:"domain_type" v:"required"`
+	DomainSuffix string             `json:"domain_suffix"`
+	SubDomainID  uint               `json:"sub_domain_id"`
+}
+type MarketUpDomainRes struct {
 }
