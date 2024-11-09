@@ -9,15 +9,29 @@ import (
 func (s *sMarket) MarketOptions() (res []vo.MarketOptionsRes, err error) {
 	var list []mMarket.Market
 	if err = s.orm.Model(&mMarket.Market{}).Where("shop_id = ?", s.shopId).
-		Select("id", "name", "is_main").Find(&list).Error; err != nil {
+		Select("id",
+			"name",
+			"is_main",
+			"language_ids",
+			"default_language_id",
+			"domain_type",
+		).
+		Find(&list).Error; err != nil {
 		return nil, err
 	}
 	res = slice.Map(list, func(index int, item mMarket.Market) vo.MarketOptionsRes {
-		return vo.MarketOptionsRes{
-			Label:  item.Name,
-			Value:  item.ID,
-			IsMain: item.IsMain,
+		i := vo.MarketOptionsRes{
+			Label:             item.Name,
+			Value:             item.ID,
+			IsMain:            item.IsMain,
+			LanguageIds:       item.LanguageIds,
+			DefaultLanguageId: item.DefaultLanguageID,
+			DomainType:        item.DomainType,
 		}
+		if i.LanguageIds == nil {
+			i.LanguageIds = []uint{}
+		}
+		return i
 	})
 	return res, err
 }

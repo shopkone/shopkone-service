@@ -28,5 +28,7 @@ func (s *sMarket) MarketInfo(id uint) (out vo.MarketInfoRes, err error) {
 	out.DomainType = data.DomainType
 	out.DomainSuffix = data.DomainSuffix
 	out.SubDomainID = data.SubDomainID
+	out.LanguageIds = data.LanguageIds
+	out.DefaultLanguageId = data.DefaultLanguageID
 	return out, err
 }

@@ -8,7 +8,6 @@ import (
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/setting/language/mLanguage"
 	"shopkone-service/internal/module/setting/language/sLanguage"
-	"shopkone-service/internal/module/setting/market/mMarket"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarket"
 	ctx2 "shopkone-service/utility/ctx"
 )
@@ -35,33 +34,29 @@ func (a *aLanguage) List(ctx g.Ctx, req *vo.LanguageListReq) (res []vo.LanguageL
 		return nil, err
 	}
 
-	// 根据语言获取marketIds
-	languageIds := slice.Map(languages, func(index int, item mLanguage.Language) uint {
-		return item.ID
-	})
-	marketLanguages, err := sMarket.NewMarket(orm, shop.ID).BindListByLangIds(languageIds)
+	// 获取市场列表
+	marketsOptions, err := sMarket.NewMarket(orm, shop.ID).MarketOptions()
 	if err != nil {
 		return nil, err
 	}
 
 	// 组装数据
-	return slice.Map(languages, func(index int, item mLanguage.Language) vo.LanguageListRes {
-		currentMarketLanguages := slice.Filter(marketLanguages, func(index int, m mMarket.MarketLanguage) bool {
-			return m.LanguageID == item.ID
+	return slice.Map(languages, func(index int, lang mLanguage.Language) vo.LanguageListRes {
+		currentMarket := slice.Filter(marketsOptions, func(index int, market vo.MarketOptionsRes) bool {
+			_, ok := slice.FindBy(market.LanguageIds, func(index int, langId uint) bool {
+				return langId == lang.ID
+			})
+			return ok
 		})
-		markets := slice.Map(currentMarketLanguages, func(index int, item mMarket.MarketLanguage) vo.LanguageMarket {
-			i := vo.LanguageMarket{
-				MarketID:  item.MarketID,
-				IsDefault: item.IsDefault,
-			}
-			return i
+		MarketNames := slice.Map(currentMarket, func(index int, item vo.MarketOptionsRes) string {
+			return item.Label
 		})
-		return vo.LanguageListRes{
-			ID:        item.ID,
-			IsDefault: item.IsDefault,
-			Language:  item.Code,
-			Markets:   markets,
-		}
+		i := vo.LanguageListRes{}
+		i.Language = lang.Code
+		i.ID = lang.ID
+		i.IsDefault = lang.IsDefault
+		i.MarketNames = MarketNames
+		return i
 	}), nil
 }
 

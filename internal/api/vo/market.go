@@ -36,13 +36,15 @@ type MarketInfoReq struct {
 	ID     uint `json:"id" v:"required"`
 }
 type MarketInfoRes struct {
-	ID           uint               `json:"id"`
-	IsMain       bool               `json:"is_main"`
-	Name         string             `json:"name"`
-	CountryCodes []string           `json:"country_codes"`
-	DomainType   mMarket.DomainType `json:"domain_type"`
-	DomainSuffix string             `json:"domain_suffix"`
-	SubDomainID  uint               `json:"sub_domain_id"`
+	ID                uint               `json:"id"`
+	IsMain            bool               `json:"is_main"`
+	Name              string             `json:"name"`
+	CountryCodes      []string           `json:"country_codes"`
+	DomainType        mMarket.DomainType `json:"domain_type"`
+	DomainSuffix      string             `json:"domain_suffix"`
+	SubDomainID       uint               `json:"sub_domain_id"`
+	DefaultLanguageId uint               `json:"default_language_id"`
+	LanguageIds       []uint             `json:"language_ids"`
 }
 
 // 更新市场
@@ -60,9 +62,12 @@ type MarketOptionsReq struct {
 	g.Meta `path:"/market/options" method:"post" summary:"Market Options" tags:"Market"`
 }
 type MarketOptionsRes struct {
-	Label  string `json:"label"`
-	Value  uint   `json:"value"`
-	IsMain bool   `json:"is_main"`
+	Label             string             `json:"label"`
+	Value             uint               `json:"value"`
+	IsMain            bool               `json:"is_main"`
+	LanguageIds       []uint             `json:"language_ids"`
+	DefaultLanguageId uint               `json:"default_language_id"`
+	DomainType        mMarket.DomainType `json:"domain_type"`
 }
 
 // 更新市场域名
@@ -76,21 +81,21 @@ type MarketUpDomainReq struct {
 type MarketUpDomainRes struct {
 }
 
-// 根据语言id更新语言市场绑定
-type BindLangByLangIdReq struct {
-	g.Meta     `path:"/market/bind-lang-by-lang-id" method:"post" summary:"Market Bind Lang By Lang Id" tags:"Market"`
-	MarketIDs  []uint `json:"market-ids"`
-	LanguageID uint   `json:"language_id" v:"required"`
+// 更新市场语言
+type MarketUpdateLangReq struct {
+	g.Meta            `path:"/market/update-lang" method:"post" summary:"Market Update Lang" tags:"Market"`
+	ID                uint   `json:"id" v:"required"`
+	LanguageIds       []uint `json:"language_ids" v:"required"`
+	DefaultLanguageID uint   `json:"default_language_id" v:"required"`
 }
-type BindLangByLangIdRes struct {
+type MarketUpdateLangRes struct {
 }
 
-// 根据市场id更新语言市场绑定
-type BindLangByMarketIdReq struct {
-	g.Meta            `path:"/market/bind-lang-by-market-id" method:"post" summary:"Market Bind Lang By Market Id" tags:"Market"`
-	MarketID          uint   `json:"market_id" v:"required"`
-	LanguageIDs       []uint `json:"language_ids" v:"required"`
-	DefaultLanguageID uint   `json:"default_language_id"`
+// 根据语言id更新市场语言
+type MarketUpdateLangByLangIDReq struct {
+	g.Meta    `path:"/market/update-lang-by-lang-id" method:"post" summary:"Market Update Lang By Lang ID" tags:"Market"`
+	LangId    uint   `json:"lang_id" v:"required"`
+	MarketIds []uint `json:"market_ids"`
 }
-type BindLangByMarketIdRes struct {
+type MarketUpdateLangByLangIDRes struct {
 }

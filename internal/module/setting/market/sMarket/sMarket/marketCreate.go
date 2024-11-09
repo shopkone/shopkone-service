@@ -20,6 +20,12 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 		}
 	}
 
+	// 获取店铺默认语言
+	defaultLanguage, err := sLanguage.NewLanguage(s.orm, s.shopId).LanguageDefault()
+	if err != nil {
+		return res, err
+	}
+
 	// 创建市场
 	var data mMarket.Market
 	data.IsMain = in.IsMain
@@ -27,26 +33,14 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 	data.ShopId = s.shopId
 	data.Status = mMarket.MarketStatusActive
 	data.DomainType = mMarket.DomainTypeMain
+	data.LanguageIds = []uint{defaultLanguage.ID}
+	data.DefaultLanguageID = defaultLanguage.ID
 	if err = s.orm.Create(&data).Error; err != nil {
 		return res, err
 	}
 
 	// 创建国家
 	if err = s.CountryCreate(in.CountryCodes, data.ID); err != nil {
-		return res, err
-	}
-
-	// 绑定默认语言
-	defaultLanguage, err := sLanguage.NewLanguage(s.orm, s.shopId).LanguageDefault()
-	if err != nil {
-		return res, err
-	}
-	bindIn := vo.BindLangByMarketIdReq{
-		LanguageIDs:       []uint{defaultLanguage.ID},
-		MarketID:          data.ID,
-		DefaultLanguageID: defaultLanguage.ID,
-	}
-	if err = s.BindLangByMarketId(&bindIn); err != nil {
 		return res, err
 	}
 

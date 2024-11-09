@@ -99,7 +99,6 @@ var migrate = Migrate{
 	// 市场
 	mMarket.Market{},
 	mMarket.MarketCountry{},
-	mMarket.MarketLanguage{},
 
 	// 语言
 	mLanguage.Language{},

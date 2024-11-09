@@ -19,23 +19,18 @@ const (
 
 type Market struct {
 	mOrm.Model
-	Name         string       `gorm:"comment:名称"`
-	Status       MarketStatus `gorm:"comment:状态"`
-	IsMain       bool         `gorm:"index;comment:是否主市场"`
-	DomainType   DomainType   `gorm:"default:1"`
-	DomainSuffix string       `gorm:"size:50"`
-	SubDomainID  uint         `gorm:"index"`
+	Name              string       `gorm:"comment:名称"`
+	Status            MarketStatus `gorm:"comment:状态"`
+	IsMain            bool         `gorm:"index;comment:是否主市场"`
+	DomainType        DomainType   `gorm:"default:1"`
+	DomainSuffix      string       `gorm:"size:50"`
+	SubDomainID       uint         `gorm:"index"`
+	DefaultLanguageID uint         `gorm:"index;not null"`
+	LanguageIds       []uint       `gorm:"serializer:json"`
 }
 
 type MarketCountry struct {
 	mOrm.Model
 	MarketID    uint   `gorm:"not null;uniqueIndex:id_country_code"`
 	CountryCode string `gorm:"size:3;uniqueIndex:id_country_code"`
-}
-
-type MarketLanguage struct {
-	mOrm.Model
-	MarketID   uint `gorm:"not null;uniqueIndex:id_language_code"`
-	LanguageID uint `gorm:"not null;uniqueIndex:id_language_code"`
-	IsDefault  bool `gorm:"default:true"`
 }

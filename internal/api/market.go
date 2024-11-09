@@ -65,24 +65,24 @@ func (a *aMarket) UpDomain(ctx g.Ctx, req *vo.MarketUpDomainReq) (res vo.MarketU
 	return res, err
 }
 
-func (a *aMarket) BindByLangId(ctx g.Ctx, req *vo.BindLangByLangIdReq) (res vo.BindLangByLangIdRes, err error) {
+// 更新市场语言
+func (a *aMarket) UpdateLang(ctx g.Ctx, req *vo.MarketUpdateLangReq) (res vo.MarketUpdateLangRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
 		s := sMarket.NewMarket(tx, shop.ID)
-		return s.BindByLanguageId(req)
+		return s.MarketUpdateLang(*req)
 	})
 	return res, err
 }
 
-func (a *aMarket) BindByMarketId(ctx g.Ctx, req *vo.BindLangByMarketIdReq) (res vo.BindLangByMarketIdRes, err error) {
+// 根据语言id更新市场
+func (a *aMarket) UpdateLangByLangID(ctx g.Ctx, req *vo.MarketUpdateLangByLangIDReq) (res vo.MarketUpdateLangByLangIDRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
-
-		// 根据市场绑定语言
 		s := sMarket.NewMarket(tx, shop.ID)
-		return s.BindLangByMarketId(req)
+		return s.MarketUpdateLangByLangID(req)
 	})
 	return res, err
 }
