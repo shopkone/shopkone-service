@@ -9,7 +9,7 @@ import (
 	"shopkone-service/internal/module/setting/language/mLanguage"
 	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/market/mMarket"
-	"shopkone-service/internal/module/setting/market/sMarket/sMarket"
+	"shopkone-service/internal/module/setting/market/sMarket/sMarketLanguage"
 	ctx2 "shopkone-service/utility/ctx"
 )
 
@@ -39,7 +39,7 @@ func (a *aLanguage) List(ctx g.Ctx, req *vo.LanguageListReq) (res []vo.LanguageL
 	languageIds := slice.Map(languages, func(index int, item mLanguage.Language) uint {
 		return item.ID
 	})
-	marketLanguages, err := sMarket.NewMarket(orm, shop.ID).GetMarketsByLanguageIds(languageIds)
+	marketLanguages, err := sMarketLanguage.NewMarketLanguage(orm, shop.ID).BindListByLangIds(languageIds)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,6 @@ func (a *aLanguage) List(ctx g.Ctx, req *vo.LanguageListReq) (res []vo.LanguageL
 			IsDefault: item.IsDefault,
 			Language:  item.Code,
 			Markets:   markets,
-			IsActive:  item.IsActive,
 		}
 	}), nil
 }

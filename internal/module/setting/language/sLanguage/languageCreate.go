@@ -34,7 +34,6 @@ func (s *sLanguage) LanguageCreate(languages []string, isDefault bool) (ids []ui
 		i.Code = item
 		i.ShopId = s.shopId
 		i.IsDefault = isDefault
-		i.IsActive = isDefault
 		return i
 	})
 	if err = s.orm.Create(&data).Error; err != nil {

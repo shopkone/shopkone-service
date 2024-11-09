@@ -14,7 +14,6 @@ type LanguageListRes struct {
 	Language  string           `json:"language"`
 	IsDefault bool             `json:"is_default"`
 	Markets   []LanguageMarket `json:"markets"`
-	IsActive  bool             `json:"is_active"`
 }
 
 type LanguageCreateReq struct {
