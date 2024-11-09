@@ -58,5 +58,10 @@ func (s *sMarket) BindByLanguageId(req *vo.BindLangByLangIdReq) (err error) {
 		}
 	}
 
+	// 同步主市场语言配置至其他市场主域名
+	if err = s.BindAutoUpdateMain(); err != nil {
+		return err
+	}
+
 	return s.BindsChecked()
 }

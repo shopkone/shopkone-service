@@ -30,6 +30,7 @@ func (s *sMarket) MarketList() (out []vo.MarketListRes, err error) {
 		i.Name = market.Name
 		i.IsMain = market.IsMain
 		i.ID = market.ID
+		i.DomainType = market.DomainType
 		i.CountryCodes = slice.Map(currentCodes, func(index int, item mMarket.MarketCountry) string {
 			return item.CountryCode
 		})

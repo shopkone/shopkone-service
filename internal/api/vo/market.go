@@ -23,10 +23,11 @@ type MarketListReq struct {
 	g.Meta `path:"/market/list" method:"post" summary:"Market List" tags:"Market"`
 }
 type MarketListRes struct {
-	ID           uint     `json:"id"`
-	IsMain       bool     `json:"is_main"`
-	Name         string   `json:"name"`
-	CountryCodes []string `json:"country_codes"`
+	DomainType   mMarket.DomainType `json:"domain_type"`
+	ID           uint               `json:"id"`
+	IsMain       bool               `json:"is_main"`
+	Name         string             `json:"name"`
+	CountryCodes []string           `json:"country_codes"`
 }
 
 // 获取市场详情
