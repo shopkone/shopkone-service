@@ -78,7 +78,7 @@ type MarketUpDomainRes struct {
 // 根据语言id更新语言市场绑定
 type BindLangByLangIdReq struct {
 	g.Meta     `path:"/market/bind-lang-by-lang-id" method:"post" summary:"Market Bind Lang By Lang Id" tags:"Market"`
-	MarketIDs  []uint `json:"market-ids" v:"required"`
+	MarketIDs  []uint `json:"market-ids"`
 	LanguageID uint   `json:"language_id" v:"required"`
 }
 type BindLangByLangIdRes struct {

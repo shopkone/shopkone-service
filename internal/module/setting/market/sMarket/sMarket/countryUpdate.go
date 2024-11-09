@@ -25,6 +25,7 @@ func (s *sMarket) CountryUpdate(codes []string, marketId uint) (err error) {
 			Unscoped().Delete(&mMarket.MarketCountry{}).Error; err != nil {
 			return err
 		}
+		// 解绑市场语言
 	}
 	// 找出要新增的codes
 	addCodes := slice.Filter(codes, func(_ int, item string) bool {

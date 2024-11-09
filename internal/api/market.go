@@ -5,9 +5,7 @@ import (
 	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
-	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarket"
-	"shopkone-service/internal/module/setting/market/sMarket/sMarketLanguage"
 	ctx2 "shopkone-service/utility/ctx"
 )
 
@@ -71,13 +69,7 @@ func (a *aMarket) BindByLangId(ctx g.Ctx, req *vo.BindLangByLangIdReq) (res vo.B
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
-		// 过滤一下，只绑定是这个店铺的市场
-		req.MarketIDs, err = sMarket.NewMarket(tx, shop.ID).MarketFilterIds(req.MarketIDs)
-		if err != nil {
-			return err
-		}
-		// 根据语言绑定市场
-		s := sMarketLanguage.NewMarketLanguage(tx, shop.ID)
+		s := sMarket.NewMarket(tx, shop.ID)
 		return s.BindByLanguageId(req)
 	})
 	return res, err
@@ -87,13 +79,9 @@ func (a *aMarket) BindByMarketId(ctx g.Ctx, req *vo.BindLangByMarketIdReq) (res 
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
-		// 过滤一下，只绑定是这个店铺的语言
-		req.LanguageIDs, err = sLanguage.NewLanguage(tx, shop.ID).LanguageFilter(req.LanguageIDs)
-		if err != nil {
-			return err
-		}
+
 		// 根据市场绑定语言
-		s := sMarketLanguage.NewMarketLanguage(tx, shop.ID)
+		s := sMarket.NewMarket(tx, shop.ID)
 		return s.BindLangByMarketId(req)
 	})
 	return res, err

@@ -4,7 +4,6 @@ import (
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/market/mMarket"
-	"shopkone-service/internal/module/setting/market/sMarket/sMarketLanguage"
 	"shopkone-service/utility/code"
 )
 
@@ -47,7 +46,7 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 		MarketID:          data.ID,
 		DefaultLanguageID: defaultLanguage.ID,
 	}
-	if err = sMarketLanguage.NewMarketLanguage(s.orm, s.shopId).BindLangByMarketId(&bindIn); err != nil {
+	if err = s.BindLangByMarketId(&bindIn); err != nil {
 		return res, err
 	}
 
