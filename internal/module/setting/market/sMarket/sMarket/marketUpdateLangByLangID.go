@@ -2,7 +2,6 @@ package sMarket
 
 import (
 	"github.com/duke-git/lancet/v2/slice"
-	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/market/mMarket"
 	"shopkone-service/utility/code"
@@ -49,7 +48,6 @@ func (s *sMarket) MarketUpdateLangByLangID(req *vo.MarketUpdateLangByLangIDReq) 
 		// 其他市场，使用主域名，则使用主要市场的配置
 		if market.DomainType == mMarket.DomainTypeMain {
 			market.LanguageIds, market.DefaultLanguageID = syncMarketConfig(markets, mainMarket.Value)
-			g.Dump(market)
 		}
 		return market
 	})
