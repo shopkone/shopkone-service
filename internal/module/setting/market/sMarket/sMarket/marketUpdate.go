@@ -36,7 +36,7 @@ func (s *sMarket) MarketUpdate(in vo.MarketUpdateReq) (res vo.MarketUpdateRes, e
 	}
 
 	// 后置校验
-	if res.RemoveNames, err = s.MarketCheck(in.Force, info.ID, info.Name); err != nil {
+	if res.RemoveNames, err = s.MarketCheck(in.Force, info.ID); err != nil {
 		return res, err
 	}
 

@@ -18,8 +18,13 @@ func (s *sMarket) MarketUpdateDomain(in vo.MarketUpDomainReq) (err error) {
 	if in.DomainType == mMarket.DomainTypeSub && in.SubDomainID == 0 {
 		return code.MarketMustSubDomain
 	}
-	return s.orm.Model(&mMarket.Market{}).
+	if err = s.orm.Model(&mMarket.Market{}).
 		Where("id = ?", in.ID).
 		Select("domain_suffix", "domain_type", "sub_domain_id").
-		Updates(&data).Error
+		Updates(&data).Error; err != nil {
+		return err
+	}
+
+	_, err = s.MarketCheck(false, in.ID)
+	return err
 }

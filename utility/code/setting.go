@@ -16,4 +16,5 @@ var (
 	MarketMustPrefixDomain    = SettingError(13, "请填写域名后缀")
 	MarketMustDefaultLanguage = SettingError(14, "市场必须设置默认语言")
 	MarketValid               = SettingError(15, "无效的市场")
+	MarketSuffixExist         = SettingError(16, "子文件夹名称已存在")
 )

@@ -45,7 +45,7 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 	}
 
 	// 后置校验
-	if res.RemoveNames, err = s.MarketCheck(in.Force, data.ID, data.Name); err != nil {
+	if res.RemoveNames, err = s.MarketCheck(in.Force, data.ID); err != nil {
 		return res, err
 	}
 
