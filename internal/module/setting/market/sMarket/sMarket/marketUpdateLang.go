@@ -68,5 +68,8 @@ func (s *sMarket) MarketUpdateLang(req vo.MarketUpdateLangReq) (err error) {
 		ShopID: s.shopId,
 		Query:  []string{"default_language_id", "language_ids"},
 	}
-	return handle.BatchUpdateById(batchIn, &otherMarkets)
+	if err = handle.BatchUpdateById(batchIn, &otherMarkets); err != nil {
+		return err
+	}
+	return s.MarketCheckValid()
 }

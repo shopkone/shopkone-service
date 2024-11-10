@@ -62,7 +62,10 @@ func (s *sMarket) MarketUpdateLangByLangID(req *vo.MarketUpdateLangByLangIDReq) 
 		ShopID: s.shopId,
 		Query:  []string{"language_ids", "default_language_id"},
 	}
-	return handle.BatchUpdateById(batchIn, &markets)
+	if err = handle.BatchUpdateById(batchIn, &markets); err != nil {
+		return err
+	}
+	return s.MarketCheckValid()
 }
 
 func syncMarketConfig(markets []mMarket.Market, mainMarketID uint) (langIds []uint, defaultLangId uint) {
