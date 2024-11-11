@@ -1,15 +1,16 @@
 package api
 
 import (
-	"github.com/duke-git/lancet/v2/slice"
-	"github.com/gogf/gf/v2/frame/g"
-	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/product/collection/sCollection"
 	"shopkone-service/internal/module/setting/tax/mTax"
 	"shopkone-service/internal/module/setting/tax/sTax/sTax"
 	ctx2 "shopkone-service/utility/ctx"
+
+	"github.com/duke-git/lancet/v2/slice"
+	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 )
 
 type aTax struct {
@@ -25,7 +26,7 @@ func (a *aTax) List(ctx g.Ctx, req *vo.TaxListReq) (res []vo.TaxListRes, err err
 		return nil, err
 	}
 	shop := auth.Shop
-	return sTax.NewTax(sOrm.NewDb(), shop.ID).TaxList()
+	return sTax.NewTax(sOrm.NewDb(&auth.Shop.ID), shop.ID).TaxList()
 }
 
 func (a *aTax) Info(ctx g.Ctx, req *vo.TaxInfoReq) (res vo.TaxInfoRes, err error) {
@@ -34,7 +35,7 @@ func (a *aTax) Info(ctx g.Ctx, req *vo.TaxInfoReq) (res vo.TaxInfoRes, err error
 		return
 	}
 	shop := auth.Shop
-	return sTax.NewTax(sOrm.NewDb(), shop.ID).TaxInfo(req.Id)
+	return sTax.NewTax(sOrm.NewDb(&auth.Shop.ID), shop.ID).TaxInfo(req.Id)
 }
 
 func (a *aTax) TaxUpdate(ctx g.Ctx, req *vo.TaxUpdateReq) (res vo.TaxUpdateRes, err error) {
@@ -43,7 +44,7 @@ func (a *aTax) TaxUpdate(ctx g.Ctx, req *vo.TaxUpdateReq) (res vo.TaxUpdateRes, 
 		return
 	}
 	shop := auth.Shop
-	orm := sOrm.NewDb()
+	orm := sOrm.NewDb(&auth.Shop.ID)
 	// 校验collectionIds是否都存在
 	collectionIds := slice.Map(req.Customers, func(_ int, item vo.BaseCustomerTax) uint {
 		if item.Type == mTax.CustomerTaxTypeCollection {
@@ -73,7 +74,7 @@ func (a *aTax) TaxCreate(ctx g.Ctx, req *vo.TaxCreateReq) (res vo.TaxCreateRes, 
 		return
 	}
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sTax.NewTax(tx, shop.ID).TaxCreate(req.CountryCodes)
 	})
 	return res, err
@@ -85,7 +86,7 @@ func (a *aTax) TaxRemove(ctx g.Ctx, req *vo.TaxRemoveReq) (res vo.TaxRemoveRes, 
 		return
 	}
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		s := sTax.NewTax(tx, shop.ID)
 		return s.TaxRemoveByIds(req.Ids)
 	})
@@ -98,7 +99,7 @@ func (a *aTax) TaxActive(ctx g.Ctx, req *vo.TaxActiveReq) (res vo.TaxActiveRes, 
 		return
 	}
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		s := sTax.NewTax(tx, shop.ID)
 		if err = s.TaxActive(*req); err != nil {
 			return err

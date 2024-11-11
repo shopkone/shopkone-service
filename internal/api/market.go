@@ -1,12 +1,13 @@
 package api
 
 import (
-	"github.com/gogf/gf/v2/frame/g"
-	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarket"
 	ctx2 "shopkone-service/utility/ctx"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 )
 
 type aMarket struct {
@@ -19,7 +20,7 @@ func NewMarketApi() *aMarket {
 func (a *aMarket) Create(ctx g.Ctx, req *vo.MarketCreateReq) (res vo.MarketCreateRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		res, err = sMarket.NewMarket(tx, shop.ID).MarketCreate(*req)
 		return err
 	})
@@ -29,19 +30,19 @@ func (a *aMarket) Create(ctx g.Ctx, req *vo.MarketCreateReq) (res vo.MarketCreat
 func (a *aMarket) List(ctx g.Ctx, req *vo.MarketListReq) (res []vo.MarketListRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	return sMarket.NewMarket(sOrm.NewDb(), shop.ID).MarketList()
+	return sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID).MarketList()
 }
 
 func (a *aMarket) Info(ctx g.Ctx, req *vo.MarketInfoReq) (res vo.MarketInfoRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	return sMarket.NewMarket(sOrm.NewDb(), shop.ID).MarketInfo(req.ID)
+	return sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID).MarketInfo(req.ID)
 }
 
 func (a *aMarket) Update(ctx g.Ctx, req *vo.MarketUpdateReq) (res vo.MarketUpdateRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		res, err = sMarket.NewMarket(tx, shop.ID).MarketUpdate(*req)
 		return err
 	})
@@ -51,14 +52,14 @@ func (a *aMarket) Update(ctx g.Ctx, req *vo.MarketUpdateReq) (res vo.MarketUpdat
 func (a *aMarket) Options(ctx g.Ctx, req *vo.MarketOptionsReq) (res []vo.MarketOptionsRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	return sMarket.NewMarket(sOrm.NewDb(), shop.ID).MarketOptions()
+	return sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID).MarketOptions()
 }
 
 // 更新市场域名设置
 func (a *aMarket) UpDomain(ctx g.Ctx, req *vo.MarketUpDomainReq) (res vo.MarketUpDomainRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		s := sMarket.NewMarket(tx, shop.ID)
 		return s.MarketUpdateDomain(*req)
 	})
@@ -69,7 +70,7 @@ func (a *aMarket) UpDomain(ctx g.Ctx, req *vo.MarketUpDomainReq) (res vo.MarketU
 func (a *aMarket) UpdateLang(ctx g.Ctx, req *vo.MarketUpdateLangReq) (res vo.MarketUpdateLangRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		s := sMarket.NewMarket(tx, shop.ID)
 		return s.MarketUpdateLang(*req)
 	})
@@ -80,7 +81,7 @@ func (a *aMarket) UpdateLang(ctx g.Ctx, req *vo.MarketUpdateLangReq) (res vo.Mar
 func (a *aMarket) UpdateLangByLangID(ctx g.Ctx, req *vo.MarketUpdateLangByLangIDReq) (res vo.MarketUpdateLangByLangIDRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		s := sMarket.NewMarket(tx, shop.ID)
 		return s.MarketUpdateLangByLangID(req)
 	})

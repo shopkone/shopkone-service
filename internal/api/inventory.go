@@ -1,9 +1,6 @@
 package api
 
 import (
-	"github.com/duke-git/lancet/v2/slice"
-	"github.com/gogf/gf/v2/frame/g"
-	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/product/inventory/mInventory"
@@ -15,6 +12,10 @@ import (
 	"shopkone-service/internal/module/setting/location/sLocation"
 	ctx2 "shopkone-service/utility/ctx"
 	"shopkone-service/utility/handle"
+
+	"github.com/duke-git/lancet/v2/slice"
+	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 )
 
 type aInventory struct {
@@ -28,7 +29,7 @@ func NewInventoryApi() *aInventory {
 func (a *aInventory) List(ctx g.Ctx, req *vo.InventoryListReq) (res handle.PageRes[vo.InventoryListRes], err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	orm := sOrm.NewDb()
+	orm := sOrm.NewDb(&auth.Shop.ID)
 
 	// 获取库存列表
 	res, err = sInventory.NewInventory(orm, shop.ID).List(*req)
@@ -89,7 +90,7 @@ func (a *aInventory) Move(ctx g.Ctx, req *vo.InventoryMoveReq) (res vo.Inventory
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	user := auth.User
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sInventory.NewInventory(tx, shop.ID).MoveInventory(req.From, req.To, user.Email)
 	})
 	return res, err
@@ -98,14 +99,14 @@ func (a *aInventory) Move(ctx g.Ctx, req *vo.InventoryMoveReq) (res vo.Inventory
 func (a *aInventory) HistoryList(ctx g.Ctx, req *vo.InventoryHistoryReq) (res []vo.InventoryHistoryRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	res, err = sInventoryChanger.NewInventoryChange(sOrm.NewDb(), shop.ID).List(req.Id)
+	res, err = sInventoryChanger.NewInventoryChange(sOrm.NewDb(&auth.Shop.ID), shop.ID).List(req.Id)
 	return res, err
 }
 
 func (a *aInventory) InventoryListUnByVariantIds(ctx g.Ctx, req *vo.InventoryListUnByVariantIdsReq) (res []vo.InventoryListUnByVariantIdsRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	orm := sOrm.NewDb()
+	orm := sOrm.NewDb(&auth.Shop.ID)
 	// 获取可用的地点
 	is := true
 	locations, err := sLocation.NewLocation(orm, shop.ID).List(&is)

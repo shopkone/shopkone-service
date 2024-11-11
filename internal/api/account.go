@@ -1,8 +1,6 @@
 package api
 
 import (
-	"github.com/gogf/gf/v2/frame/g"
-	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/email/iEmail"
 	"shopkone-service/internal/module/base/email/sEmail"
@@ -13,6 +11,9 @@ import (
 	"shopkone-service/internal/module/shop/user/sUser"
 	"shopkone-service/utility/code"
 	ctx2 "shopkone-service/utility/ctx"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 )
 
 type aAccountApi struct {
@@ -25,7 +26,7 @@ func NewAccountApi() *aAccountApi {
 // Login 登录
 func (s *aAccountApi) Login(ctx g.Ctx, req *vo.LoginReq) (res vo.LoginRes, err error) {
 	c := ctx2.NewCtx(ctx)
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(nil).Transaction(func(tx *gorm.DB) error {
 		loginIn := iUser.LoginIn{
 			Email: req.Email,
 			Pwd:   req.Password,
@@ -45,7 +46,7 @@ func (s *aAccountApi) Logout(ctx g.Ctx, req *vo.LogoutReq) (res vo.LogoutRes, er
 
 // Register 注册
 func (s *aAccountApi) Register(ctx g.Ctx, req *vo.RegisterReq) (res vo.RegisterRes, err error) {
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(nil).Transaction(func(tx *gorm.DB) error {
 		// 校验验证码
 		if err = sEmail.NewCaptcha().Verify(req.Email, req.Code, iEmail.RegisterSense); err != nil {
 			return err

@@ -1,12 +1,13 @@
 package api
 
 import (
-	"github.com/gogf/gf/v2/frame/g"
-	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/shop/user/sUser"
 	ctx2 "shopkone-service/utility/ctx"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 )
 
 type aUserApi struct {
@@ -31,7 +32,7 @@ func (s *aUserApi) Info(ctx g.Ctx, req *vo.UserInfoReq) (res vo.UserInfoRes, err
 func (a *aUserApi) SetColumns(ctx g.Ctx, req *vo.SetColumnsReq) (res vo.SetColumnsRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	user := auth.User
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sUser.NewUserColumn(tx).Set(user.ID, *req)
 	})
 	return res, err
@@ -41,6 +42,6 @@ func (a *aUserApi) SetColumns(ctx g.Ctx, req *vo.SetColumnsReq) (res vo.SetColum
 func (a *aUserApi) GetColumns(ctx g.Ctx, req *vo.GetColumnsReq) (res vo.GetColumnsRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	user := auth.User
-	res, err = sUser.NewUserColumn(sOrm.NewDb()).Get(user.ID, *req)
+	res, err = sUser.NewUserColumn(sOrm.NewDb(&auth.Shop.ID)).Get(user.ID, *req)
 	return
 }

@@ -1,9 +1,6 @@
 package api
 
 import (
-	"github.com/duke-git/lancet/v2/slice"
-	"github.com/gogf/gf/v2/frame/g"
-	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/product/product/iProduct"
@@ -12,6 +9,10 @@ import (
 	"shopkone-service/internal/module/product/product/sProduct/sVariant"
 	ctx2 "shopkone-service/utility/ctx"
 	"shopkone-service/utility/handle"
+
+	"github.com/duke-git/lancet/v2/slice"
+	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 )
 
 type aProduct struct {
@@ -25,7 +26,7 @@ func (a *aProduct) Create(ctx g.Ctx, req *vo.ProductCreateReq) (res vo.ProductCr
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	user := auth.User
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		res, err = sProduct.NewProduct(tx, shop.ID).Create(*req, user.Email)
 		return err
 	})
@@ -35,14 +36,14 @@ func (a *aProduct) Create(ctx g.Ctx, req *vo.ProductCreateReq) (res vo.ProductCr
 func (a *aProduct) Info(ctx g.Ctx, req *vo.ProductInfoReq) (res vo.ProductInfoRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	res, err = sProduct.NewProduct(sOrm.NewDb(), shop.ID).Info(req.Id)
+	res, err = sProduct.NewProduct(sOrm.NewDb(&auth.Shop.ID), shop.ID).Info(req.Id)
 	return res, err
 }
 
 func (a *aProduct) List(ctx g.Ctx, req *vo.ProductListReq) (res handle.PageRes[vo.ProductListRes], err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	res, err = sProduct.NewProduct(sOrm.NewDb(), shop.ID).List(*req)
+	res, err = sProduct.NewProduct(sOrm.NewDb(&auth.Shop.ID), shop.ID).List(*req)
 	res.Page = req.PageReq
 	return res, err
 }
@@ -51,7 +52,7 @@ func (a *aProduct) Update(ctx g.Ctx, req *vo.ProductUpdateReq) (res vo.ProductUp
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	user := auth.User
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sProduct.NewProduct(tx, shop.ID).Update(*req, user.Email)
 	})
 	return res, err
@@ -60,13 +61,13 @@ func (a *aProduct) Update(ctx g.Ctx, req *vo.ProductUpdateReq) (res vo.ProductUp
 func (a *aProduct) ListByIds(ctx g.Ctx, req *vo.ListByIdsReq) (res []vo.ListByIdsRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	return sProduct.NewProduct(sOrm.NewDb(), shop.ID).ListByIds(req.Ids)
+	return sProduct.NewProduct(sOrm.NewDb(&auth.Shop.ID), shop.ID).ListByIds(req.Ids)
 }
 
 func (a *aProduct) VariantsByIDs(ctx g.Ctx, req *vo.VariantListByIdsReq) (res []vo.VariantListByIdsRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	orm := sOrm.NewDb()
+	orm := sOrm.NewDb(&auth.Shop.ID)
 	// 获取变体列表
 	variants, err := sVariant.NewVariant(orm, shop.ID).ListByIds(req.Ids, true)
 	if err != nil {
@@ -118,7 +119,7 @@ func (a *aProduct) VariantsByIDs(ctx g.Ctx, req *vo.VariantListByIdsReq) (res []
 func (a *aProduct) CreateSupplier(ctx g.Ctx, req *vo.CreateSupplierReq) (res vo.CreateSupplierRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		res.Id, err = sSupplier.NewSupplier(tx, shop.ID).Create(req.Address)
 		return err
 	})
@@ -129,14 +130,14 @@ func (a *aProduct) CreateSupplier(ctx g.Ctx, req *vo.CreateSupplierReq) (res vo.
 func (a *aProduct) SupplierList(ctx g.Ctx, req *vo.SupplierListReq) (res []vo.SupplierListRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	return sSupplier.NewSupplier(sOrm.NewDb(), shop.ID).List()
+	return sSupplier.NewSupplier(sOrm.NewDb(&auth.Shop.ID), shop.ID).List()
 }
 
 // 更新供应商信息
 func (a *aProduct) UpdateSupplier(ctx g.Ctx, req *vo.SupplierUpdateReq) (res vo.SupplierUpdateRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sSupplier.NewSupplier(tx, shop.ID).Update(*req)
 	})
 	return res, err

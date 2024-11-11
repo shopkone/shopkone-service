@@ -1,13 +1,14 @@
 package api
 
 import (
-	"github.com/gogf/gf/v2/frame/g"
-	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/delivery/local-delivery/sLocalDelivery/sLocalDelivery"
 	"shopkone-service/internal/module/setting/location/sLocation"
 	ctx2 "shopkone-service/utility/ctx"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 )
 
 type aLocalDelivery struct {
@@ -23,7 +24,7 @@ func (a *aLocalDelivery) List(ctx g.Ctx, req *vo.LocalDeliveryListReq) (res []vo
 		return nil, err
 	}
 	shop := auth.Shop
-	orm := sOrm.NewDb()
+	orm := sOrm.NewDb(&auth.Shop.ID)
 	locationIds, err := sLocation.NewLocation(orm, shop.ID).GetActiveIds()
 	if err != nil {
 		return nil, err
@@ -37,7 +38,7 @@ func (a *aLocalDelivery) Info(ctx g.Ctx, req *vo.LocalDeliveryInfoReq) (res vo.L
 		return
 	}
 	shop := auth.Shop
-	return sLocalDelivery.NewLocalDelivery(sOrm.NewDb(), shop.ID).LocalDeliveryInfo(req.Id)
+	return sLocalDelivery.NewLocalDelivery(sOrm.NewDb(&auth.Shop.ID), shop.ID).LocalDeliveryInfo(req.Id)
 }
 
 func (a *aLocalDelivery) Update(ctx g.Ctx, req *vo.UpdateLocalDeliveryReq) (res vo.UpdateLocalDeliveryRes, err error) {
@@ -46,7 +47,7 @@ func (a *aLocalDelivery) Update(ctx g.Ctx, req *vo.UpdateLocalDeliveryReq) (res 
 		return
 	}
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sLocalDelivery.NewLocalDelivery(tx, shop.ID).LocalDeliveryUpdate(*req)
 	})
 	return res, err

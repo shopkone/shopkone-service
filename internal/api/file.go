@@ -1,14 +1,15 @@
 package api
 
 import (
-	"github.com/gogf/gf/v2/frame/g"
-	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/ali/sAli"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/setting/file/sFile"
 	ctx2 "shopkone-service/utility/ctx"
 	"shopkone-service/utility/handle"
+
+	"github.com/gogf/gf/v2/frame/g"
+	"gorm.io/gorm"
 )
 
 type aFile struct {
@@ -22,7 +23,7 @@ func NewFileApi() *aFile {
 func (a *aFile) AddFile(ctx g.Ctx, req *vo.AddFileReq) (res vo.AddFileRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		s := sFile.NewFile(tx, shop.ID)
 		res.ID, err = s.Add(*req)
 		return err
@@ -34,14 +35,14 @@ func (a *aFile) AddFile(ctx g.Ctx, req *vo.AddFileReq) (res vo.AddFileRes, err e
 func (a *aFile) FileList(ctx g.Ctx, req *vo.FileListReq) (res handle.PageRes[vo.FileListRes], err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	return sFile.NewFile(sOrm.NewDb(), shop.ID).List(*req)
+	return sFile.NewFile(sOrm.NewDb(&auth.Shop.ID), shop.ID).List(*req)
 }
 
 // FileDelete 删除文件
 func (a *aFile) FilesDelete(ctx g.Ctx, req *vo.FilesDeleteReq) (res vo.FilesDeleteRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sFile.NewFile(tx, shop.ID).FilesDelete(req.Ids)
 	})
 	return res, err
@@ -51,14 +52,14 @@ func (a *aFile) FilesDelete(ctx g.Ctx, req *vo.FilesDeleteReq) (res vo.FilesDele
 func (a *aFile) FileInfo(ctx g.Ctx, req *vo.FileInfoReq) (res vo.FileInfoRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	return sFile.NewFile(sOrm.NewDb(), shop.ID).FileInfo(req.Id)
+	return sFile.NewFile(sOrm.NewDb(&auth.Shop.ID), shop.ID).FileInfo(req.Id)
 }
 
 // FileUpdateInfo 更新文件信息
 func (a *aFile) FileUpdateInfo(ctx g.Ctx, req *vo.FileUpdateInfoReq) (res vo.FileUpdateInfoRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sFile.NewFile(tx, shop.ID).FileUpdateInfo(*req)
 	})
 	return res, err
@@ -68,14 +69,14 @@ func (a *aFile) FileUpdateInfo(ctx g.Ctx, req *vo.FileUpdateInfoReq) (res vo.Fil
 func (a *aFile) FileListByIds(ctx g.Ctx, req *vo.FileListByIdsReq) (res []vo.FileListByIdsRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	return sFile.NewFile(sOrm.NewDb(), shop.ID).FileListByIds(req.Ids)
+	return sFile.NewFile(sOrm.NewDb(&auth.Shop.ID), shop.ID).FileListByIds(req.Ids)
 }
 
 // UpdateGroupIdByFileIds 更新文件分组
 func (a *aFile) UpdateGroupIdByFileIds(ctx g.Ctx, req *vo.UpdateGroupIdByFileIdsReq) (res vo.UpdateGroupIdByFileIdsRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sFile.NewFile(tx, shop.ID).UpdateGroupIdByFileIds(req.FileIds, req.GroupId)
 	})
 	return res, err
@@ -87,7 +88,7 @@ func (a *aFile) FileGroupList(ctx g.Ctx, req *vo.FileGroupListReq) (res []vo.Fil
 	if err != nil {
 		return res, err
 	}
-	res, err = sFile.NewFileGroup(sOrm.NewDb(), auth.Shop.ID).List()
+	res, err = sFile.NewFileGroup(sOrm.NewDb(&auth.Shop.ID), auth.Shop.ID).List()
 	return res, err
 }
 
@@ -97,7 +98,7 @@ func (a *aFile) FileGroupAdd(ctx g.Ctx, req *vo.FileGroupAddReq) (res vo.FileGro
 	if err != nil {
 		return res, err
 	}
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		s := sFile.NewFileGroup(tx, auth.Shop.ID)
 		res.ID, err = s.Add(*req)
 		return err
@@ -111,7 +112,7 @@ func (a *aFile) FileGroupUpdate(ctx g.Ctx, req *vo.FileGroupUpdateReq) (res vo.F
 	if err != nil {
 		return res, err
 	}
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sFile.NewFileGroup(tx, auth.Shop.ID).Update(req.Id, req.Name)
 	})
 	res.ID = req.Id
@@ -124,7 +125,7 @@ func (a *aFile) FileGroupRemove(ctx g.Ctx, req *vo.FileGroupRemoveReq) (res vo.F
 	if err != nil {
 		return res, err
 	}
-	err = sOrm.NewDb().Transaction(func(tx *gorm.DB) error {
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		return sFile.NewFileGroup(tx, auth.Shop.ID).Delete(req.Id)
 	})
 	return res, err
