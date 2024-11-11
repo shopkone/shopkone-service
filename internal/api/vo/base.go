@@ -92,5 +92,6 @@ type LanguagesReq struct {
 	g.Meta `path:"/base/language-list" method:"post" summary:"获取语言列表" tags:"Base"`
 }
 type LanguagesRes struct {
-	List []string `json:"list"`
+	Value string `json:"value"`
+	Label string `json:"label"`
 }

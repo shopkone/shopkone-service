@@ -30,6 +30,9 @@ func (s *sMarket) MarketInfo(id uint) (out vo.MarketInfoRes, err error) {
 	out.SubDomainID = data.SubDomainID
 	out.LanguageIds = data.LanguageIds
 	out.DefaultLanguageId = data.DefaultLanguageID
+	out.PriceAdjustmentType = data.PriceAdjustmentType
+	out.PriceAdjustment = data.PriceAdjustment
+	out.CurrencyCode = data.CurrencyCode
 	if data.LanguageIds == nil {
 		out.LanguageIds = []uint{}
 	}

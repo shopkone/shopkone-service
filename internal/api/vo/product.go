@@ -53,7 +53,9 @@ type ProductInfoRes struct {
 
 type ProductListReq struct {
 	g.Meta         `path:"/product/list" method:"post" tags:"Product" summary:"获取商品列表"`
-	TrackInventory int8 `json:"track_inventory"` // 跟踪库存 1. 跟踪 2. 不跟踪
+	TrackInventory int8    `json:"track_inventory"` // 跟踪库存 1. 跟踪 2. 不跟踪
+	ExcludeIds     *[]uint `json:"exclude_ids" dc:"排除商品id列表"`
+	IncludeIds     *[]uint `json:"include_ids" dc:"包含商品id列表"`
 	handle.PageReq
 }
 type ProductListRes struct {

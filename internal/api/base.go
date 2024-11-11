@@ -8,6 +8,7 @@ import (
 	"shopkone-service/internal/module/base/resource/iResource"
 	"shopkone-service/internal/module/base/resource/mResource"
 	"shopkone-service/internal/module/base/resource/sResource"
+	ctx2 "shopkone-service/utility/ctx"
 )
 
 type aBaseApi struct {
@@ -19,25 +20,30 @@ func NewBaseApi() *aBaseApi {
 
 // Countries 获取国家列表
 func (a *aBaseApi) Countries(ctx g.Ctx, req *vo.CountriesReq) (res []vo.CountriesRes, err error) {
+	t := ctx2.NewCtx(ctx).GetT
 	list := sResource.NewCountry().List()
 	res = slice.Map(list, func(index int, item iResource.CountryListOut) vo.CountriesRes {
+		zones := slice.Map(item.Zones, func(index int, zone iResource.ZoneListOut) iResource.ZoneListOut {
+			zone.Name = t(item.Name + "___" + zone.Name)
+			return zone
+		})
 		return vo.CountriesRes{
 			Code:      item.Code,
 			Continent: item.Continent,
-			Name:      item.Name,
-			Zones:     item.Zones,
+			Name:      t(item.Name),
+			Zones:     zones,
 			Flag:      item.Flag,
 			Config: vo.AddressConfig{
-				Address1:   item.Config.Address1,
-				Address2:   item.Config.Address2,
-				City:       item.Config.City,
-				Company:    item.Config.Company,
-				Country:    item.Config.Country,
-				FirstName:  item.Config.FirstName,
-				LastName:   item.Config.LastName,
-				Phone:      item.Config.Phone,
-				PostalCode: item.Config.PostalCode,
-				Zone:       item.Config.Zone,
+				Address1:   t(item.Config.Address1),
+				Address2:   t(item.Config.Address2),
+				City:       t(item.Config.City),
+				Company:    t(item.Config.Company),
+				Country:    t(item.Config.Country),
+				FirstName:  t(item.Config.FirstName),
+				LastName:   t(item.Config.LastName),
+				Phone:      t(item.Config.Phone),
+				PostalCode: t(item.Config.PostalCode),
+				Zone:       t(item.Config.Zone),
 			},
 			Formatting:       item.Formatting.Show,
 			PostalCodeConfig: item.PostalCodeConfig,
@@ -60,9 +66,10 @@ func (a *aBaseApi) PhonePrefix(ctx g.Ctx, req *vo.PhonePrefixReq) (res []vo.Phon
 
 // TimezoneList 获取时区列表
 func (a *aBaseApi) TimezoneList(ctx g.Ctx, req *vo.TimezoneListReq) (res []vo.TimezoneListRes, err error) {
+	t := ctx2.NewCtx(ctx).GetT
 	res = slice.Map(resource.Timezones, func(index int, item mResource.Timezone) vo.TimezoneListRes {
 		return vo.TimezoneListRes{
-			Description: item.Description,
+			Description: t(item.Description),
 			OlsonName:   item.OlsonName,
 		}
 	})
@@ -71,11 +78,12 @@ func (a *aBaseApi) TimezoneList(ctx g.Ctx, req *vo.TimezoneListReq) (res []vo.Ti
 
 // CurrencyList 获取货币列表
 func (a *aBaseApi) CurrencyList(ctx g.Ctx, req *vo.CurrencyListReq) (res []vo.CurrencyListRes, err error) {
+	t := ctx2.NewCtx(ctx).GetT
 	res = slice.Map(resource.Currencies, func(index int, item mResource.Currency) vo.CurrencyListRes {
 		return vo.CurrencyListRes{
 			Code:   item.Code,
 			Symbol: item.SymbolLeft,
-			Title:  item.Title,
+			Title:  t(item.Title),
 		}
 	})
 	return res, err
@@ -83,10 +91,11 @@ func (a *aBaseApi) CurrencyList(ctx g.Ctx, req *vo.CurrencyListReq) (res []vo.Cu
 
 // CategoryList 获取分类列表
 func (a *aBaseApi) CategoryList(ctx g.Ctx, req *vo.CategoryListReq) (res []vo.CategoryListRes, err error) {
+	t := ctx2.NewCtx(ctx).GetT
 	res = slice.Map(resource.Categories, func(index int, item mResource.Category) vo.CategoryListRes {
 		return vo.CategoryListRes{
 			Value: item.Value,
-			Label: item.EnLabel,
+			Label: t(item.EnLabel),
 			Deep:  item.Deep,
 			Pid:   item.Pid,
 		}
@@ -108,7 +117,13 @@ func (a *aBaseApi) CarrierList(ctx g.Ctx, req *vo.CarrierListReq) (res []vo.Carr
 }
 
 // 获取语言列表
-func (a *aBaseApi) LanguageList(ctx g.Ctx, req *vo.LanguagesReq) (res vo.LanguagesRes, err error) {
-	res.List = resource.Languages
+func (a *aBaseApi) LanguageList(ctx g.Ctx, req *vo.LanguagesReq) (res []vo.LanguagesRes, err error) {
+	t := ctx2.NewCtx(ctx).GetT
+	res = slice.Map(resource.Languages, func(index int, item string) vo.LanguagesRes {
+		i := vo.LanguagesRes{}
+		i.Label = t(item)
+		i.Value = item
+		return i
+	})
 	return res, err
 }

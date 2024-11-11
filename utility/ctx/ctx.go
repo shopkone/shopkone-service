@@ -2,6 +2,7 @@ package ctx
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/i18n/gi18n"
 	"github.com/gogf/gf/v2/text/gstr"
 	"shopkone-service/internal/module/shop/user/mUser"
 	"shopkone-service/utility/code"
@@ -20,7 +21,7 @@ type sCtx struct {
 }
 
 func NewCtx(ctx g.Ctx) *sCtx {
-	return &sCtx{ctx}
+	return &sCtx{gi18n.WithLanguage(ctx, "zh-CN")}
 }
 
 func (s *sCtx) GetLanguage() string {
@@ -80,4 +81,8 @@ func (s *sCtx) GetAuth() (auth middleware.Auth, err error) {
 		return auth, code.AuthError
 	}
 	return auth, nil
+}
+
+func (s *sCtx) GetT(key string) string {
+	return gi18n.T(s.ctx, key)
 }

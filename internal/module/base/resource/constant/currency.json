@@ -825,84 +825,84 @@
     "code": "SHP",
     "symbol_left": "£",
     "symbol_right": "",
-    "title": "Saint Helena pound"
+    "title": "Saint Helena pound(SHP)"
   },
   {
     "code": "BIF",
     "symbol_left": "",
     "symbol_right": "FBu",
-    "title": "Burundian franc"
+    "title": "Burundian franc(BIF)"
   },
   {
     "code": "BMD",
     "symbol_left": "$",
     "symbol_right": "",
-    "title": "Bermudian dollar"
+    "title": "Bermudian dollar(BMD)"
   },
   {
     "code": "CUP",
     "symbol_left": "$",
     "symbol_right": "",
-    "title": "Cuban peso"
+    "title": "Cuban peso(CUP)"
   },
   {
     "code": "DJF",
     "symbol_left": "",
     "symbol_right": "Fdj",
-    "title": "Djiboutian franc"
+    "title": "Djiboutian franc(DJF)"
   },
   {
     "code": "ERN",
     "symbol_left": "",
     "symbol_right": "Nkf",
-    "title": "Eritrean nakfa"
+    "title": "Eritrean nakfa(ERN)"
   },
   {
     "code": "GNF",
     "symbol_left": "",
     "symbol_right": "FG",
-    "title": "Guinean franc"
+    "title": "Guinean franc(GNF)"
   },
   {
     "code": "KPW",
     "symbol_left": "₩",
     "symbol_right": "",
-    "title": "North Korean won"
+    "title": "North Korean won(KPW)"
   },
   {
     "code": "SLL",
     "symbol_left": "Le",
     "symbol_right": "",
-    "title": "Sierra Leonean leone"
+    "title": "Sierra Leonean leone(SLL)"
   },
   {
     "code": "SOS",
     "symbol_left": "Sh.So.",
     "symbol_right": "",
-    "title": "Somali shilling"
+    "title": "Somali shilling(SOS)"
   },
   {
     "code": "TJS",
     "symbol_left": "SM",
     "symbol_right": "",
-    "title": "Tajikistani somoni"
+    "title": "Tajikistani somoni(TJS)"
   },
   {
     "code": "TOP",
     "symbol_left": "T$",
     "symbol_right": "",
-    "title": "Tongan paʻanga"
+    "title": "Tongan paʻanga(TOP)"
   },
   {
     "code": "FKP",
     "symbol_left": "£",
     "symbol_right": "",
-    "title": "Falkland Islands pound"
+    "title": "Falkland Islands pound(FKP)"
   },
   {
     "code": "IQD",
     "symbol_left": "د.ع",
     "symbol_right": "",
-    "title": "Iraqi Dinar"
+    "title": "Iraqi Dinar(IQD)"
   }
 ]

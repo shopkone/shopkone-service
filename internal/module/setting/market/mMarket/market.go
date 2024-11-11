@@ -17,20 +17,41 @@ const (
 	DomainTypeSuffix                       // 使用后缀
 )
 
+type PriceAdjustmentType uint
+
+const (
+	PriceAdjustmentTypeReduce PriceAdjustmentType = iota + 1
+	PriceAdjustmentTypeAdd
+)
+
 type Market struct {
 	mOrm.Model
-	Name              string       `gorm:"comment:名称"`
-	Status            MarketStatus `gorm:"comment:状态"`
-	IsMain            bool         `gorm:"index;comment:是否主市场"`
-	DomainType        DomainType   `gorm:"default:1"`
-	DomainSuffix      string       `gorm:"size:50"`
-	SubDomainID       uint         `gorm:"index"`
-	DefaultLanguageID uint         `gorm:"index;not null"`
-	LanguageIds       []uint       `gorm:"serializer:json"`
+	Name   string       `gorm:"comment:名称"`
+	Status MarketStatus `gorm:"comment:状态"`
+	IsMain bool         `gorm:"index;comment:是否主市场"`
+	// 域名
+	DomainType   DomainType `gorm:"default:1"`
+	DomainSuffix string     `gorm:"size:50"`
+	SubDomainID  uint       `gorm:"index"`
+	// 语言
+	DefaultLanguageID uint   `gorm:"index;not null"`
+	LanguageIds       []uint `gorm:"serializer:json"`
+	// 定价调整
+	CurrencyCode        string              `gorm:"index;not null;default:USD'"`
+	PriceAdjustmentType PriceAdjustmentType `gorm:"index;not null;default:1"`
+	PriceAdjustment     float64             `gorm:"index;not null;default:0"`
 }
 
 type MarketCountry struct {
 	mOrm.Model
 	MarketID    uint   `gorm:"not null;uniqueIndex:id_country_code"`
 	CountryCode string `gorm:"size:3;uniqueIndex:id_country_code"`
+}
+
+type MarketProduct struct {
+	mOrm.Model
+	MarketID  uint     `gorm:"index"`
+	ProductID uint     `gorm:"index"`
+	Fixed     *float64 `gorm:"index"`
+	Exclude   bool     `gorm:"default:false"`
 }

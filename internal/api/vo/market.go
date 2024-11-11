@@ -36,15 +36,18 @@ type MarketInfoReq struct {
 	ID     uint `json:"id" v:"required"`
 }
 type MarketInfoRes struct {
-	ID                uint               `json:"id"`
-	IsMain            bool               `json:"is_main"`
-	Name              string             `json:"name"`
-	CountryCodes      []string           `json:"country_codes"`
-	DomainType        mMarket.DomainType `json:"domain_type"`
-	DomainSuffix      string             `json:"domain_suffix"`
-	SubDomainID       uint               `json:"sub_domain_id"`
-	DefaultLanguageId uint               `json:"default_language_id"`
-	LanguageIds       []uint             `json:"language_ids"`
+	ID                  uint                        `json:"id"`
+	IsMain              bool                        `json:"is_main"`
+	Name                string                      `json:"name"`
+	CountryCodes        []string                    `json:"country_codes"`
+	DomainType          mMarket.DomainType          `json:"domain_type"`
+	DomainSuffix        string                      `json:"domain_suffix"`
+	SubDomainID         uint                        `json:"sub_domain_id"`
+	DefaultLanguageId   uint                        `json:"default_language_id"`
+	LanguageIds         []uint                      `json:"language_ids"`
+	CurrencyCode        string                      `json:"currency_code"`
+	PriceAdjustmentType mMarket.PriceAdjustmentType `json:"adjust_type"`
+	PriceAdjustment     float64                     `json:"price_adjustment"`
 }
 
 // 更新市场
