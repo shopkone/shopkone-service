@@ -1,6 +1,8 @@
 package mMarket
 
-import "shopkone-service/internal/module/base/orm/mOrm"
+import (
+	"shopkone-service/internal/module/base/orm/mOrm"
+)
 
 type MarketStatus uint8
 
@@ -20,8 +22,8 @@ const (
 type PriceAdjustmentType uint
 
 const (
-	PriceAdjustmentTypeReduce PriceAdjustmentType = iota + 1
-	PriceAdjustmentTypeAdd
+	PriceAdjustmentTypeReduce PriceAdjustmentType = iota + 1 // 减少
+	PriceAdjustmentTypeAdd                                   // 增加
 )
 
 type Market struct {
@@ -36,22 +38,15 @@ type Market struct {
 	// 语言
 	DefaultLanguageID uint   `gorm:"index;not null"`
 	LanguageIds       []uint `gorm:"serializer:json"`
+
 	// 定价调整
-	CurrencyCode        string              `gorm:"index;not null;default:USD'"`
-	PriceAdjustmentType PriceAdjustmentType `gorm:"index;not null;default:1"`
-	PriceAdjustment     float64             `gorm:"index;not null;default:0"`
+	CurrencyCode  string              `gorm:"index;not null;default:USD'"` // 货币
+	AdjustPercent float64             `json:"percent"`
+	AdjustType    PriceAdjustmentType `gorm:"default:1"`
 }
 
 type MarketCountry struct {
 	mOrm.Model
 	MarketID    uint   `gorm:"not null;uniqueIndex:id_country_code"`
 	CountryCode string `gorm:"size:3;uniqueIndex:id_country_code"`
-}
-
-type MarketProduct struct {
-	mOrm.Model
-	MarketID  uint     `gorm:"index"`
-	ProductID uint     `gorm:"index"`
-	Fixed     *float64 `gorm:"index"`
-	Exclude   bool     `gorm:"default:false"`
 }

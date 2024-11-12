@@ -88,6 +88,9 @@ func getShopID(d *gorm.DB) (id interface{}, c bool) {
 	if tableName == "staffs" {
 		return id, false
 	}
+	if tableName == "user_columns" {
+		return id, false
+	}
 	if !ok {
 		panic("sorm.connect.getShopID 异常")
 		return id, false

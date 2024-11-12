@@ -61,8 +61,8 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 	data.Status = mMarket.MarketStatusActive
 	data.DomainType = mMarket.DomainTypeMain
 	data.CurrencyCode = maxCurrencyCode
-	data.PriceAdjustment = 0
-	data.PriceAdjustmentType = mMarket.PriceAdjustmentTypeAdd
+	data.AdjustPercent = 0
+	data.AdjustType = mMarket.PriceAdjustmentTypeAdd
 	if err = s.orm.Create(&data).Error; err != nil {
 		return res, err
 	}

@@ -4,6 +4,7 @@ import (
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarket"
+	"shopkone-service/internal/module/setting/market/sMarket/sMarketProduct"
 	ctx2 "shopkone-service/utility/ctx"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -84,6 +85,17 @@ func (a *aMarket) UpdateLangByLangID(ctx g.Ctx, req *vo.MarketUpdateLangByLangID
 	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		s := sMarket.NewMarket(tx, shop.ID)
 		return s.MarketUpdateLangByLangID(req)
+	})
+	return res, err
+}
+
+// 更新商品调整
+func (a *aMarket) UpdateProduct(ctx g.Ctx, req *vo.MarketUpdateProductReq) (res vo.MarketUpdateProductRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
+		s := sMarketProduct.NewMarketProduct(tx, shop.ID)
+		return s.ProductUpdate(*req)
 	})
 	return res, err
 }

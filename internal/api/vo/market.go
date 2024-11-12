@@ -35,19 +35,21 @@ type MarketInfoReq struct {
 	g.Meta `path:"/market/info" method:"post" summary:"Market Info" tags:"Market"`
 	ID     uint `json:"id" v:"required"`
 }
+
 type MarketInfoRes struct {
-	ID                  uint                        `json:"id"`
-	IsMain              bool                        `json:"is_main"`
-	Name                string                      `json:"name"`
-	CountryCodes        []string                    `json:"country_codes"`
-	DomainType          mMarket.DomainType          `json:"domain_type"`
-	DomainSuffix        string                      `json:"domain_suffix"`
-	SubDomainID         uint                        `json:"sub_domain_id"`
-	DefaultLanguageId   uint                        `json:"default_language_id"`
-	LanguageIds         []uint                      `json:"language_ids"`
-	CurrencyCode        string                      `json:"currency_code"`
-	PriceAdjustmentType mMarket.PriceAdjustmentType `json:"adjust_type"`
-	PriceAdjustment     float64                     `json:"price_adjustment"`
+	ID                uint                        `json:"id"`
+	IsMain            bool                        `json:"is_main"`
+	Name              string                      `json:"name"`
+	CountryCodes      []string                    `json:"country_codes"`
+	DomainType        mMarket.DomainType          `json:"domain_type"`
+	DomainSuffix      string                      `json:"domain_suffix"`
+	SubDomainID       uint                        `json:"sub_domain_id"`
+	DefaultLanguageId uint                        `json:"default_language_id"`
+	LanguageIds       []uint                      `json:"language_ids"`
+	CurrencyCode      string                      `json:"currency_code"`
+	AdjustPercent     float64                     `json:"adjust_percent"`
+	AdjustType        mMarket.PriceAdjustmentType `json:"adjust_type"`
+	AdjustProducts    []MarketUpdateProductItem   `json:"adjust_products"`
 }
 
 // 更新市场
@@ -101,4 +103,23 @@ type MarketUpdateLangByLangIDReq struct {
 	MarketIds []uint `json:"market_ids"`
 }
 type MarketUpdateLangByLangIDRes struct {
+}
+
+type MarketUpdateProductItem struct {
+	ID        uint     `json:"id" v:"required"`
+	ProductID uint     `json:"product_id" v:"required"`
+	Fixed     *float64 `json:"fixed"`
+	Exclude   bool     `json:"exclude"`
+}
+
+// 更新商品价格调整
+type MarketUpdateProductReq struct {
+	g.Meta         `path:"/market/update-product" method:"post" summary:"Market Update Product" tags:"Market"`
+	MarketID       uint                        `json:"market_id" v:"required"`
+	AdjustPercent  float64                     `json:"adjust_percent"`
+	AdjustType     mMarket.PriceAdjustmentType `json:"adjust_type"`
+	AdjustProducts []MarketUpdateProductItem   `json:"adjust_products"`
+	CurrencyCode   string                      `json:"currency_code"`
+}
+type MarketUpdateProductRes struct {
 }
