@@ -13,4 +13,5 @@ var (
 	ErrAddressId        = baseError(10, "地址ID错误")
 	IdMissing           = baseError(11, "缺少参数")
 	SystemError         = baseError(12, "系统错误")
+	CacheKeyError       = baseError(13, "缓存键错误")
 )

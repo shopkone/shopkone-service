@@ -28,7 +28,7 @@ func NewUserCache() *sUserCache {
 }
 
 func (s *sUserCache) UpdateUserCache(userId uint, orm *gorm.DB) error {
-	key := "user_" + convertor.ToString(userId)
+	key := sCache.USER_PREFIX_KEY + convertor.ToString(userId)
 	user, err := NewUser(orm).InfoById(userId)
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func (s *sUserCache) UpdateUserCache(userId uint, orm *gorm.DB) error {
 }
 
 func (s *sUserCache) GetUserCache(userId uint) (user mUser.User, err error) {
-	key := "user_" + convertor.ToString(userId)
+	key := sCache.USER_PREFIX_KEY + convertor.ToString(userId)
 	err = sCache.NewUserCache().Get(key, &user)
 	return user, err
 }
@@ -62,7 +62,7 @@ func (s *sUserCache) UpdateUserLoginCache(token string, userId uint) (err error)
 	if user.ID != 0 {
 		return code.LoginSystemLock
 	}
-	if err = sCache.AuthCache().Set(token, userId, uint(day7)); err != nil {
+	if err = sCache.AuthCache().Set(sCache.TOKEN_PREFIX_KEY+token, userId, uint(day7)); err != nil {
 		return err
 	}
 	return nil
@@ -75,7 +75,7 @@ func (s *sUserCache) GetUserLoginCache(token string) (user mUser.User, err error
 		return user, err
 	}
 	var userId uint
-	if err = sCache.AuthCache().Get(token, &userId); err != nil {
+	if err = sCache.AuthCache().Get(sCache.TOKEN_PREFIX_KEY+token, &userId); err != nil {
 		return user, err
 	}
 	return s.GetUserCache(userId)
@@ -86,7 +86,7 @@ func (s *sUserCache) Removes(tokens []string) error {
 		return nil
 	}
 	for _, token := range tokens {
-		if err := sCache.AuthCache().Remove(token); err != nil {
+		if err := sCache.AuthCache().Remove(sCache.TOKEN_PREFIX_KEY + token); err != nil {
 			return err
 		}
 	}

@@ -10,8 +10,8 @@ import (
 var email *gcache.Cache
 var auth *gcache.Cache
 var user *gcache.Cache
-var staff *gcache.Cache
 var shop *gcache.Cache
+var other *gcache.Cache
 
 type ICacheConnect interface {
 	Connect() error                      // 连接Redis
@@ -38,12 +38,12 @@ func (s *sCacheConnect) Connect() (err error) {
 	if user, err = s.setCache(2); err != nil {
 		return err
 	}
-	// 员工缓存
-	if staff, err = s.setCache(3); err != nil {
+	// 店铺缓存
+	if shop, err = s.setCache(3); err != nil {
 		return err
 	}
-	// 店铺缓存
-	if shop, err = s.setCache(4); err != nil {
+	// 其他缓存
+	if other, err = s.setCache(4); err != nil {
 		return err
 	}
 	return nil

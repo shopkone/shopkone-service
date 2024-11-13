@@ -91,10 +91,13 @@ func getShopID(d *gorm.DB) (id interface{}, c bool) {
 	if tableName == "user_columns" {
 		return id, false
 	}
-	if !ok {
-		panic("sorm.connect.getShopID 异常")
+	if tableName == "user_login_records" {
 		return id, false
 	}
-	g.Dump(tableName)
+	g.Dump(tableName, id)
+	if !ok || id == 0 {
+		panic("sorm.connect.getShopID 异常")
+		return 0, true
+	}
 	return id, true
 }

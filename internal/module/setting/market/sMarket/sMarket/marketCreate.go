@@ -7,6 +7,7 @@ import (
 	"shopkone-service/internal/module/base/resource/mResource"
 	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/market/mMarket"
+	"shopkone-service/internal/module/setting/market/sMarket/sMarketProduct"
 	"shopkone-service/utility/code"
 )
 
@@ -60,11 +61,19 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 	data.ShopId = s.shopId
 	data.Status = mMarket.MarketStatusActive
 	data.DomainType = mMarket.DomainTypeMain
-	data.CurrencyCode = maxCurrencyCode
-	data.AdjustPercent = 0
-	data.AdjustType = mMarket.PriceAdjustmentTypeAdd
 	if err = s.orm.Create(&data).Error; err != nil {
 		return res, err
+	}
+
+	// 添加市场调整货币
+	priceCreateIn := sMarketProduct.MarketPriceCreateIn{
+		AdjustPercent: 0,
+		AdjustType:    mMarket.PriceAdjustmentTypeAdd,
+		CurrencyCode:  maxCurrencyCode,
+		MarketID:      0,
+	}
+	if err = sMarketProduct.NewMarketProduct(s.orm, s.shopId).PriceCreate(priceCreateIn); err != nil {
+		return vo.MarketCreateRes{}, err
 	}
 
 	// 更新语言

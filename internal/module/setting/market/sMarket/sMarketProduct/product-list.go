@@ -1,6 +1,8 @@
 package sMarketProduct
 
-import "shopkone-service/internal/module/setting/market/mMarket"
+import (
+	"shopkone-service/internal/module/setting/market/mMarket"
+)
 
 func (s *sMarketProduct) ProductList(marketID uint) ([]mMarket.MarketProduct, error) {
 	var list []mMarket.MarketProduct

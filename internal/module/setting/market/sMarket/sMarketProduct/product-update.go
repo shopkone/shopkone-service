@@ -4,18 +4,38 @@ import (
 	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/market/mMarket"
+	"shopkone-service/utility/code"
 	"shopkone-service/utility/handle"
 )
 
-func (s *sMarketProduct) ProductUpdate(in vo.MarketUpdateProductReq) error {
-	// 更新定价调整数据
-	market := mMarket.Market{}
-	market.AdjustPercent = in.AdjustPercent
-	market.AdjustType = in.AdjustType
-	market.CurrencyCode = in.CurrencyCode
-	if err := s.orm.Where("id = ?", in.MarketID).
-		Select("adjust_percent", "adjust_type", "currency_code").
-		Updates(&market).Error; err != nil {
+func (s *sMarketProduct) ProductUpdate(in vo.MarketUpdateProductReq, isMainMarket bool) error {
+	// 获取价格调整
+	marketPrice, err := s.PriceInfo(in.MarketID)
+	if err != nil {
+		return err
+	}
+	// 如果更改了货币
+	if marketPrice.CurrencyCode != in.CurrencyCode {
+		// 如果是主市场，则不允许再这里变更
+		if isMainMarket {
+			return code.MarketPriceUpdateInBaseCurrency
+		}
+		// 清空固定价格
+		in.AdjustProducts = slice.Map(
+			in.AdjustProducts,
+			func(index int, item vo.MarketUpdateProductItem) vo.MarketUpdateProductItem {
+				item.Fixed = nil
+				return item
+			})
+	}
+	// 更新价格调整
+	priceUpdateIn := MarketPriceUpdateIn{
+		MarketID:      in.MarketID,
+		CurrencyCode:  in.CurrencyCode,
+		AdjustPercent: in.AdjustPercent,
+		AdjustType:    in.AdjustType,
+	}
+	if err = s.PriceUpdate(priceUpdateIn); err != nil {
 		return err
 	}
 	// 获取旧的商品

@@ -37,19 +37,15 @@ type MarketInfoReq struct {
 }
 
 type MarketInfoRes struct {
-	ID                uint                        `json:"id"`
-	IsMain            bool                        `json:"is_main"`
-	Name              string                      `json:"name"`
-	CountryCodes      []string                    `json:"country_codes"`
-	DomainType        mMarket.DomainType          `json:"domain_type"`
-	DomainSuffix      string                      `json:"domain_suffix"`
-	SubDomainID       uint                        `json:"sub_domain_id"`
-	DefaultLanguageId uint                        `json:"default_language_id"`
-	LanguageIds       []uint                      `json:"language_ids"`
-	CurrencyCode      string                      `json:"currency_code"`
-	AdjustPercent     float64                     `json:"adjust_percent"`
-	AdjustType        mMarket.PriceAdjustmentType `json:"adjust_type"`
-	AdjustProducts    []MarketUpdateProductItem   `json:"adjust_products"`
+	ID                uint               `json:"id"`
+	IsMain            bool               `json:"is_main"`
+	Name              string             `json:"name"`
+	CountryCodes      []string           `json:"country_codes"`
+	DomainType        mMarket.DomainType `json:"domain_type"`
+	DomainSuffix      string             `json:"domain_suffix"`
+	SubDomainID       uint               `json:"sub_domain_id"`
+	DefaultLanguageId uint               `json:"default_language_id"`
+	LanguageIds       []uint             `json:"language_ids"`
 }
 
 // 更新市场
@@ -122,4 +118,18 @@ type MarketUpdateProductReq struct {
 	CurrencyCode   string                      `json:"currency_code"`
 }
 type MarketUpdateProductRes struct {
+}
+
+// 或许商品价格调整
+type MarketGetProductReq struct {
+	g.Meta   `path:"/market/get-product" method:"post" summary:"Market Get Product" tags:"Market"`
+	MarketID uint `json:"market_id" v:"required"`
+}
+type MarketGetProductRes struct {
+	AdjustPercent         float64                     `json:"adjust_percent"`
+	AdjustType            mMarket.PriceAdjustmentType `json:"adjust_type"`
+	AdjustProducts        []MarketUpdateProductItem   `json:"adjust_products"`
+	CurrencyCode          string                      `json:"currency_code"`
+	ExchangeRate          float64                     `json:"exchange_rate"`
+	ExchangeRateTimeStamp int64                       `json:"exchange_rate_time_stamp"`
 }

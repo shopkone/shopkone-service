@@ -21,7 +21,7 @@ func NewStaffCache() *sStaffCache {
 
 func (s *sStaffCache) GetCache(shopId, userId uint) (staff mStaff.Staff, err error) {
 	key := s.getKey(shopId, userId)
-	err = sCache.NewStaffCache().Get(key, &staff)
+	err = sCache.NewUserCache().Get(key, &staff)
 	return staff, err
 }
 
@@ -32,9 +32,9 @@ func (s *sStaffCache) UpdateCache(staffId uint, orm *gorm.DB) (err error) {
 	}
 	key := s.getKey(staff.ShopId, staff.UserId)
 	year100 := 60 * 24 * 365 * 100 //100年
-	return sCache.NewStaffCache().Set(key, staff, uint(year100))
+	return sCache.NewUserCache().Set(key, staff, uint(year100))
 }
 
 func (s *sStaffCache) getKey(shopId, userId uint) string {
-	return "staff_" + convertor.ToString(shopId) + "_" + convertor.ToString(userId)
+	return sCache.STAFF_PREFIX_KEY + convertor.ToString(shopId) + "_" + convertor.ToString(userId)
 }

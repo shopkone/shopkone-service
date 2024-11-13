@@ -68,6 +68,7 @@ func (s *sShop) CreateTrial(in iShop.CreateTrialIn) (shopId uint, err error) {
 	if err = s.orm.Create(&shop).Error; err != nil {
 		return shopId, err
 	}
+	s.orm.Statement.Settings.Store("__SHOP_ID", shop.ID)
 	// 创建默认税费
 	if err = sTax.NewTax(s.orm, shop.ID).TaxCreate([]string{shop.Country}); err != nil {
 		return 0, err

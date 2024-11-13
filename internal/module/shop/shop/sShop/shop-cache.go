@@ -25,7 +25,7 @@ func (s *sShopCache) UpdateShopCache(shopId uint, orm *gorm.DB) error {
 	if err := query.First(&shop).Error; err != nil {
 		return err
 	}
-	key := "shop_" + shop.Uuid
+	key := sCache.SHOP_PREFIX_KEY + shop.Uuid
 	year100 := 60 * 24 * 365 * 100 //100年
 	if err := sCache.NewShopCache().Set(key, shop, uint(year100)); err != nil {
 		return err
@@ -34,7 +34,7 @@ func (s *sShopCache) UpdateShopCache(shopId uint, orm *gorm.DB) error {
 }
 
 func (s *sShopCache) GetShopCache(uuid string) (shop mShop.Shop, err error) {
-	key := "shop_" + uuid
+	key := sCache.SHOP_PREFIX_KEY + uuid
 	err = sCache.NewShopCache().Get(key, &shop)
 	return shop, err
 }

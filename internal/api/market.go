@@ -95,7 +95,19 @@ func (a *aMarket) UpdateProduct(ctx g.Ctx, req *vo.MarketUpdateProductReq) (res 
 	shop := auth.Shop
 	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
 		s := sMarketProduct.NewMarketProduct(tx, shop.ID)
-		return s.ProductUpdate(*req)
+		market, err := sMarket.NewMarket(tx, shop.ID).MarketSimple(req.MarketID)
+		if err != nil {
+			return err
+		}
+		return s.ProductUpdate(*req, market.IsMain)
 	})
 	return res, err
+}
+
+// 获取商品调整
+func (a *aMarket) GetProduct(ctx g.Ctx, req *vo.MarketGetProductReq) (res vo.MarketGetProductRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	s := sMarketProduct.NewMarketProduct(sOrm.NewDb(&auth.Shop.ID), shop.ID)
+	return s.GetPrice(req.MarketID, shop.StoreCurrency)
 }

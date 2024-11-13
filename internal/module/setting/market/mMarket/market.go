@@ -19,13 +19,6 @@ const (
 	DomainTypeSuffix                       // 使用后缀
 )
 
-type PriceAdjustmentType uint
-
-const (
-	PriceAdjustmentTypeReduce PriceAdjustmentType = iota + 1 // 减少
-	PriceAdjustmentTypeAdd                                   // 增加
-)
-
 type Market struct {
 	mOrm.Model
 	Name   string       `gorm:"comment:名称"`
@@ -38,11 +31,6 @@ type Market struct {
 	// 语言
 	DefaultLanguageID uint   `gorm:"index;not null"`
 	LanguageIds       []uint `gorm:"serializer:json"`
-
-	// 定价调整
-	CurrencyCode  string              `gorm:"index;not null;default:USD'"` // 货币
-	AdjustPercent float64             `json:"percent"`
-	AdjustType    PriceAdjustmentType `gorm:"default:1"`
 }
 
 type MarketCountry struct {

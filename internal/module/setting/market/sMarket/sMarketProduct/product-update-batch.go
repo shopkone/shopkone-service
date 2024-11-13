@@ -2,13 +2,11 @@ package sMarketProduct
 
 import (
 	"github.com/duke-git/lancet/v2/slice"
-	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/module/setting/market/mMarket"
 	"shopkone-service/utility/handle"
 )
 
 func (s *sMarketProduct) ProductUpdateBatch(products, oldProducts []mMarket.MarketProduct) (err error) {
-	g.Dump(products, oldProducts)
 	products = slice.Filter(products, func(index int, newItem mMarket.MarketProduct) bool {
 		oldItem, ok := slice.FindBy(oldProducts, func(index int, oldItem mMarket.MarketProduct) bool {
 			return oldItem.ID == newItem.ID

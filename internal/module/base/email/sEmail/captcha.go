@@ -96,5 +96,5 @@ func (s *sCaptcha) Remove(email string, sense iEmail.Sense) (err error) {
 }
 
 func (s *sCaptcha) getKey(email string, sense iEmail.Sense) string {
-	return "captcha_" + string(sense) + "_" + email
+	return sCache.CAPTCHA_PREFIX_KEY + string(sense) + "_" + email
 }
