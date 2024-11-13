@@ -14,7 +14,7 @@ func (s *sProduct) List(in vo.ProductListReq) (res handle.PageRes[vo.ProductList
 	query := s.orm.Model(&mProduct.Product{}).Where("shop_id = ?", s.shopId)
 	// 获取全部总数
 	res.Page = in.PageReq
-	if err = query.Count(&res.Page.Total).Error; err != nil {
+	if err = query.Count(&res.Page.AllTotal).Error; err != nil {
 		return res, err
 	}
 	// 过滤是否追踪库存
