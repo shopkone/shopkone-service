@@ -4,6 +4,7 @@ import (
 	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/market/mMarket"
+	"shopkone-service/internal/module/setting/market/sMarket/sMarketCountry"
 )
 
 func (s *sMarket) MarketUpdate(in vo.MarketUpdateReq) (res vo.MarketUpdateRes, err error) {
@@ -31,7 +32,7 @@ func (s *sMarket) MarketUpdate(in vo.MarketUpdateReq) (res vo.MarketUpdateRes, e
 	}
 
 	// 更新国家绑定
-	if err = s.CountryUpdate(in.CountryCodes, in.ID); err != nil {
+	if err = sMarketCountry.NewMarketCountry(s.orm, s.shopId).CountryUpdate(in.CountryCodes, in.ID); err != nil {
 		return res, err
 	}
 

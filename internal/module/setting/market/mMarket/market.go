@@ -32,9 +32,3 @@ type Market struct {
 	DefaultLanguageID uint   `gorm:"index;not null"`
 	LanguageIds       []uint `gorm:"serializer:json"`
 }
-
-type MarketCountry struct {
-	mOrm.Model
-	MarketID    uint   `gorm:"not null;uniqueIndex:id_country_code"`
-	CountryCode string `gorm:"size:3;uniqueIndex:id_country_code"`
-}

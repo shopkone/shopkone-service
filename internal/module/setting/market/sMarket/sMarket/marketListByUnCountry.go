@@ -3,6 +3,7 @@ package sMarket
 import (
 	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/module/setting/market/mMarket"
+	"shopkone-service/internal/module/setting/market/sMarket/sMarketCountry"
 )
 
 func (s *sMarket) MarketListByUnCountry() (out []mMarket.Market, err error) {
@@ -16,7 +17,7 @@ func (s *sMarket) MarketListByUnCountry() (out []mMarket.Market, err error) {
 	marketIds := slice.Map(out, func(index int, item mMarket.Market) uint {
 		return item.ID
 	})
-	countries, err := s.CountryList(marketIds)
+	countries, err := sMarketCountry.NewMarketCountry(s.orm, s.shopId).CountryList(marketIds)
 	if err != nil {
 		return nil, err
 	}

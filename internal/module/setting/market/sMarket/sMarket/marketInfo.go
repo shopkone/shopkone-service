@@ -4,6 +4,7 @@ import (
 	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/market/mMarket"
+	"shopkone-service/internal/module/setting/market/sMarket/sMarketCountry"
 )
 
 func (s *sMarket) MarketInfo(id uint) (out vo.MarketInfoRes, err error) {
@@ -14,7 +15,7 @@ func (s *sMarket) MarketInfo(id uint) (out vo.MarketInfoRes, err error) {
 		return out, err
 	}
 
-	countries, err := s.CountryList([]uint{id})
+	countries, err := sMarketCountry.NewMarketCountry(s.orm, s.shopId).CountryList([]uint{id})
 	if err != nil {
 		return vo.MarketInfoRes{}, err
 	}

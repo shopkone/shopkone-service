@@ -21,6 +21,7 @@ func NewShopCache() *sShopCache {
 }
 
 func (s *sShopCache) UpdateShopCache(shopId uint, orm *gorm.DB) error {
+	// 更新店铺缓存
 	shop := mShop.Shop{}
 	query := orm.Model(&shop).Where("id = ?", shopId)
 	if err := query.First(&shop).Error; err != nil {

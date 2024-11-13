@@ -7,11 +7,14 @@ import (
 	"shopkone-service/internal/module/base/resource/mResource"
 	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/market/mMarket"
+	"shopkone-service/internal/module/setting/market/sMarket/sMarketCountry"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarketProduct"
 	"shopkone-service/utility/code"
 )
 
 func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, err error) {
+	marketCountryService := sMarketCountry.NewMarketCountry(s.orm, s.shopId)
+
 	// 如果是主市场，则判断著市场是否已经存在
 	if in.IsMain {
 		var Main mMarket.Market
@@ -87,7 +90,7 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 	}
 
 	// 创建国家
-	if err = s.CountryCreate(in.CountryCodes, data.ID); err != nil {
+	if err = marketCountryService.CountryCreate(in.CountryCodes, data.ID); err != nil {
 		return res, err
 	}
 
