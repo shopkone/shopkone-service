@@ -133,3 +133,12 @@ type MarketGetProductRes struct {
 	ExchangeRate          float64                     `json:"exchange_rate"`
 	ExchangeRateTimeStamp int64                       `json:"exchange_rate_time_stamp"`
 }
+
+type MarketSimpleReq struct {
+	g.Meta `path:"/market/simple" method:"post" summary:"Market Simple" tags:"Market"`
+	ID     uint `json:"id"`
+}
+type MarketSimpleRes struct {
+	Name   string `json:"name"`
+	IsMain bool   `json:"is_main"`
+}

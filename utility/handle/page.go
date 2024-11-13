@@ -21,6 +21,7 @@ type PageRes[T any] struct {
 
 /*PageReq 分页请求*/
 type PageReq struct {
-	Page     int `json:"page" v:"required|min:1|max:100" dc:"页码"`
-	PageSize int `json:"page_size" v:"required|min:1|max:100" dc:"每页数量"`
+	Page     int   `json:"page" v:"required|min:1|max:100" dc:"页码"`
+	PageSize int   `json:"page_size" v:"required|min:1|max:100" dc:"每页数量"`
+	Total    int64 `json:"total"`
 }

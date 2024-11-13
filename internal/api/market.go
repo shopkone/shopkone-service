@@ -1,8 +1,11 @@
 package api
 
 import (
+	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
+	"shopkone-service/internal/module/base/resource/iResource"
+	"shopkone-service/internal/module/base/resource/sResource"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarket"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarketProduct"
 	ctx2 "shopkone-service/utility/ctx"
@@ -99,7 +102,12 @@ func (a *aMarket) UpdateProduct(ctx g.Ctx, req *vo.MarketUpdateProductReq) (res 
 		if err != nil {
 			return err
 		}
-		return s.ProductUpdate(*req, market.IsMain)
+		productUpdateIn := sMarketProduct.ProductUpdateIn{
+			Req:           req,
+			StoreCurrency: shop.StoreCurrency,
+			IsMain:        market.IsMain,
+		}
+		return s.ProductUpdate(productUpdateIn)
 	})
 	return res, err
 }
@@ -110,4 +118,28 @@ func (a *aMarket) GetProduct(ctx g.Ctx, req *vo.MarketGetProductReq) (res vo.Mar
 	shop := auth.Shop
 	s := sMarketProduct.NewMarketProduct(sOrm.NewDb(&auth.Shop.ID), shop.ID)
 	return s.GetPrice(req.MarketID, shop.StoreCurrency)
+}
+
+// 获取市场简
+func (a *aMarket) Simple(ctx g.Ctx, req *vo.MarketSimpleReq) (res vo.MarketSimpleRes, err error) {
+	c := ctx2.NewCtx(ctx)
+	auth, err := c.GetAuth()
+	shop := auth.Shop
+	s := sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID)
+	out, err := s.MarketSimple(req.ID)
+	res.IsMain = out.IsMain
+	res.Name = out.Name
+
+	// 转换名称
+	countries := sResource.NewCountry().List()
+	if out.IsMain {
+		country, ok := slice.FindBy(countries, func(index int, item iResource.CountryListOut) bool {
+			return item.Code == out.Name
+		})
+		if ok {
+			res.Name = c.GetT(country.Name)
+		}
+	}
+
+	return res, err
 }

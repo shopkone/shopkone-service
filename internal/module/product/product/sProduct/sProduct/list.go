@@ -12,6 +12,12 @@ import (
 
 func (s *sProduct) List(in vo.ProductListReq) (res handle.PageRes[vo.ProductListRes], err error) {
 	query := s.orm.Model(&mProduct.Product{}).Where("shop_id = ?", s.shopId)
+	// 获取全部总数
+	res.Page = in.PageReq
+	if err = query.Count(&res.Page.Total).Error; err != nil {
+		return res, err
+	}
+	// 过滤是否追踪库存
 	if in.TrackInventory != 0 {
 		track := true
 		if in.TrackInventory == 2 {
@@ -19,19 +25,19 @@ func (s *sProduct) List(in vo.ProductListReq) (res handle.PageRes[vo.ProductList
 		}
 		query = query.Where("inventory_tracking = ?", track)
 	}
-	// 获取总数
-	if err = query.Count(&res.Total).Error; err != nil {
-		return res, err
-	}
-	// 分页
-	query = query.Scopes(handle.Pagination(in.PageReq)).Order("id desc")
-	// 排除和包含不加入总数计数
+	// 排除和包含
 	if in.ExcludeIds != nil && len(*in.ExcludeIds) > 0 {
 		query = query.Where("id not in (?)", *in.ExcludeIds)
 	}
 	if in.IncludeIds != nil {
 		query = query.Where("id in (?)", *in.IncludeIds)
 	}
+	// 获取总数
+	if err = query.Count(&res.Total).Error; err != nil {
+		return res, err
+	}
+	// 分页
+	query = query.Scopes(handle.Pagination(in.PageReq)).Order("id desc")
 	// 获取商品列表
 	var products []mProduct.Product
 	err = query.Find(&products).Error

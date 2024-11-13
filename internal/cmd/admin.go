@@ -157,6 +157,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(marketApi.UpdateLangByLangID)
 		group.Bind(marketApi.UpdateProduct)
 		group.Bind(marketApi.GetProduct)
+		group.Bind(marketApi.Simple)
 
 		// 语言
 		group.Bind(langaugesApi.List)

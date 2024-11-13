@@ -70,7 +70,7 @@ func (s *sMarket) MarketCreate(in vo.MarketCreateReq) (res vo.MarketCreateRes, e
 		AdjustPercent: 0,
 		AdjustType:    mMarket.PriceAdjustmentTypeAdd,
 		CurrencyCode:  maxCurrencyCode,
-		MarketID:      0,
+		MarketID:      data.ID,
 	}
 	if err = sMarketProduct.NewMarketProduct(s.orm, s.shopId).PriceCreate(priceCreateIn); err != nil {
 		return vo.MarketCreateRes{}, err

@@ -44,7 +44,6 @@ func (a *aProduct) List(ctx g.Ctx, req *vo.ProductListReq) (res handle.PageRes[v
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	res, err = sProduct.NewProduct(sOrm.NewDb(&auth.Shop.ID), shop.ID).List(*req)
-	res.Page = req.PageReq
 	return res, err
 }
 

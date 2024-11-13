@@ -100,6 +100,7 @@ var migrate = Migrate{
 	mMarket.Market{},
 	mMarket.MarketCountry{},
 	mMarket.MarketProduct{},
+	mMarket.MarketPrice{},
 
 	// 语言
 	mLanguage.Language{},
