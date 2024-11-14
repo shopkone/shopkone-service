@@ -15,6 +15,9 @@ func (s *sShipping) ShippingCreate(in vo.ShippingCreateReq) (id uint, err error)
 	shipping := mShipping.Shipping{}
 	shipping.ShopId = s.shopId
 	shipping.Name = in.Name
+	if shipping.Type == mShipping.GeneralExpressDelivery {
+		shipping.Name = ""
+	}
 	shipping.Type = in.Type
 	if err = s.orm.Create(&shipping).Error; err != nil {
 		return 0, err

@@ -1,8 +1,10 @@
 package api
 
 import (
+	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
+	"shopkone-service/internal/module/delivery/shipping/mShipping"
 	"shopkone-service/internal/module/delivery/shipping/sShipping/sShipping"
 	"shopkone-service/internal/module/delivery/shipping/sShipping/sShippingZone"
 	ctx2 "shopkone-service/utility/ctx"
@@ -59,13 +61,37 @@ func (a *aShipping) List(ctx g.Ctx, req *vo.ShippingListReq) (res []vo.ShippingL
 	return sShipping.NewShipping(sOrm.NewDb(&auth.Shop.ID), shop.ID).ShippingList()
 }
 
-func (a *aShipping) ZoneListByCountries(ctx g.Ctx, req *vo.ShippingZoneListByCountriesReq) (res vo.ShippingZoneListByCountriesRes, err error) {
+func (a *aShipping) ZoneListByCountries(ctx g.Ctx, req *vo.ShippingZoneListByCountriesReq) (res []vo.ShippingZoneListByCountriesRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
-	s := sShippingZone.NewShippingZone(shop.ID, sOrm.NewDb(&shop.ID))
-	res.Zones, err = s.ZonesByCountries(req.CountryCodes)
-	if res.Zones == nil {
-		res.Zones = []vo.BaseShippingZone{}
+	db := sOrm.NewDb(&shop.ID)
+	// 获取区域
+	s := sShippingZone.NewShippingZone(shop.ID, db)
+	zones, err := s.ZonesByCountries(req.CountryCodes)
+	if zones == nil {
+		zones = []vo.BaseShippingZone{}
 	}
+	// 获取所属方案信息
+	shippingIds := slice.Map(zones, func(index int, item vo.BaseShippingZone) uint {
+		return item.ShippingID
+	})
+	shippingIds = slice.Unique(shippingIds)
+	shippings, err := sShipping.NewShipping(db, shop.ID).SimpleList(shippingIds)
+	if err != nil {
+		return res, err
+	}
+	res = slice.Map(zones, func(index int, zone vo.BaseShippingZone) vo.ShippingZoneListByCountriesRes {
+		i := vo.ShippingZoneListByCountriesRes{}
+		i.BaseShippingZone = zone
+		shipping, ok := slice.FindBy(shippings, func(index int, shipping mShipping.Shipping) bool {
+			return shipping.ID == zone.ShippingID
+		})
+		if !ok {
+			return i
+		}
+		i.ShippingID = shipping.ID
+		i.ShippingName = shipping.Name
+		return i
+	})
 	return res, err
 }

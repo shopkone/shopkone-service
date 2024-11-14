@@ -24,7 +24,7 @@ func (s *sShippingZone) ZoneList(in ZoneListIn) (res []vo.BaseShippingZone, err 
 	if in.ZoneIds != nil && len(in.ZoneIds) > 0 {
 		query = query.Where("id IN ?", in.ZoneIds)
 	}
-	if err = query.Select("id", "name").Find(&zones).Error; err != nil {
+	if err = query.Select("id", "name", "shipping_id").Find(&zones).Error; err != nil {
 		return nil, err
 	}
 	zoneIds := slice.Map(zones, func(index int, item mShipping.ShippingZone) uint {
@@ -61,6 +61,7 @@ func (s *sShippingZone) ZoneList(in ZoneListIn) (res []vo.BaseShippingZone, err 
 	res = slice.Map(zones, func(index int, item mShipping.ShippingZone) vo.BaseShippingZone {
 		i := vo.BaseShippingZone{}
 		i.ID = item.ID
+		i.ShippingID = item.ShippingId
 		i.Name = item.Name
 		// 组装code
 		codes := slice.Filter(zoneCodes, func(index int, code mShipping.ShippingZoneCode) bool {

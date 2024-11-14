@@ -39,10 +39,11 @@ type BaseShippingZoneFee struct {
 
 // BaseShippingZone 表示物流区域方案
 type BaseShippingZone struct {
-	ID    uint                  `json:"id"`                 // 区域ID
-	Name  string                `json:"name" v:"required"`  // 区域名称
-	Codes []BaseZoneCode        `json:"codes" v:"required"` // 国家/地区代码
-	Fees  []BaseShippingZoneFee `json:"fees" v:"required"`  // 费用
+	ShippingID uint                  `json:"-"`                  // 所属方案
+	ID         uint                  `json:"id"`                 // 区域ID
+	Name       string                `json:"name" v:"required"`  // 区域名称
+	Codes      []BaseZoneCode        `json:"codes" v:"required"` // 国家/地区代码
+	Fees       []BaseShippingZoneFee `json:"fees" v:"required"`  // 费用
 }
 
 // BaseShipping 表示物流方案
@@ -98,5 +99,7 @@ type ShippingZoneListByCountriesReq struct {
 	CountryCodes []string `json:"country_codes" v:"required"`
 }
 type ShippingZoneListByCountriesRes struct {
-	Zones []BaseShippingZone `json:"zones"`
+	BaseShippingZone
+	ShippingID   uint   `json:"shipping_id"`
+	ShippingName string `json:"shipping_name"`
 }
