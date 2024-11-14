@@ -127,6 +127,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(shippingApi.Update)
 		group.Bind(shippingApi.Info)
 		group.Bind(shippingApi.List)
+		group.Bind(shippingApi.ZoneListByCountries)
 
 		// 本地配送
 		group.Bind(localDeliveryApi.List)

@@ -4,6 +4,7 @@ import (
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/delivery/shipping/sShipping/sShipping"
+	"shopkone-service/internal/module/delivery/shipping/sShipping/sShippingZone"
 	ctx2 "shopkone-service/utility/ctx"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -56,4 +57,15 @@ func (a *aShipping) List(ctx g.Ctx, req *vo.ShippingListReq) (res []vo.ShippingL
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	return sShipping.NewShipping(sOrm.NewDb(&auth.Shop.ID), shop.ID).ShippingList()
+}
+
+func (a *aShipping) ZoneListByCountries(ctx g.Ctx, req *vo.ShippingZoneListByCountriesReq) (res vo.ShippingZoneListByCountriesRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	s := sShippingZone.NewShippingZone(shop.ID, sOrm.NewDb(&shop.ID))
+	res.Zones, err = s.ZonesByCountries(req.CountryCodes)
+	if res.Zones == nil {
+		res.Zones = []vo.BaseShippingZone{}
+	}
+	return res, err
 }

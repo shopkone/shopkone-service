@@ -46,6 +46,7 @@ type MarketInfoRes struct {
 	SubDomainID       uint               `json:"sub_domain_id"`
 	DefaultLanguageId uint               `json:"default_language_id"`
 	LanguageIds       []uint             `json:"language_ids"`
+	CurrencyCode      string             `json:"currency_code"`
 }
 
 // 更新市场

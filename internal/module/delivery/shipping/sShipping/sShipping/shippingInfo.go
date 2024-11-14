@@ -37,7 +37,8 @@ func (s *sShipping) ShippingInfo(id uint) (res vo.BaseShipping, err error) {
 	})
 
 	// 获取发货区域
-	res.Zones, err = sShippingZone.NewShippingZone(s.shopId, s.orm).ZoneList(shipping.ID)
+	zoneListIn := sShippingZone.ZoneListIn{ShippingId: shipping.ID}
+	res.Zones, err = sShippingZone.NewShippingZone(s.shopId, s.orm).ZoneList(zoneListIn)
 
 	return res, err
 }

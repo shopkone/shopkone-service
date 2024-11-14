@@ -7,13 +7,24 @@ import (
 	"shopkone-service/internal/module/delivery/shipping/sShipping/sShippingZoneFee"
 )
 
-func (s *sShippingZone) ZoneList(shippingId uint) (res []vo.BaseShippingZone, err error) {
+type ZoneListIn struct {
+	ShippingId uint
+	ZoneIds    []uint
+}
+
+func (s *sShippingZone) ZoneList(in ZoneListIn) (res []vo.BaseShippingZone, err error) {
 	sZoneFee := sShippingZoneFee.NewShippingZoneFee(s.orm, s.shopId)
 
 	// 获取区域
 	var zones []mShipping.ShippingZone
-	if err = s.orm.Model(&zones).Where("shipping_id = ? AND shop_id = ?", shippingId, s.shopId).
-		Select("id", "name").Find(&zones).Error; err != nil {
+	query := s.orm.Model(&zones)
+	if in.ShippingId != 0 {
+		query = query.Where("shipping_id = ?", in.ShippingId)
+	}
+	if in.ZoneIds != nil && len(in.ZoneIds) > 0 {
+		query = query.Where("id IN ?", in.ZoneIds)
+	}
+	if err = query.Select("id", "name").Find(&zones).Error; err != nil {
 		return nil, err
 	}
 	zoneIds := slice.Map(zones, func(index int, item mShipping.ShippingZone) uint {
@@ -22,9 +33,11 @@ func (s *sShippingZone) ZoneList(shippingId uint) (res []vo.BaseShippingZone, er
 
 	// 获取codes
 	var zoneCodes []mShipping.ShippingZoneCode
-	if err = s.orm.Model(&zoneCodes).Where("shipping_zone_id IN ? AND shop_id = ?", zoneIds, s.shopId).
-		Select("shipping_zone_id", "country_code", "zone_codes", "id").Find(&zoneCodes).Error; err != nil {
-		return nil, err
+	if in.ShippingId != 0 {
+		if err = s.orm.Model(&zoneCodes).Where("shipping_zone_id IN ? AND shop_id = ?", zoneIds, s.shopId).
+			Select("shipping_zone_id", "country_code", "zone_codes", "id").Find(&zoneCodes).Error; err != nil {
+			return nil, err
+		}
 	}
 
 	// 获取运费

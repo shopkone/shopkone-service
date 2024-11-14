@@ -92,3 +92,11 @@ type ShippingUpdateReq struct {
 }
 type ShippingUpdateRes struct {
 }
+
+type ShippingZoneListByCountriesReq struct {
+	g.Meta       `path:"/shipping/zone/list-by-countries" method:"post" tags:"物流" summary:"物流区域列表"`
+	CountryCodes []string `json:"country_codes" v:"required"`
+}
+type ShippingZoneListByCountriesRes struct {
+	Zones []BaseShippingZone `json:"zones"`
+}

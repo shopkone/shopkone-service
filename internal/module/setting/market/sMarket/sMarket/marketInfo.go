@@ -5,6 +5,7 @@ import (
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/setting/market/mMarket"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarketCountry"
+	"shopkone-service/internal/module/setting/market/sMarket/sMarketProduct"
 )
 
 func (s *sMarket) MarketInfo(id uint) (out vo.MarketInfoRes, err error) {
@@ -31,6 +32,13 @@ func (s *sMarket) MarketInfo(id uint) (out vo.MarketInfoRes, err error) {
 	out.SubDomainID = data.SubDomainID
 	out.LanguageIds = data.LanguageIds
 	out.DefaultLanguageId = data.DefaultLanguageID
+
+	// 获取货币
+	priceInfo, err := sMarketProduct.NewMarketProduct(s.orm, s.shopId).PriceInfo(out.ID)
+	if err != nil {
+		return vo.MarketInfoRes{}, err
+	}
+	out.CurrencyCode = priceInfo.CurrencyCode
 
 	if data.LanguageIds == nil {
 		out.LanguageIds = []uint{}
