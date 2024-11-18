@@ -87,3 +87,17 @@ func (s *sCountry) PhonePrefixByCountryCode(code string) iResource.PhonePrefixLi
 	})
 	return result
 }
+
+func (s *sCountry) CheckCountryListExist(countryCodes []string) (err error) {
+	list := s.List()
+	isAllExist := slice.Every(countryCodes, func(index int, code string) bool {
+		_, ok := slice.FindBy(list, func(index int, item iResource.CountryListOut) bool {
+			return item.Code == code
+		})
+		return ok
+	})
+	if !isAllExist {
+		err = code.CountryCodeUnknown
+	}
+	return
+}

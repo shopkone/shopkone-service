@@ -35,3 +35,18 @@ type DomainConnectCheckReq struct {
 type DomainConnectCheckRes struct {
 	IsConnect bool `json:"is_connect"`
 }
+
+type DomainBlockCountryUpdateReq struct {
+	g.Meta `path:"/domain/block-country/update" method:"post" tags:"Domain" summary:"更新域名屏蔽国家"`
+	Codes  []string `json:"codes"`
+}
+type DomainBlockCountryUpdateRes struct {
+}
+
+type DomainBlockCountryListReq struct {
+	g.Meta `path:"/domain/block-country/list" method:"post" tags:"Domain" summary:"获取域名屏蔽国家列表"`
+}
+type DomainBlockCountryListRes struct {
+	Code string `json:"code"`
+	Name string `json:"name"`
+}

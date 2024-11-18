@@ -38,9 +38,21 @@ func (a *aMarket) List(ctx g.Ctx, req *vo.MarketListReq) (res []vo.MarketListRes
 }
 
 func (a *aMarket) Info(ctx g.Ctx, req *vo.MarketInfoReq) (res vo.MarketInfoRes, err error) {
-	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	c := ctx2.NewCtx(ctx)
+	auth, err := c.GetAuth()
 	shop := auth.Shop
-	return sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID).MarketInfo(req.ID)
+	res, err = sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID).MarketInfo(req.ID)
+	// 如果是主要市场，则翻译
+	countries := sResource.NewCountry().List()
+	if res.IsMain {
+		country, ok := slice.FindBy(countries, func(index int, item iResource.CountryListOut) bool {
+			return item.Code == res.Name
+		})
+		if ok {
+			res.Name = c.GetT(country.Name)
+		}
+	}
+	return res, err
 }
 
 func (a *aMarket) Update(ctx g.Ctx, req *vo.MarketUpdateReq) (res vo.MarketUpdateRes, err error) {

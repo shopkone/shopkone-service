@@ -17,12 +17,12 @@ func (s *sMarket) MarketUpdate(in vo.MarketUpdateReq) (res vo.MarketUpdateRes, e
 
 	// 如果是主市场
 	if info.IsMain {
-		// 不能修改名称
-		in.Name = info.Name
 		// 国家只能有一个
 		in.CountryCodes = slice.Filter(in.CountryCodes, func(index int, item string) bool {
 			return index == 0
 		})
+		// 名称只能是国家本身
+		in.Name = in.CountryCodes[0]
 	}
 
 	// 更新市场信息

@@ -107,4 +107,6 @@ var migrate = Migrate{
 
 	// 域名
 	mDomains.Domain{},
+	mDomains.DomainBlackIp{},
+	mDomains.DomainBlockCountry{},
 }
