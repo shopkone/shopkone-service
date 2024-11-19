@@ -36,7 +36,7 @@ func (s *sVariant) ListByIds(ids []uint, hasDeleted bool) (res []iProduct.Varian
 		nameArr := slice.Map(item.Name, func(index int, item mProduct.VariantName) string {
 			return item.Value
 		})
-		name := slice.Join(nameArr, " / ")
+		name := slice.Join(nameArr, " · ")
 
 		image, ok := slice.FindBy(files, func(index int, f vo.FileListByIdsRes) bool {
 			return item.ImageId == f.Id
@@ -45,6 +45,7 @@ func (s *sVariant) ListByIds(ids []uint, hasDeleted bool) (res []iProduct.Varian
 		i := iProduct.VariantListByIdOut{}
 		i.Id = item.ID
 		i.Name = name
+		i.Price = item.Price
 		if ok {
 			i.Image = image.Path
 		}

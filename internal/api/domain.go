@@ -6,6 +6,8 @@ import (
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/base/resource/iResource"
 	"shopkone-service/internal/module/base/resource/sResource"
+	"shopkone-service/internal/module/setting/domains/mDomains"
+	"shopkone-service/internal/module/setting/domains/sDomain/sBlackIp"
 	"shopkone-service/internal/module/setting/domains/sDomain/sBlockCountry"
 	"shopkone-service/internal/module/setting/domains/sDomain/sDomain"
 	ctx2 "shopkone-service/utility/ctx"
@@ -112,6 +114,52 @@ func (a *aDomain) BlockCountryList(ctx g.Ctx, req *vo.DomainBlockCountryListReq)
 			Name: t(cy.Name),
 		}
 		return i
+	})
+	return res, err
+}
+
+func (a *aDomain) BlockIpUpdate(ctx g.Ctx, req *vo.DomainBlackIpUpdateReq) (res vo.DomainBlackIpUpdateRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	err = sOrm.NewDb(&shop.ID).Transaction(func(tx *gorm.DB) error {
+		s := sBlackIp.NewBlackIp(tx, shop.ID)
+		return s.Update(req.Ips, req.Type)
+	})
+	return res, err
+}
+
+func (a *aDomain) BlockIpList(ctx g.Ctx, req *vo.DomainBlackIpListReq) (res []vo.DomainBlackIpListRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	err = sOrm.NewDb(&shop.ID).Transaction(func(tx *gorm.DB) error {
+		s := sBlackIp.NewBlackIp(tx, shop.ID)
+		ips, err := s.List(nil)
+		res = slice.Map(ips, func(index int, ip mDomains.DomainBlackIp) vo.DomainBlackIpListRes {
+			return vo.DomainBlackIpListRes{
+				Ip:   ip.Ip,
+				Type: ip.Type,
+			}
+		})
+		return err
+	})
+	return res, err
+}
+
+func (a *aDomain) BlackIpRemove(ctx g.Ctx, req *vo.DomainBlackIpRemoveReq) (res vo.DomainBlackIpRemoveRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	err = sOrm.NewDb(&shop.ID).Transaction(func(tx *gorm.DB) error {
+		s := sBlackIp.NewBlackIp(tx, shop.ID)
+		return s.Remove(req.Ips, req.Type)
 	})
 	return res, err
 }

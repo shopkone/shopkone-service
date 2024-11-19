@@ -3,6 +3,8 @@ package api
 import (
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
+	"shopkone-service/internal/module/product/inventory/mInventory"
+	"shopkone-service/internal/module/product/inventory/sInventory/sInventory"
 	"shopkone-service/internal/module/product/product/iProduct"
 	"shopkone-service/internal/module/product/product/sProduct/sProduct"
 	"shopkone-service/internal/module/product/product/sProduct/sSupplier"
@@ -87,11 +89,20 @@ func (a *aProduct) VariantsByIDs(ctx g.Ctx, req *vo.VariantListByIdsReq) (res []
 	if err != nil {
 		return nil, err
 	}
+	// 获取变体库存
+	variantIds := slice.Map(variants, func(index int, item iProduct.VariantListByIdOut) uint {
+		return item.Id
+	})
+	inventories, err := sInventory.NewInventory(orm, shop.ID).ListByVariantsIds(variantIds, 0)
+	if err != nil {
+		return nil, err
+	}
 	res = slice.Map(variants, func(index int, item iProduct.VariantListByIdOut) vo.VariantListByIdsRes {
 		i := vo.VariantListByIdsRes{}
 		i.Id = item.Id
 		i.Name = item.Name
 		i.Image = item.Image
+		i.Price = item.Price
 		i.IsDeleted = item.IsDeleted
 		product, ok := slice.FindBy(products, func(index int, p vo.ListByIdsRes) bool {
 			return p.Id == item.ProductId
@@ -108,6 +119,12 @@ func (a *aProduct) VariantsByIDs(ctx g.Ctx, req *vo.VariantListByIdsReq) (res []
 				i.Image = img.Files[0]
 			}
 		}
+		// 组装库存
+		slice.ForEach(inventories, func(index int, item mInventory.Inventory) {
+			if item.VariantId == i.Id {
+				i.Inventory = item.Quantity + i.Inventory
+			}
+		})
 		return i
 	})
 

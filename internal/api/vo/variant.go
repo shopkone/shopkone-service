@@ -46,9 +46,12 @@ type VariantListByIdsReq struct {
 	Ids    []uint `json:"ids" v:"required" dc:"变体ID列表"`
 }
 type VariantListByIdsRes struct {
-	Id           uint   `json:"id"`
-	Image        string `json:"image"`
-	Name         string `json:"name"`
-	ProductTitle string `json:"product_title"`
-	IsDeleted    bool   `json:"is_deleted"`
+	Id             uint    `json:"id"`
+	Image          string  `json:"image"`
+	Name           string  `json:"name"`
+	ProductTitle   string  `json:"product_title"`
+	IsDeleted      bool    `json:"is_deleted"`
+	Price          float32 `json:"price"`
+	Inventory      uint    `json:"inventory"`
+	TrackInventory bool    `json:"track_inventory"`
 }

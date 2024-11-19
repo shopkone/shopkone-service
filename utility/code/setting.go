@@ -18,4 +18,7 @@ var (
 	MarketValid               = SettingError(15, "无效的市场")
 	MarketSuffixExist         = SettingError(16, "子文件夹名称已存在")
 	MarketExchangeRateError   = SettingError(17, "市场汇率获取失败")
+	DomainValidIP             = SettingError(18, "无效的IP")
+	DomainValidBlackIpType    = SettingError(19, "无效的类型")
+	DomainBlackIpExist        = SettingError(20, "IP已存在")
 )

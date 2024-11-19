@@ -50,3 +50,27 @@ type DomainBlockCountryListRes struct {
 	Code string `json:"code"`
 	Name string `json:"name"`
 }
+
+type DomainBlackIpUpdateReq struct {
+	g.Meta `path:"/domain/black-ip/update" method:"post" tags:"Domain" summary:"更新域名黑名单IP"`
+	Ips    []string             `json:"ips"`
+	Type   mDomains.BlackIpType `json:"type" v:"required"`
+}
+type DomainBlackIpUpdateRes struct {
+}
+
+type DomainBlackIpListReq struct {
+	g.Meta `path:"/domain/black-ip/list" method:"post" tags:"Domain" summary:"获取域名黑名单IP列表"`
+}
+type DomainBlackIpListRes struct {
+	Ip   string               `json:"ip"`
+	Type mDomains.BlackIpType `json:"type"`
+}
+
+type DomainBlackIpRemoveReq struct {
+	g.Meta `path:"/domain/black-ip/remove" method:"post" tags:"Domain" summary:"移除域名黑名单IP"`
+	Ips    []string             `json:"ips" v:"required"`
+	Type   mDomains.BlackIpType `json:"type" v:"required"`
+}
+type DomainBlackIpRemoveRes struct {
+}
