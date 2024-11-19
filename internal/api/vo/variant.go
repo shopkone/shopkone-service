@@ -42,16 +42,20 @@ type VariantList struct {
 }
 
 type VariantListByIdsReq struct {
-	g.Meta `path:"/product/variant/list-by-ids" method:"post" summary:"根据变体ID列表获取变体列表" tags:"Product"`
-	Ids    []uint `json:"ids" v:"required" dc:"变体ID列表"`
+	g.Meta       `path:"/product/variant/list-by-ids" method:"post" summary:"根据变体ID列表获取变体列表" tags:"Product"`
+	Ids          []uint `json:"ids" v:"required" dc:"变体ID列表"`
+	HasDeleted   bool   `json:"has_deleted"`
+	HasInventory bool   `json:"has_inventory"`
+	LocationID   uint   `json:"location_id"`
 }
 type VariantListByIdsRes struct {
-	Id             uint    `json:"id"`
-	Image          string  `json:"image"`
-	Name           string  `json:"name"`
-	ProductTitle   string  `json:"product_title"`
-	IsDeleted      bool    `json:"is_deleted"`
-	Price          float32 `json:"price"`
-	Inventory      uint    `json:"inventory"`
-	TrackInventory bool    `json:"track_inventory"`
+	Id                uint                     `json:"id"`
+	Image             string                   `json:"image"`
+	Name              string                   `json:"name"`
+	ProductTitle      string                   `json:"product_title"`
+	IsDeleted         bool                     `json:"is_deleted"`
+	Price             float32                  `json:"price"`
+	Inventory         uint                     `json:"inventory"`
+	InventoryTracking bool                     `json:"inventory_tracking"`
+	InventoryPolicy   mProduct.InventoryPolicy `json:"inventory_policy"`
 }

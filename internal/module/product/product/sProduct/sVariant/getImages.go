@@ -3,17 +3,21 @@ package sVariant
 import (
 	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/api/vo"
-	"shopkone-service/internal/module/product/product/mProduct"
 	"shopkone-service/internal/module/setting/file/sFile"
 )
+
+type GetImagesIn struct {
+	VariantId uint
+	ImageId   uint
+}
 
 type GetImagesOut struct {
 	VariantId uint
 	Image     string
 }
 
-func (s *sVariant) GetImages(variants []mProduct.Variant) (out []GetImagesOut, err error) {
-	imageIds := slice.Map(variants, func(index int, item mProduct.Variant) uint {
+func (s *sVariant) GetImages(in []GetImagesIn) (out []GetImagesOut, err error) {
+	imageIds := slice.Map(in, func(index int, item GetImagesIn) uint {
 		return item.ImageId
 	})
 	imageIds = slice.Unique(imageIds)
@@ -24,8 +28,8 @@ func (s *sVariant) GetImages(variants []mProduct.Variant) (out []GetImagesOut, e
 	if err != nil {
 		return nil, err
 	}
-	out = slice.Map(variants, func(index int, item mProduct.Variant) GetImagesOut {
-		i := GetImagesOut{VariantId: item.ID}
+	out = slice.Map(in, func(index int, item GetImagesIn) GetImagesOut {
+		i := GetImagesOut{VariantId: item.VariantId}
 		find, ok := slice.FindBy(filesSrc, func(index int, v vo.FileListByIdsRes) bool {
 			return v.Id == item.ImageId
 		})

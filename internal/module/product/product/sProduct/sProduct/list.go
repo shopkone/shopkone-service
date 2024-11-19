@@ -59,7 +59,13 @@ func (s *sProduct) List(in vo.ProductListReq) (res handle.PageRes[vo.ProductList
 		return res, err
 	}
 	// 获取变体图片
-	variantImages, err := variantService.GetImages(variants)
+	variantGetImageIn := slice.Map(variants, func(index int, item mProduct.Variant) sVariant.GetImagesIn {
+		i := sVariant.GetImagesIn{}
+		i.VariantId = item.ID
+		i.ImageId = item.ImageId
+		return i
+	})
+	variantImages, err := variantService.GetImages(variantGetImageIn)
 	// 获取商品文件
 	productFiles, err := s.GetProductImages(productIds)
 	// 组装数据
