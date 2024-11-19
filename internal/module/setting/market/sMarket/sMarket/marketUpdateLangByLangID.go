@@ -10,7 +10,7 @@ import (
 
 func (s *sMarket) MarketUpdateLangByLangID(req *vo.MarketUpdateLangByLangIDReq) (err error) {
 	// 获取市场列表
-	list, err := s.MarketOptions()
+	list, err := s.MarketOptions(nil)
 	if err != nil {
 		return err
 	}

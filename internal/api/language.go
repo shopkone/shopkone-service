@@ -21,7 +21,8 @@ func NewLanguageApi() *aLanguage {
 }
 
 func (a *aLanguage) List(ctx g.Ctx, req *vo.LanguageListReq) (res []vo.LanguageListRes, err error) {
-	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	c := ctx2.NewCtx(ctx)
+	auth, err := c.GetAuth()
 	if err != nil {
 		return res, err
 	}
@@ -36,7 +37,7 @@ func (a *aLanguage) List(ctx g.Ctx, req *vo.LanguageListReq) (res []vo.LanguageL
 	}
 
 	// 获取市场列表
-	marketsOptions, err := sMarket.NewMarket(orm, shop.ID).MarketOptions()
+	marketsOptions, err := sMarket.NewMarket(orm, shop.ID).MarketOptions(c.GetT)
 	if err != nil {
 		return nil, err
 	}

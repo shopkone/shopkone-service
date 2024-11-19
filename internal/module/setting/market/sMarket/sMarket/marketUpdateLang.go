@@ -38,7 +38,7 @@ func (s *sMarket) MarketUpdateLang(req vo.MarketUpdateLangReq) (err error) {
 	if data.DomainType != mMarket.DomainTypeMain {
 		return err
 	}
-	options, err := s.MarketOptions()
+	options, err := s.MarketOptions(nil)
 	if err != nil {
 		return err
 	}

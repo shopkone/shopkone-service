@@ -66,9 +66,10 @@ func (a *aMarket) Update(ctx g.Ctx, req *vo.MarketUpdateReq) (res vo.MarketUpdat
 }
 
 func (a *aMarket) Options(ctx g.Ctx, req *vo.MarketOptionsReq) (res []vo.MarketOptionsRes, err error) {
-	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	c := ctx2.NewCtx(ctx)
+	auth, err := c.GetAuth()
 	shop := auth.Shop
-	return sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID).MarketOptions()
+	return sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID).MarketOptions(c.GetT)
 }
 
 // 更新市场域名设置

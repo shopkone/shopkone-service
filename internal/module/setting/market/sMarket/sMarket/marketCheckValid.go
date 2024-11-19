@@ -8,7 +8,7 @@ import (
 )
 
 func (s *sMarket) MarketCheckValid() (err error) {
-	markets, err := s.MarketOptions()
+	markets, err := s.MarketOptions(nil)
 	if err != nil {
 		return err
 	}
