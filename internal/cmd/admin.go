@@ -26,6 +26,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 	marketApi := api.NewMarketApi()
 	langaugesApi := api.NewLanguageApi()
 	domainApi := api.NewDomainApi()
+	customerApi := api.NewCustomerApi()
 
 	s.Group("/api", func(group *ghttp.RouterGroup) {
 		group.Middleware(middleware.UserMiddleware)
@@ -174,5 +175,8 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(domainApi.BlockIpUpdate)
 		group.Bind(domainApi.BlockIpList)
 		group.Bind(domainApi.BlackIpRemove)
+
+		// 客户
+		group.Bind(customerApi.Create)
 	})
 }

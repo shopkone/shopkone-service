@@ -33,3 +33,6 @@ func taxError(code int, message string) error {
 func SettingError(code int, message string) error {
 	return err(8000+code, message)
 }
+func CustomerError(code int, message string) error {
+	return err(9000+code, message)
+}

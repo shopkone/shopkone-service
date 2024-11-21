@@ -1,58 +1,33 @@
 package mCustomer
 
 import (
-	"shopkone-service/internal/module/base/address/mAddress"
 	"shopkone-service/internal/module/base/orm/mOrm"
+	"time"
 )
 
-// 主要联系方式类型
-type MainConcatType string
+type GenderType uint8
 
 const (
-	MainConcatTypePhone MainConcatType = "phone"
-	MainConcatTypeEmail MainConcatType = "email"
-)
-
-// 客户来源
-type CustomerSource uint8
-
-const (
-	CustomerSourceManual   CustomerSource = 1 // 手动创建
-	CustomerSourceRegister CustomerSource = 2 // 注册账号
-)
-
-// 客户生命周期动作
-type CustomerEvent int32
-
-const (
-	CustomerEventRegister CustomerEvent = 1 // 注册账号
-	CustomerEventCreate   CustomerEvent = 2 // 手动创建
+	GenderTypeUnknown GenderType = 0
+	GenderTypeMale    GenderType = 1
+	GenderTypeFemale  GenderType = 2
+	GenderTypeOther   GenderType = 3
 )
 
 // 客户
 type Customer struct {
 	mOrm.Model
-	FirstName          string
-	LastName           string
-	Email              string
-	PhoneCode          string
-	PhoneIso2          string
-	PhoneNumber        string
-	MainConcat         MainConcatType
-	Password           string
-	Subscribe          bool
-	CountryIso3        string
-	Source             CustomerSource
-	Address            []mAddress.Address  `gorm:"foreignKey:CustomerID"`
-	CustomerFootprints []CustomerFootprint `gorm:"foreignKey:CustomerID"`
-	TaxFree            bool
-	Tags               []string `gorm:"serializer:json"`
-	OrderIds           []uint   `gorm:"serializer:json"`
+	FirstName string `gorm:"size:200"`
+	LastName  string `gorm:"size:200"`
+	Email     string `gorm:"size:200"`
+	Note      string `gorm:"size:500"`
+	Phone     string `gorm:"size:100"`
+	Gender    GenderType
+	Birthday  *time.Time
 }
 
-// 客户足迹
-type CustomerFootprint struct {
+type CustomerAddress struct {
 	mOrm.Model
-	Event      CustomerEvent
-	CustomerID uint
+	CustomerID uint `gorm:"index"`
+	AddressID  uint `gorm:"index"`
 }

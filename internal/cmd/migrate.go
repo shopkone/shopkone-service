@@ -3,6 +3,7 @@ package cmd
 import (
 	"shopkone-service/internal/module/base/address/mAddress"
 	"shopkone-service/internal/module/base/seo/mSeo"
+	"shopkone-service/internal/module/customer/customer/mCustomer"
 	"shopkone-service/internal/module/delivery/in-store-pick-up/mInStorePickup"
 	"shopkone-service/internal/module/delivery/local-delivery/mLocalDelivery"
 	"shopkone-service/internal/module/delivery/shipping/mShipping"
@@ -109,4 +110,8 @@ var migrate = Migrate{
 	mDomains.Domain{},
 	mDomains.DomainBlackIp{},
 	mDomains.DomainBlockCountry{},
+
+	// 客户
+	mCustomer.Customer{},
+	mCustomer.CustomerAddress{},
 }
