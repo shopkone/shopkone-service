@@ -54,6 +54,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(baseApi.CategoryList) // 获取商品分类列表
 		group.Bind(baseApi.CarrierList)  // 获取物流公司列表
 		group.Bind(baseApi.LanguageList) // 获取语言列表
+		group.Bind(baseApi.ExchangeRate) // 获取汇率
 
 		// 文件
 		group.Bind(fileApi.GetUploadToken)         // 获取上传token

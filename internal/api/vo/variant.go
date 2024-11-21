@@ -55,6 +55,7 @@ type VariantListByIdsRes struct {
 	ProductTitle      string                   `json:"product_title"`
 	IsDeleted         bool                     `json:"is_deleted"`
 	Price             float32                  `json:"price"`
+	CostPerItem       *float32                 `json:"cost_per_item"`
 	Inventory         uint                     `json:"inventory"`
 	InventoryTracking bool                     `json:"inventory_tracking"`
 	InventoryPolicy   mProduct.InventoryPolicy `json:"inventory_policy"`

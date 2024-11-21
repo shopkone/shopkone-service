@@ -95,3 +95,13 @@ type LanguagesRes struct {
 	Value string `json:"value"`
 	Label string `json:"label"`
 }
+
+type GetExchangeRateReq struct {
+	g.Meta `path:"/base/exchange-rate" method:"post" summary:"获取汇率" tags:"Base"`
+	From   string `json:"from" v:"required"`
+	To     string `json:"to" v:"required"`
+}
+type GetExchangeRateRes struct {
+	Rate      float64 `json:"rate"`
+	TimeStamp int64   `json:"timestamp"`
+}

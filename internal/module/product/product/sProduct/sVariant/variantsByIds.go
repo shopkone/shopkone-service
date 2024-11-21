@@ -19,6 +19,7 @@ type VariantByIdsOut struct {
 	Image          string
 	Name           []mProduct.VariantName
 	Price          float32
+	CostPerItem    *float32
 	Inventory      uint
 	TrackInventory bool
 	ProductId      uint
@@ -34,7 +35,7 @@ func (s *sVariant) VariantsByIds(in VariantByIdsIn) (out []VariantByIdsOut, err 
 		query = query.Unscoped()
 	}
 	// 查询变体
-	query = query.Select("id", "image_id", "name", "price", "product_id")
+	query = query.Select("id", "image_id", "name", "price", "product_id", "cost_per_item")
 	if err = query.Find(&variants).Error; err != nil {
 		return nil, err
 	}
@@ -64,6 +65,7 @@ func (s *sVariant) VariantsByIds(in VariantByIdsIn) (out []VariantByIdsOut, err 
 		i.Name = item.Name
 		i.Price = item.Price
 		i.ProductId = item.ProductId
+		i.CostPerItem = item.CostPerItem
 		// 获取图片
 		image, ok := slice.FindBy(images, func(index int, image GetImagesOut) bool {
 			return image.Image != "" && image.VariantId == item.ID

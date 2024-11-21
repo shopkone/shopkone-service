@@ -4,6 +4,7 @@ import (
 	"github.com/duke-git/lancet/v2/slice"
 	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/api/vo"
+	exchang_rate "shopkone-service/internal/module/base/exchang-rate"
 	"shopkone-service/internal/module/base/resource"
 	"shopkone-service/internal/module/base/resource/iResource"
 	"shopkone-service/internal/module/base/resource/mResource"
@@ -125,5 +126,20 @@ func (a *aBaseApi) LanguageList(ctx g.Ctx, req *vo.LanguagesReq) (res []vo.Langu
 		i.Value = item
 		return i
 	})
+	return res, err
+}
+
+// 汇率
+func (a *aBaseApi) ExchangeRate(ctx g.Ctx, req *vo.GetExchangeRateReq) (res vo.GetExchangeRateRes, err error) {
+	getRateIn := exchang_rate.GetRateIn{
+		FromCode: req.From,
+		ToCode:   req.To,
+	}
+	exchange, err := exchang_rate.NewExchangeRate().GetRate(getRateIn)
+	if err != nil {
+		return res, err
+	}
+	res.Rate = exchange.Rate
+	res.TimeStamp = exchange.Timestamp
 	return res, err
 }

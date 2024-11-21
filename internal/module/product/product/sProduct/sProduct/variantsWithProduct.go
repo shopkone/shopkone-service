@@ -40,6 +40,7 @@ func (s *sProduct) VariantsWithProduct(in *vo.VariantListByIdsReq) (out []vo.Var
 			ProductTitle:      "",
 			IsDeleted:         false,
 			Price:             item.Price,
+			CostPerItem:       item.CostPerItem,
 			Inventory:         item.Inventory,
 			InventoryTracking: false,
 			InventoryPolicy:   0,

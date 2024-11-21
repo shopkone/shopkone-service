@@ -32,9 +32,26 @@ func (a *aMarket) Create(ctx g.Ctx, req *vo.MarketCreateReq) (res vo.MarketCreat
 }
 
 func (a *aMarket) List(ctx g.Ctx, req *vo.MarketListReq) (res []vo.MarketListRes, err error) {
-	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	c := ctx2.NewCtx(ctx)
+	auth, err := c.GetAuth()
 	shop := auth.Shop
-	return sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID).MarketList()
+	res, err = sMarket.NewMarket(sOrm.NewDb(&auth.Shop.ID), shop.ID).MarketList()
+	if err != nil {
+		return nil, err
+	}
+	countries := sResource.NewCountry().List()
+	res = slice.Map(res, func(index int, item vo.MarketListRes) vo.MarketListRes {
+		if item.IsMain {
+			country, ok := slice.FindBy(countries, func(index int, country iResource.CountryListOut) bool {
+				return country.Code == item.Name
+			})
+			if ok {
+				item.Name = c.GetT(country.Name)
+			}
+		}
+		return item
+	})
+	return res, err
 }
 
 func (a *aMarket) Info(ctx g.Ctx, req *vo.MarketInfoReq) (res vo.MarketInfoRes, err error) {
