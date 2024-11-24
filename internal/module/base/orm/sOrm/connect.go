@@ -31,43 +31,43 @@ func ConnectMysql(migrate []interface{}) error {
 		conf.Mysql.TimeZone,
 	)
 
-	d, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return fmt.Errorf("初始化数据库失败: %w", err)
 	}
 
-	d.Callback().Query().Before("gorm:query").Register("gorm:add_shop_id", func(d *gorm.DB) {
-		id, ok := getShopID(d)
+	database.Callback().Query().Before("gorm:query").Register("gorm:add_shop_id", func(tx *gorm.DB) {
+		id, ok := getShopID(tx)
 		if !ok {
 			return
 		}
-		d.Where("shop_id = ?", id)
+		tx = tx.Where("shop_id = ?", id)
 	})
-	d.Callback().Create().Before("gorm:before_create").Register("gorm:create_shop_id", func(d *gorm.DB) {
-		id, ok := getShopID(d)
+	database.Callback().Create().Before("gorm:before_create").Register("gorm:create_shop_id", func(tx *gorm.DB) {
+		id, ok := getShopID(tx)
 		if !ok {
 			return
 		}
-		d.Statement.SetColumn("shop_id", id)
+		tx.Statement.SetColumn("shop_id", id)
 	})
-	d.Callback().Update().Before("gorm:before_update").Register("gorm:update_shop_id", func(d *gorm.DB) {
-		id, ok := getShopID(d)
+	database.Callback().Update().Before("gorm:before_update").Register("gorm:update_shop_id", func(tx *gorm.DB) {
+		id, ok := getShopID(tx)
 		if !ok {
 			return
 		}
-		d.Where("shop_id = ?", id)
-		d.Statement.SetColumn("shop_id", id)
+		tx = tx.Where("shop_id = ?", id)
+		tx.Statement.SetColumn("shop_id", id)
 	})
-	d.Callback().Delete().Before("gorm:before_delete").Register("gorm:delete_shop_id", func(d *gorm.DB) {
-		id, ok := getShopID(d)
+	database.Callback().Delete().Before("gorm:before_delete").Register("gorm:delete_shop_id", func(tx *gorm.DB) {
+		id, ok := getShopID(tx)
 		if !ok {
 			return
 		}
-		d.Where("shop_id = ?", id)
-		d.Statement.SetColumn("shop_id", id)
+		tx = tx.Where("shop_id = ?", id)
+		tx.Statement.SetColumn("shop_id", id)
 	})
 
-	db = d.Debug()
+	db = database.Debug()
 
 	if err = db.AutoMigrate(migrate...); err != nil {
 		return err
