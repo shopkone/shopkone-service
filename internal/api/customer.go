@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
-	"shopkone-service/internal/module/customer/customer/sCustomer/sCustomer"
+	"shopkone-service/internal/module/customer/customer/sCustomer"
 	ctx2 "shopkone-service/utility/ctx"
 	"shopkone-service/utility/handle"
 )
@@ -40,5 +40,49 @@ func (*aCustomer) List(ctx g.Ctx, req *vo.CustomerListReq) (res handle.PageRes[v
 	shop := auth.Shop
 	orm := sOrm.NewDb(&auth.Shop.ID)
 	res, err = sCustomer.NewCustomer(orm, shop.ID).List(*req)
+	return res, err
+}
+
+// 更新客户信息
+func (*aCustomer) UpdateBase(ctx g.Ctx, req *vo.CustomerUpdateBaseReq) (res vo.CustomerUpdateBaseRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	orm := sOrm.NewDb(&auth.Shop.ID)
+	err = orm.Transaction(func(tx *gorm.DB) error {
+		return sCustomer.NewCustomer(tx, shop.ID).CustomerUpdateBaseInfo(req)
+	})
+	return res, err
+}
+
+// 更新客户标签
+func (*aCustomer) UpdateTags(ctx g.Ctx, req *vo.CustomerUpdateTagsReq) (res vo.CustomerUpdateTagsRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	orm := sOrm.NewDb(&auth.Shop.ID)
+	err = orm.Transaction(func(tx *gorm.DB) error {
+		return sCustomer.NewCustomer(tx, shop.ID).CustomerUpdateTags(req)
+	})
+	return res, err
+}
+
+// 更新客户备注
+func (*aCustomer) UpdateNote(ctx g.Ctx, req *vo.CustomerUpdateNoteReq) (res vo.CustomerUpdateNoteRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	orm := sOrm.NewDb(&auth.Shop.ID)
+	err = orm.Transaction(func(tx *gorm.DB) error {
+		return sCustomer.NewCustomer(tx, shop.ID).CustomerUpdateNote(req)
+	})
+	return res, err
+}
+
+// 更新客户免税地区
+func (*aCustomer) SetTax(ctx g.Ctx, req *vo.CustomerSetTaxReq) (res vo.CustomerSetTaxRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	orm := sOrm.NewDb(&auth.Shop.ID)
+	err = orm.Transaction(func(tx *gorm.DB) error {
+		return sCustomer.NewCustomer(tx, shop.ID).CustomerUpdateTax(req)
+	})
 	return res, err
 }

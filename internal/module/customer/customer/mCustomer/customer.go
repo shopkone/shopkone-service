@@ -17,14 +17,17 @@ const (
 // 客户
 type Customer struct {
 	mOrm.Model
-	FirstName string   `gorm:"size:200"`
-	LastName  string   `gorm:"size:200"`
-	Email     string   `gorm:"size:200"`
-	Note      string   `gorm:"size:500"`
-	Phone     string   `gorm:"size:100"`
-	Tags      []string `gorm:"serializer:json"`
-	Gender    GenderType
-	Birthday  *time.Time
+	FirstName     string   `gorm:"size:200"`
+	LastName      string   `gorm:"size:200"`
+	Email         string   `gorm:"size:200"`
+	Note          string   `gorm:"size:500"`
+	Phone         string   `gorm:"size:100"`
+	Tags          []string `gorm:"serializer:json"`
+	Language      string   `gorm:"size:10"`
+	Gender        GenderType
+	Birthday      *time.Time
+	TaxFreeAll    bool `gorm:"default:false"`
+	TaxFreeActive bool `gorm:"default:false"`
 }
 
 type CustomerAddress struct {
