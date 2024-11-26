@@ -184,5 +184,8 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(customerApi.UpdateTags)
 		group.Bind(customerApi.UpdateNote)
 		group.Bind(customerApi.SetTax)
+		group.Bind(customerApi.AddAddress)
+		group.Bind(customerApi.UpdateAddress)
+		group.Bind(customerApi.RemoveAddress)
 	})
 }

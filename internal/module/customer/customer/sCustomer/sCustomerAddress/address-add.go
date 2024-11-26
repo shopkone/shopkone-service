@@ -25,5 +25,5 @@ func (s *sCustomerAddress) Add(customerId uint, address mAddress.Address) (err e
 		AddressID:  addressId,
 		IsDefault:  defaultCount == 0,
 	}
-	return s.orm.Create(&customerAddress).Error
+	return s.orm.Select("is_default", "customer_id", "address_id", "shop_id").Create(&customerAddress).Error
 }

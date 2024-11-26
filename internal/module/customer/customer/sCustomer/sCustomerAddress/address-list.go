@@ -18,6 +18,7 @@ func (s *sCustomerAddress) List(customerIds []uint) (list []CustomerAddressListO
 	var customerAddressMap []mCustomer.CustomerAddress
 	if err = s.orm.Model(&customerAddressMap).Where("customer_id in ?", customerIds).
 		Select("customer_id", "address_id", "is_default").
+		Order("is_default desc").
 		Find(&customerAddressMap).Error; err != nil {
 		return list, err
 	}
@@ -38,14 +39,17 @@ func (s *sCustomerAddress) List(customerIds []uint) (list []CustomerAddressListO
 		})
 		currentAddress := slice.Filter(address, func(index int, addr mAddress.Address) bool {
 			_, ok := slice.FindBy(currentCustomerAddressMap, func(index int, item mCustomer.CustomerAddress) bool {
-				if item.IsDefault {
-					i.DefaultAddressID = addr.ID
-				}
 				return item.AddressID == addr.ID
 			})
 			return ok
 		})
 		i.Address = currentAddress
+		d, ok := slice.FindBy(customerAddressMap, func(index int, item mCustomer.CustomerAddress) bool {
+			return item.IsDefault
+		})
+		if ok {
+			i.DefaultAddressID = d.AddressID
+		}
 		return i
 	})
 	return list, err

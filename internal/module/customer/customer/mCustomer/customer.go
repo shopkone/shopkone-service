@@ -34,7 +34,7 @@ type CustomerAddress struct {
 	mOrm.Model
 	CustomerID uint `gorm:"index"`
 	AddressID  uint `gorm:"index"`
-	IsDefault  bool `gorm:"default:true"`
+	IsDefault  bool
 }
 
 type CustomerNoTaxArea struct {

@@ -4,6 +4,7 @@ import (
 	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/customer/customer/mCustomer"
+	"shopkone-service/utility/handle"
 )
 
 func (s *sCustomer) CustomerUpdateTax(in *vo.CustomerSetTaxReq) (err error) {
@@ -52,6 +53,41 @@ func (s *sCustomer) CustomerUpdateTax(in *vo.CustomerSetTaxReq) (err error) {
 	})
 	if len(adds) > 0 {
 		if err = s.orm.Create(&adds).Error; err != nil {
+			return err
+		}
+	}
+	// 更新
+	updates := slice.Filter(newTax, func(index int, item mCustomer.CustomerNoTaxArea) bool {
+		_, ok := slice.FindBy(oldTax, func(index int, area mCustomer.CustomerNoTaxArea) bool {
+			return area.CountryCode == item.CountryCode
+		})
+		return ok
+	})
+	updates = slice.Filter(updates, func(index int, item mCustomer.CustomerNoTaxArea) bool {
+		old, ok := slice.FindBy(oldTax, func(index int, area mCustomer.CustomerNoTaxArea) bool {
+			return area.CountryCode == item.CountryCode
+		})
+		if !ok {
+			return false
+		}
+		isAllSame := slice.Equal(old.Zones, item.Zones)
+		return !isAllSame
+	})
+	updates = slice.Map(updates, func(index int, item mCustomer.CustomerNoTaxArea) mCustomer.CustomerNoTaxArea {
+		old, _ := slice.FindBy(oldTax, func(index int, area mCustomer.CustomerNoTaxArea) bool {
+			return area.CountryCode == item.CountryCode
+		})
+		item.CanCreateId = true
+		item.ID = old.ID
+		return item
+	})
+	if len(updates) > 0 {
+		batchIn := handle.BatchUpdateByIdIn{
+			Orm:    s.orm,
+			ShopID: s.shopId,
+			Query:  []string{"zones"},
+		}
+		if err = handle.BatchUpdateById(batchIn, &updates); err != nil {
 			return err
 		}
 	}

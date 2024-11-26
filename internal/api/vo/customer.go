@@ -24,23 +24,31 @@ type CustomerCreateRes struct {
 	ID uint `json:"id"`
 }
 
+type CustomerFreeTax struct {
+	Areas []CustomerSetTaxItem `json:"areas"`
+	Free  bool                 `json:"free"`
+	All   bool                 `json:"all"`
+}
+
 // 获取客户详情
 type CustomerInfoReq struct {
 	g.Meta `path:"/customer/info" method:"post" summary:"客户详情" tags:"Customer"`
 	ID     uint `json:"id" v:"required" dc:"客户ID"`
 }
 type CustomerInfoRes struct {
-	ID        uint                 `json:"id"`
-	FirstName string               `json:"first_name" dc:"名字"`
-	LastName  string               `json:"last_name" dc:"姓氏"`
-	Email     string               `json:"email" dc:"邮箱"`
-	Note      string               `json:"note" dc:"备注"`
-	Phone     mAddress.Phone       `json:"phone" dc:"电话"`
-	Gender    mCustomer.GenderType `json:"gender"`
-	Birthday  int64                `json:"birthday"`
-	Language  string               `json:"language"`
-	Address   []mAddress.Address   `json:"address"`
-	Tags      []string             `json:"tags"`
+	ID               uint                 `json:"id"`
+	FirstName        string               `json:"first_name" dc:"名字"`
+	LastName         string               `json:"last_name" dc:"姓氏"`
+	Email            string               `json:"email" dc:"邮箱"`
+	Note             string               `json:"note" dc:"备注"`
+	Phone            mAddress.Phone       `json:"phone" dc:"电话"`
+	Gender           mCustomer.GenderType `json:"gender"`
+	Birthday         int64                `json:"birthday"`
+	Language         string               `json:"language"`
+	Address          []mAddress.Address   `json:"address"`
+	Tags             []string             `json:"tags"`
+	Tax              CustomerFreeTax      `json:"tax"`
+	DefaultAddressID uint                 `json:"default_address_id"`
 }
 
 // 获取客户列表
@@ -77,33 +85,35 @@ type CustomerUpdateBaseRes struct {
 }
 
 // 添加收货地址
-type CustomerAddAddress struct {
-	g.Meta `path:"/customer/add/address" method:"post" summary:"添加地址" tags:"Customer"`
-	mAddress.Address
+type CustomerAddAddressReq struct {
+	g.Meta     `path:"/customer/add/address" method:"post" summary:"添加地址" tags:"Customer"`
+	CustomerID uint             `json:"customer_id" v:"required"`
+	Address    mAddress.Address `json:"address" v:"required"`
 }
 type CustomerAddAddressRes struct {
 }
 
 // 更新收货地址
-type CustomerUpdateAddress struct {
-	g.Meta `path:"/customer/update/address" method:"post" summary:"更新地址" tags:"Customer"`
-	mAddress.Address
-	IsDefault bool `json:"is_default"`
+type CustomerUpdateAddressReq struct {
+	g.Meta     `path:"/customer/update/address" method:"post" summary:"更新地址" tags:"Customer"`
+	Address    mAddress.Address `json:"address" V:"required"`
+	IsDefault  bool             `json:"is_default"`
+	CustomerID uint             `json:"customer_id" v:"required"`
 }
 type CustomerUpdateAddressRes struct {
 }
 
 type CustomerSetTaxItem struct {
-	ID          uint     `json:"id" v:"required" dc:"单个地区id"`
-	CountryCode string   `json:"country_code" v:"required" dc:"国家代码"`
-	Zones       []string `json:"zones" v:"required" dc:"地区"`
+	ID          uint     `json:"id" dc:"单个地区id"`
+	CountryCode string   `json:"country_code" dc:"国家代码"`
+	Zones       []string `json:"zones" dc:"地区"`
 }
 
 // 设置免税地区
 type CustomerSetTaxReq struct {
 	g.Meta `path:"/customer/set/tax" method:"post" summary:"设置免税地区" tags:"Customer"`
 	ID     uint                 `json:"id" v:"required" dc:"客户ID"`
-	Areas  []CustomerSetTaxItem `json:"areas" v:"required" dc:"免税地区"`
+	Areas  []CustomerSetTaxItem `json:"areas" dc:"免税地区"`
 	Free   bool                 `json:"free"`
 	All    bool                 `json:"all"`
 }
@@ -126,4 +136,12 @@ type CustomerUpdateNoteReq struct {
 	Note   string `json:"note" dc:"备注"`
 }
 type CustomerUpdateNoteRes struct {
+}
+
+// 删除地址
+type CustomerDeleteAddressReq struct {
+	g.Meta    `path:"/customer/delete/address" method:"post" summary:"删除地址" tags:"Customer"`
+	AddressID uint `json:"address_id" v:"required"`
+}
+type CustomerDeleteAddressRes struct {
 }

@@ -6,6 +6,7 @@ import (
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/orm/sOrm"
 	"shopkone-service/internal/module/customer/customer/sCustomer"
+	"shopkone-service/internal/module/customer/customer/sCustomer/sCustomerAddress"
 	ctx2 "shopkone-service/utility/ctx"
 	"shopkone-service/utility/handle"
 )
@@ -83,6 +84,39 @@ func (*aCustomer) SetTax(ctx g.Ctx, req *vo.CustomerSetTaxReq) (res vo.CustomerS
 	orm := sOrm.NewDb(&auth.Shop.ID)
 	err = orm.Transaction(func(tx *gorm.DB) error {
 		return sCustomer.NewCustomer(tx, shop.ID).CustomerUpdateTax(req)
+	})
+	return res, err
+}
+
+// 添加收货地址
+func (*aCustomer) AddAddress(ctx g.Ctx, req *vo.CustomerAddAddressReq) (res vo.CustomerAddAddressRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	orm := sOrm.NewDb(&auth.Shop.ID)
+	err = orm.Transaction(func(tx *gorm.DB) error {
+		return sCustomerAddress.NewCustomerAddress(shop.ID, tx).Add(req.CustomerID, req.Address)
+	})
+	return res, err
+}
+
+// 更新收货地址
+func (*aCustomer) UpdateAddress(ctx g.Ctx, req *vo.CustomerUpdateAddressReq) (res vo.CustomerUpdateAddressRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	orm := sOrm.NewDb(&auth.Shop.ID)
+	err = orm.Transaction(func(tx *gorm.DB) error {
+		return sCustomerAddress.NewCustomerAddress(shop.ID, tx).Update(req)
+	})
+	return res, err
+}
+
+// 删除收货地址
+func (*aCustomer) RemoveAddress(ctx g.Ctx, req *vo.CustomerDeleteAddressReq) (res vo.CustomerDeleteAddressRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	orm := sOrm.NewDb(&auth.Shop.ID)
+	err = orm.Transaction(func(tx *gorm.DB) error {
+		return sCustomerAddress.NewCustomerAddress(shop.ID, tx).Remove(req.AddressID)
 	})
 	return res, err
 }
