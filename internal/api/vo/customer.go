@@ -91,6 +91,7 @@ type CustomerAddAddressReq struct {
 	Address    mAddress.Address `json:"address" v:"required"`
 }
 type CustomerAddAddressRes struct {
+	ID uint `json:"id"`
 }
 
 // 更新收货地址
@@ -144,4 +145,16 @@ type CustomerDeleteAddressReq struct {
 	AddressID uint `json:"address_id" v:"required"`
 }
 type CustomerDeleteAddressRes struct {
+}
+
+// 获取客户options
+type CustomerOptionsReq struct {
+	g.Meta `path:"/customer/options" method:"post" summary:"客户列表" tags:"Customer"`
+}
+type CustomerOptionsRes struct {
+	ID        uint   `json:"id"`
+	Email     string `json:"email"`
+	Phone     string `json:"phone"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
 }

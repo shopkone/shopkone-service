@@ -94,7 +94,8 @@ func (*aCustomer) AddAddress(ctx g.Ctx, req *vo.CustomerAddAddressReq) (res vo.C
 	shop := auth.Shop
 	orm := sOrm.NewDb(&auth.Shop.ID)
 	err = orm.Transaction(func(tx *gorm.DB) error {
-		return sCustomerAddress.NewCustomerAddress(shop.ID, tx).Add(req.CustomerID, req.Address)
+		res.ID, err = sCustomerAddress.NewCustomerAddress(shop.ID, tx).Add(req.CustomerID, req.Address)
+		return err
 	})
 	return res, err
 }
@@ -118,5 +119,14 @@ func (*aCustomer) RemoveAddress(ctx g.Ctx, req *vo.CustomerDeleteAddressReq) (re
 	err = orm.Transaction(func(tx *gorm.DB) error {
 		return sCustomerAddress.NewCustomerAddress(shop.ID, tx).Remove(req.AddressID)
 	})
+	return res, err
+}
+
+// 获取客户options
+func (*aCustomer) Options(ctx g.Ctx, req *vo.CustomerOptionsReq) (res []vo.CustomerOptionsRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	shop := auth.Shop
+	orm := sOrm.NewDb(&auth.Shop.ID)
+	res, err = sCustomer.NewCustomer(orm, shop.ID).CustomerOptions()
 	return res, err
 }

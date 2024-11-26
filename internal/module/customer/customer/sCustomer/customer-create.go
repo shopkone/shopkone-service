@@ -55,6 +55,6 @@ func (s *sCustomer) Create(in *vo.CustomerCreateReq) (id uint, err error) {
 		return data.ID, err
 	}
 	// 创建收货地址
-	err = sCustomerAddress.NewCustomerAddress(s.shopId, s.orm).Add(data.ID, in.Address)
+	_, err = sCustomerAddress.NewCustomerAddress(s.shopId, s.orm).Add(data.ID, in.Address)
 	return data.ID, err
 }
