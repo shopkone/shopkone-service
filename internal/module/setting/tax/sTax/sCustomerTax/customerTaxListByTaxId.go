@@ -34,10 +34,11 @@ func (s *sCustomerTax) CustomerTaxListByTaxId(taxId uint) (res []vo.BaseCustomer
 		})
 		i.Zones = slice.Map(currentZones, func(index int, zone mTax.CustomerTaxZone) vo.BaseCustomerTaxZone {
 			return vo.BaseCustomerTaxZone{
-				ID:       zone.ID,
-				Name:     zone.Name,
-				AreaCode: zone.AreaCode,
-				TaxRate:  zone.TaxRate,
+				ID:          zone.ID,
+				Name:        zone.Name,
+				ZoneCode:    zone.ZoneCode,
+				CountryCode: zone.CountryCode,
+				TaxRate:     zone.TaxRate,
 			}
 		})
 		return i

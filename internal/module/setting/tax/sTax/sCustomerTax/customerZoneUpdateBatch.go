@@ -27,7 +27,7 @@ func (s *sCustomerTax) TaxZoneUpdateBatch(list, oldList []mTax.CustomerTaxZone) 
 	batchIn := handle.BatchUpdateByIdIn{
 		Orm:    s.orm,
 		ShopID: s.shopId,
-		Query:  []string{"area_code", "tax_rate", "name"},
+		Query:  []string{"country_code", "zone_code", "tax_rate", "name"},
 	}
 	return handle.BatchUpdateById(batchIn, &list)
 }

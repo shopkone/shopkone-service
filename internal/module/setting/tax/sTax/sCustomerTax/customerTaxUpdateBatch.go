@@ -26,7 +26,8 @@ func (s *sCustomerTax) CustomerTaxUpdateBatch(list, oldList []mTax.CustomerTax, 
 					CustomerTaxID: customer.ID,
 					Name:          item.Name,
 					TaxRate:       item.TaxRate,
-					AreaCode:      item.AreaCode,
+					CountryCode:   item.CountryCode,
+					ZoneCode:      item.ZoneCode,
 				}
 				z.ID = item.ID
 				z.ShopId = s.shopId
