@@ -27,7 +27,7 @@ type Tax struct {
 
 type TaxZone struct {
 	mOrm.Model
-	ZoneCode string  `gorm:"index;not null"` // 省份代码
+	ZoneCode string  `gorm:"index;not null"`
 	Name     string  `gorm:"size:200"`
 	TaxRate  float64 `gorm:"default:0"`
 	TaxId    uint    `gorm:"index;not null"`
@@ -42,8 +42,7 @@ type CustomerTax struct {
 
 type CustomerTaxZone struct {
 	mOrm.Model
-	ZoneCode      string  `gorm:"index;not null"` // 国家代码
-	CountryCode   string  `gorm:"index;not null"` // 省份代码
+	AreaCode      string  `gorm:"index;not null"` // 国家代码 + 省份代码
 	Name          string  `gorm:"size:200"`
 	TaxRate       float64 `gorm:"default:0"`
 	CustomerTaxID uint    `gorm:"index;not null"`

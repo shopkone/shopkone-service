@@ -36,8 +36,7 @@ func (s *sCustomerTax) CustomerTaxCreate(in []mTax.CustomerTax, baseList []vo.Ba
 				CustomerTaxID: customer.ID,
 				Name:          zone.Name,
 				TaxRate:       zone.TaxRate,
-				CountryCode:   zone.CountryCode,
-				ZoneCode:      zone.ZoneCode,
+				AreaCode:      zone.AreaCode,
 			}
 			i.ShopId = s.shopId
 			zones = append(zones, i)

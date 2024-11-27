@@ -85,9 +85,9 @@ func (s *sTax) CheckError(taxId uint) (info vo.TaxInfoRes, err error) {
 		isAllExist := slice.Every(info.Customers, func(index int, customer vo.BaseCustomerTax) bool {
 			return slice.Every(customer.Zones, func(index int, zone vo.BaseCustomerTaxZone) bool {
 				_, has := slice.FindBy(country.Zones, func(index int, item mResource.CountryZone) bool {
-					return item.Code == zone.ZoneCode
+					return item.Code == zone.AreaCode
 				})
-				return has || zone.CountryCode == country.Code
+				return has || zone.AreaCode == country.Code
 			})
 		})
 		if !isAllExist {
@@ -97,10 +97,7 @@ func (s *sTax) CheckError(taxId uint) (info vo.TaxInfoRes, err error) {
 		// 区域是否重复
 		isAllNoRepeat := slice.Every(info.Customers, func(index int, customer vo.BaseCustomerTax) bool {
 			codes := slice.Map(customer.Zones, func(index int, item vo.BaseCustomerTaxZone) string {
-				if item.CountryCode != "" {
-					return item.CountryCode
-				}
-				return item.ZoneCode
+				return item.AreaCode
 			})
 			return len(customer.Zones) == len(slice.Unique(codes))
 		})
