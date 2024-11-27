@@ -15,13 +15,13 @@ type BaseZoneCode struct {
 // BaseShippingZoneFeeCondition 表示运费条件
 type BaseShippingZoneFeeCondition struct {
 	ID       uint    `json:"id"`        // 条件ID
-	Fixed    float64 `json:"fixed"`     // 固定费用
-	First    float64 `json:"first"`     // 首重/首件
-	FirstFee float64 `json:"first_fee"` // 首重/首件费用
-	Next     float64 `json:"next"`      // 续重/续件
-	NextFee  float64 `json:"next_fee"`  // 续重/续件费用
-	Max      float64 `json:"max"`       // 最大值限制
-	Min      float64 `json:"min"`       // 最小值限制
+	Fixed    float32 `json:"fixed"`     // 固定费用
+	First    float32 `json:"first"`     // 首重/首件
+	FirstFee float32 `json:"first_fee"` // 首重/首件费用
+	Next     float32 `json:"next"`      // 续重/续件
+	NextFee  float32 `json:"next_fee"`  // 续重/续件费用
+	Max      float32 `json:"max"`       // 最大值限制
+	Min      float32 `json:"min"`       // 最小值限制
 }
 
 // BaseShippingZoneFee 表示物流区域方案运费

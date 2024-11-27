@@ -28,7 +28,7 @@ const (
 type OrderDiscount struct {
 	mOrm.Model
 	Type         OrderDiscountType       `gorm:"not null"`  // 折扣类型
-	Value        float32                 `gorm:"default:0"` // 折扣金额
+	Price        float32                 `gorm:"default:0"` // 折扣金额
 	CreatorEmail string                  `gorm:"size:255"`  // 创建人邮箱
 	FromSource   OrderDiscountFromSource `json:"index"`     // 折扣来源
 	FromID       uint                    `gorm:"index"`     // 折扣来源ID

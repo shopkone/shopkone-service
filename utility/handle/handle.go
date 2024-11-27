@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"shopkone-service/internal/consts"
 )
 
 func GenUid() string {
@@ -69,4 +70,20 @@ func BatchUpdateById[T any](in BatchUpdateByIdIn, list *[]T) (err error) {
 
 func RoundMoney(money float64) float64 {
 	return float64(int(money*100)) / 100
+}
+
+func ToKg(weight float32, uint consts.WeightUnit) float32 {
+	if uint == consts.WeightUnitGram {
+		return weight / 1000
+	}
+	if uint == consts.WeightUnitOunce {
+		return weight / 35.2739619
+	}
+	if uint == consts.WeightUnitPound {
+		return weight / 2.20462262
+	}
+	if uint == consts.WeightUnitKilogram {
+		return weight
+	}
+	return weight
 }

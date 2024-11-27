@@ -27,6 +27,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 	langaugesApi := api.NewLanguageApi()
 	domainApi := api.NewDomainApi()
 	customerApi := api.NewCustomerApi()
+	orderApi := api.NewOrderApi()
 
 	s.Group("/api", func(group *ghttp.RouterGroup) {
 		group.Middleware(middleware.UserMiddleware)
@@ -188,5 +189,8 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(customerApi.UpdateAddress)
 		group.Bind(customerApi.RemoveAddress)
 		group.Bind(customerApi.Options)
+
+		// 订单
+		group.Bind(orderApi.OrderPreCalPrice)
 	})
 }

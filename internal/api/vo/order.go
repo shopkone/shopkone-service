@@ -2,23 +2,56 @@ package vo
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
+	"shopkone-service/internal/module/base/address/mAddress"
 	"shopkone-service/internal/module/order/order/mOrder"
 )
 
-type OrderCalculatePreDiscount struct {
+// 运费
+type OrderPreBaseShippingFee struct {
+	Free          bool    `json:"free"`
+	Name          string  `json:"name"`
+	Price         float32 `json:"price"`
+	ShippingFeeID uint    `json:"shipping_fee_id"`
+}
+
+// 优惠
+type OrderPreBaseDiscount struct {
 	ID    uint                     `json:"id"`
+	Price float32                  `json:"value"`
 	Type  mOrder.OrderDiscountType `json:"type"`
-	Value float32                  `json:"value"`
 }
 
-type OrderCalculatePreVariantItem struct {
-	VariantID uint                      `json:"variant_id" v:"required"`
-	Quantity  uint                      `json:"quantity" v:"required"`
-	Discount  OrderCalculatePreDiscount `json:"discount"`
+// 商品项
+type OrderPreBaseVariantItem struct {
+	VariantID uint                 `json:"variant_id" v:"required"`
+	Quantity  uint                 `json:"quantity" v:"required"`
+	Discount  OrderPreBaseDiscount `json:"discount"`
 }
 
-type OrderCalculatePreReq struct {
+// 返回可用运费方案
+type BasePreShippingFeePlan struct {
+	Name  string  `json:"name"`
+	ID    uint    `json:"id"`
+	Price float32 `json:"price"`
+}
+
+// 预计算订单价格
+type OrderCalPreReq struct {
 	g.Meta       `path:"/order/calculate-pre" method:"post" summary:"计算订单价格" tags:"Order"`
-	VariantItems []OrderCalculatePreVariantItem `json:"variant_items" v:"required"`
-	Discount     OrderCalculatePreDiscount      `json:"discount"`
+	VariantItems []OrderPreBaseVariantItem `json:"variant_items" v:"required"`
+	MarketID     uint                      `json:"market_id" v:"required"`
+	Discount     OrderPreBaseDiscount      `json:"discount"`
+	Address      mAddress.Address          `json:"address"`
+	CustomerID   uint                      `json:"customer_id"`
+	ShippingFee  OrderPreBaseShippingFee   `json:"shipping_fee"`
+}
+
+type OrderCalPreRes struct {
+	CostPrice        float32                  `json:"cost_price"`
+	TaxPrice         float32                  `json:"tax_price"`
+	ShippingPrice    float32                  `json:"shipping_price"`
+	DiscountPrice    float32                  `json:"discount_price"`
+	SumPrice         float32                  `json:"sum_price"`
+	Total            float32                  `json:"total"`
+	ShippingFeePlans []BasePreShippingFeePlan `json:"shipping_fee_plans"`
 }
