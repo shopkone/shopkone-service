@@ -2,10 +2,12 @@ package sOrder
 
 import (
 	"github.com/duke-git/lancet/v2/slice"
+	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/order/order/mOrder"
 	"shopkone-service/internal/module/order/order/sOrder/sOrderProduct"
 	"shopkone-service/internal/module/order/order/sOrder/sOrderShipping"
+	"shopkone-service/internal/module/order/order/sOrder/sOrderTax"
 	"shopkone-service/internal/module/product/product/sProduct/sProduct"
 	"shopkone-service/internal/module/product/product/sProduct/sVariant"
 )
@@ -123,10 +125,32 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 	}
 
 	// 计算税
-	if in.CustomerID != 0 && in.Address.Country != "" {
+	taxCalIn := sOrderTax.TaxCalIn{
+		CountryCode: in.Address.Country,
+		ZoneCode:    in.Address.Zone,
+		Variants:    discountVariantPrice,
+		InVariants:  in.VariantItems,
 	}
+	taxes, err := sOrderTax.NewOrderTax(s.orm, s.shopId).TaxCal(taxCalIn)
+	if err != nil {
+		return vo.OrderCalPreRes{}, err
+	}
+	taxVariants := slice.Map(discountVariantPrice, func(index int, item sVariant.VariantToOrderOut) sVariant.VariantToOrderOut {
+		tax, ok := slice.FindBy(taxes, func(index int, tax sOrderTax.TaxCalOut) bool {
+			return tax.VariantID == item.ID
+		})
+		if ok {
+			item.Price = item.Price + tax.Tax
+		}
+		return item
+	})
 
 	// 计算订单总价
+	slice.ForEach(taxVariants, func(index int, item sVariant.VariantToOrderOut) {
+		out.Total = out.Total + item.Price
+	})
+
+	g.Dump(out)
 
 	return out, err
 }

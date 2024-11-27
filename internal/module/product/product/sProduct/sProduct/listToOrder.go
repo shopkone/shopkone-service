@@ -7,15 +7,16 @@ import (
 )
 
 type ProductsToOrderOut struct {
-	ID            uint
-	Title         string
-	Spu           string
-	Vendor        string
-	Tags          []string
-	Type          mProduct.VariantType
-	Category      string
-	FirstImageSrc string
-	Variants      []sVariant.VariantToOrderOut
+	ID                uint
+	Title             string
+	Spu               string
+	Vendor            string
+	Tags              []string
+	Type              mProduct.VariantType
+	Category          string
+	FirstImageSrc     string
+	Variants          []sVariant.VariantToOrderOut
+	InventoryTracking bool
 }
 
 func (s *sProduct) ListToOrder(variantIds []uint) ([]ProductsToOrderOut, error) {
@@ -39,12 +40,13 @@ func (s *sProduct) ListToOrder(variantIds []uint) ([]ProductsToOrderOut, error) 
 	// 组装数据
 	out := slice.Map(list, func(index int, item mProduct.Product) ProductsToOrderOut {
 		i := ProductsToOrderOut{
-			ID:     item.ID,
-			Title:  item.Title,
-			Spu:    item.Spu,
-			Vendor: item.Vendor,
-			Tags:   item.Tags,
-			Type:   item.VariantType,
+			ID:                item.ID,
+			Title:             item.Title,
+			Spu:               item.Spu,
+			Vendor:            item.Vendor,
+			Tags:              item.Tags,
+			Type:              item.VariantType,
+			InventoryTracking: item.InventoryTracking,
 			//Category:      item.Category.Name,
 			//FirstImageSrc: item.Category.FirstImageSrc,
 		}
