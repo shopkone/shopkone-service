@@ -39,10 +39,11 @@ type BaseCustomerTax struct {
 }
 
 type BaseCustomerTaxZone struct {
-	ID       uint    `json:"id"`
-	Name     string  `json:"name" v:"required:true"`
-	AreaCode string  `json:"area_code" v:"required:true"`
-	TaxRate  float64 `json:"tax_rate"`
+	ID          uint    `json:"id"`
+	Name        string  `json:"name" v:"required:true"`
+	CountryCode string  `json:"country_code"`
+	ZoneCode    string  `json:"zone_code"`
+	TaxRate     float64 `json:"tax_rate"`
 }
 
 type TaxInfoReq struct {

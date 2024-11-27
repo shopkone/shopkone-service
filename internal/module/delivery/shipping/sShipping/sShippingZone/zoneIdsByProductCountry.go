@@ -15,6 +15,7 @@ type ZoneIdsByCountryOut struct {
 	ZoneIds    []uint
 }
 
+// 根据国家获取物流区域
 func (s *sShippingZone) ZoneIdsByCountry(in ZoneIdsByCountryIn) (out []ZoneIdsByCountryOut, err error) {
 	// 根据国家获取区域码
 	var zoneCodes []mShipping.ShippingZoneCode

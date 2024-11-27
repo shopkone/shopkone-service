@@ -34,7 +34,6 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 		inVariant, ok := slice.FindBy(in.VariantItems, func(index int, inVariant vo.OrderPreBaseVariantItem) bool {
 			return inVariant.VariantID == variant.ID
 		})
-		oldPrice := variant.Price
 		if ok && inVariant.Discount.Price != 0 {
 			if inVariant.Discount.Type == mOrder.OrderDiscountTypePercentage {
 				variant.Price = variant.Price * (1 - inVariant.Discount.Price/100)
@@ -44,7 +43,6 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 			if variant.Price < 0 {
 				variant.Price = 0
 			}
-			out.DiscountPrice = out.DiscountPrice + (oldPrice - variant.Price)
 		}
 		return variant
 	})
@@ -78,10 +76,6 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 		} else if in.Discount.Type == mOrder.OrderDiscountTypeFixed {
 			out.Total = out.Total - in.Discount.Price
 		}
-	}
-
-	// 计算税
-	if in.CustomerID != 0 && in.Address.Country != "" {
 	}
 
 	// 获取订单可以使用的运费方案
@@ -125,7 +119,11 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 	if in.ShippingFee.Price != 0 {
 		out.ShippingPrice = in.ShippingFee.Price
 	}
-	if in.ShippingFee.ShippingFeeID != 0 && in.CustomerID != 0 && in.Address.Country != "" {
+	if in.ShippingFee.ShippingFeeID != 0 && in.CustomerID != 0 && in.Address.Country != "" && len(out.ShippingFeePlans) > 0 {
+	}
+
+	// 计算税
+	if in.CustomerID != 0 && in.Address.Country != "" {
 	}
 
 	// 计算订单总价
