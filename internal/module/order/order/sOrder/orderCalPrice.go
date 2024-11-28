@@ -110,7 +110,7 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 		if err != nil {
 			return vo.OrderCalPreRes{}, err
 		}
-		out.ShippingFeePlans = slice.Map(list, func(index int, item sOrderShipping.FeesByCountryProductOut) vo.BasePreShippingFeePlan {
+		out.ShippingFeePlans = slice.Map(list.Plans, func(index int, item sOrderShipping.FeesByCountryProductOut) vo.BasePreShippingFeePlan {
 			i := vo.BasePreShippingFeePlan{}
 			i.ID = item.FeeID
 			i.Name = item.FeeName
@@ -120,10 +120,23 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 	}
 
 	// 计算运费
-	if in.ShippingFee.Price != 0 {
-		out.ShippingPrice = in.ShippingFee.Price
+	if in.ShippingFee.Free {
+		out.ShippingFee = in.ShippingFee
+	} else if in.ShippingFee.Customer {
+		out.Total = out.Total + in.ShippingFee.Price
+		out.ShippingFee = in.ShippingFee
 	}
 	if in.ShippingFee.ShippingFeeID != 0 && in.CustomerID != 0 && in.Address.Country != "" && len(out.ShippingFeePlans) > 0 {
+		opt, ok := slice.FindBy(out.ShippingFeePlans, func(index int, item vo.BasePreShippingFeePlan) bool {
+			return item.ID == in.ShippingFee.ShippingFeeID
+		})
+		if ok {
+			out.ShippingFee = vo.OrderPreBaseShippingFee{
+				ShippingFeeID: opt.ID,
+				Name:          opt.Name,
+				Price:         opt.Price,
+			}
+		}
 	}
 
 	// 计算税

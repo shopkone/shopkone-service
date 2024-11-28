@@ -5,8 +5,17 @@ import (
 	"shopkone-service/utility/handle"
 )
 
+type FeeFilterIn struct {
+	Fee          mShipping.ShippingZoneFee
+	Condition    mShipping.ShippingZonFeeCondition
+	TotalWeight  float32
+	ProductCount int
+	OrderPrice   float32
+	ProductPrice float32
+}
+
 // TODO:测试一下shopline如何处理不同名字的方案的
-func (s *sOrderShipping) FeeFilter(in FeeCalIn) bool {
+func (s *sOrderShipping) FeeFilter(in FeeFilterIn) bool {
 	fee := in.Fee
 	condition := in.Condition
 

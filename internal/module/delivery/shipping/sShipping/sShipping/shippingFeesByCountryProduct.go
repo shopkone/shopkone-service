@@ -13,9 +13,12 @@ type ShippingFeesByCountryProductIn struct {
 	ProductIDs  []uint
 }
 type ShippingFeesByCountryProductOut struct {
+	Fee        mShipping.ShippingZoneFee
+	ProductIDs []uint
+	IsGeneral  bool
 }
 
-func (s *sShipping) FeesByCountryProduct(in ShippingFeesByCountryProductIn) (fees []mShipping.ShippingZoneFee, err error) {
+func (s *sShipping) FeesByCountryProduct(in ShippingFeesByCountryProductIn) (fees []ShippingFeesByCountryProductOut, err error) {
 	// 获取区域
 	zoneService := sShippingZone.NewShippingZone(s.shopId, s.orm)
 
@@ -46,7 +49,7 @@ func (s *sShipping) FeesByCountryProduct(in ShippingFeesByCountryProductIn) (fee
 		return has
 	})
 	// 商品需要全部匹配才可以使用
-	canUseShippingIds = slice.Filter(canUseShippingIds, func(index int, id uint) bool {
+	/*canUseShippingIds = slice.Filter(canUseShippingIds, func(index int, id uint) bool {
 		ps := slice.Filter(shippingProducts, func(index int, item mShipping.ShippingProduct) bool {
 			return item.ShippingId == id
 		})
@@ -57,7 +60,7 @@ func (s *sShipping) FeesByCountryProduct(in ShippingFeesByCountryProductIn) (fee
 			return ok
 		})
 		return isProductAllMatch
-	})
+	})*/
 
 	genderShipping, err := s.ShippingGeneral()
 	if err != nil {
@@ -86,5 +89,24 @@ func (s *sShipping) FeesByCountryProduct(in ShippingFeesByCountryProductIn) (fee
 	// 获取费用
 	zoneFeeService := sShippingZoneFee.NewShippingZoneFee(s.orm, s.shopId)
 
-	return zoneFeeService.FeesByZoneIds(zoneIds)
+	list, err := zoneFeeService.FeesByZoneIds(zoneIds)
+	if err != nil {
+		return nil, err
+	}
+
+	fees = slice.Map(list, func(index int, fee mShipping.ShippingZoneFee) ShippingFeesByCountryProductOut {
+		products := slice.Filter(shippingProducts, func(index int, item mShipping.ShippingProduct) bool {
+			return item.ShippingId == fee.ShippingZoneId
+		})
+		i := ShippingFeesByCountryProductOut{
+			Fee: fee,
+		}
+		i.IsGeneral = genderShipping.ID == fee.ID
+		slice.ForEach(products, func(index int, item mShipping.ShippingProduct) {
+			i.ProductIDs = append(i.ProductIDs, item.ProductId)
+		})
+		return i
+	})
+
+	return fees, err
 }

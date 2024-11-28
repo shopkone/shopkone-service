@@ -6,16 +6,14 @@ import (
 	"shopkone-service/utility/handle"
 )
 
-type FeeCalIn struct {
+type FeeCalInItem struct {
 	Fee          mShipping.ShippingZoneFee
 	Condition    mShipping.ShippingZonFeeCondition
 	TotalWeight  float32
 	ProductCount int
-	OrderPrice   float32
-	ProductPrice float32
 }
 
-func (s *sOrderShipping) FeeCal(in FeeCalIn) (price float32) {
+func (s *sOrderShipping) FeeCalItem(in FeeCalInItem) (price float32) {
 	fee := in.Fee
 	condition := in.Condition
 	productCount := in.ProductCount

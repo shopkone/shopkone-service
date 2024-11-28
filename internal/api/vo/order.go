@@ -9,6 +9,7 @@ import (
 // 运费
 type OrderPreBaseShippingFee struct {
 	Free          bool    `json:"free"`
+	Customer      bool    `json:"customer"`
 	Name          string  `json:"name"`
 	Price         float32 `json:"price"`
 	ShippingFeeID uint    `json:"shipping_fee_id"`
@@ -55,10 +56,10 @@ type OrderCalPreReq struct {
 
 type OrderCalPreRes struct {
 	CostPrice        float32                  `json:"cost_price"`
-	ShippingPrice    float32                  `json:"shipping_price"`
 	DiscountPrice    float32                  `json:"discount_price"`
 	SumPrice         float32                  `json:"sum_price"`
 	Total            float32                  `json:"total"`
 	ShippingFeePlans []BasePreShippingFeePlan `json:"shipping_fee_plans"`
 	Taxes            []BasePreTaxDetail       `json:"taxes"`
+	ShippingFee      OrderPreBaseShippingFee  `json:"shipping_fee"`
 }

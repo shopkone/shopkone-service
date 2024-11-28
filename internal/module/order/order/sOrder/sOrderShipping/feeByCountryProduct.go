@@ -32,7 +32,7 @@ type FeesByCountryProductOut struct {
 	FeePrice float32
 }
 
-func (s *sOrderShipping) FeesByCountryProduct(in FeesByCountryProduct) (out []FeesByCountryProductOut, err error) {
+func (s *sOrderShipping) FeesByCountryProduct(in FeesByCountryProduct) (out FeeCalsPerProductOut, err error) {
 	productIds := slice.Map(in.Variants, func(index int, item FeesProductVariant) uint {
 		return item.ProductId
 	})
@@ -50,13 +50,13 @@ func (s *sOrderShipping) FeesByCountryProduct(in FeesByCountryProduct) (out []Fe
 	}
 
 	// 获取费用条件
-	feeIds := slice.Map(fees, func(index int, item mShipping.ShippingZoneFee) uint {
-		return item.ID
+	feeIds := slice.Map(fees, func(index int, item sShipping.ShippingFeesByCountryProductOut) uint {
+		return item.Fee.ID
 	})
 	feeIds = slice.Unique(feeIds)
 	feeConditions, err := sShippingZoneFee.NewShippingZoneFee(s.orm, s.shopId).ConditionsByFeeIds(feeIds)
 	if err != nil {
-		return nil, err
+		return out, err
 	}
 
 	// 商品总数
@@ -73,15 +73,16 @@ func (s *sOrderShipping) FeesByCountryProduct(in FeesByCountryProduct) (out []Fe
 		totalWeight = totalWeight + handle.ToKg(*item.Weight, item.WeightUnit)
 	})
 
+	var calFeesIn []FeeCalsPerProductIn
 	slice.ForEach(feeConditions, func(index int, condition mShipping.ShippingZonFeeCondition) {
-		fee, ok := slice.FindBy(fees, func(index int, fee mShipping.ShippingZoneFee) bool {
-			return fee.ID == condition.ShippingZoneFeeId
+		fee, ok := slice.FindBy(fees, func(index int, fee sShipping.ShippingFeesByCountryProductOut) bool {
+			return fee.Fee.ID == condition.ShippingZoneFeeId
 		})
 		if !ok {
 			return
 		}
-		feeIn := FeeCalIn{
-			Fee:          fee,
+		feeIn := FeeFilterIn{
+			Fee:          fee.Fee,
 			Condition:    condition,
 			TotalWeight:  totalWeight,
 			ProductCount: productCount,
@@ -89,13 +90,20 @@ func (s *sOrderShipping) FeesByCountryProduct(in FeesByCountryProduct) (out []Fe
 			ProductPrice: in.ProductPrice,
 		}
 		if s.FeeFilter(feeIn) {
-			i := FeesByCountryProductOut{}
-			i.FeeID = fee.ID
-			i.FeeName = fee.Name
-			i.FeePrice = s.FeeCal(feeIn)
-			out = append(out, i)
+			slice.ForEach(in.Variants, func(index int, item FeesProductVariant) {
+				if !slice.Contain(fee.ProductIDs, item.ProductId) && !fee.IsGeneral {
+					return
+				}
+				i := FeeCalsPerProductIn{
+					Fee:          fee.Fee,
+					Condition:    condition,
+					Variant:      item,
+					IsGeneralFee: fee.IsGeneral,
+				}
+				calFeesIn = append(calFeesIn, i)
+			})
 		}
 	})
 
-	return out, err
+	return s.FeeCalsPerProduct(calFeesIn, in.Variants), err
 }
