@@ -19,6 +19,7 @@ type OrderPreBaseDiscount struct {
 	ID    uint                     `json:"id"`
 	Price float32                  `json:"value"`
 	Type  mOrder.OrderDiscountType `json:"type"`
+	Note  string                   `json:"note"`
 }
 
 // 商品项
@@ -35,11 +36,17 @@ type BasePreShippingFeePlan struct {
 	Price float32 `json:"price"`
 }
 
+// 返回税务详情
+type BasePreTaxDetail struct {
+	Name  string  `json:"name"`
+	Rate  float64 `json:"rate"`
+	Price float32 `json:"price"`
+}
+
 // 预计算订单价格
 type OrderCalPreReq struct {
 	g.Meta       `path:"/order/calculate-pre" method:"post" summary:"计算订单价格" tags:"Order"`
 	VariantItems []OrderPreBaseVariantItem `json:"variant_items" v:"required"`
-	MarketID     uint                      `json:"market_id" v:"required"`
 	Discount     OrderPreBaseDiscount      `json:"discount"`
 	Address      mAddress.Address          `json:"address"`
 	CustomerID   uint                      `json:"customer_id"`
@@ -48,10 +55,10 @@ type OrderCalPreReq struct {
 
 type OrderCalPreRes struct {
 	CostPrice        float32                  `json:"cost_price"`
-	TaxPrice         float32                  `json:"tax_price"`
 	ShippingPrice    float32                  `json:"shipping_price"`
 	DiscountPrice    float32                  `json:"discount_price"`
 	SumPrice         float32                  `json:"sum_price"`
 	Total            float32                  `json:"total"`
 	ShippingFeePlans []BasePreShippingFeePlan `json:"shipping_fee_plans"`
+	Taxes            []BasePreTaxDetail       `json:"taxes"`
 }

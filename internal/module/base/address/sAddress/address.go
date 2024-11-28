@@ -87,6 +87,10 @@ func (s *sAddress) UpdateById(address mAddress.Address) (err error) {
 	if zone.Name == "" && len(country.Zones) > 0 {
 		address.Zone = country.Zones[0].Code
 	}
+	// 如果该国家下没有省份，却设置了省份，取消掉
+	if zone.Name != "" && len(country.Zones) == 0 {
+		address.Zone = ""
+	}
 	// 如果没有设置电话号码区域，则根据国家取设置
 	if address.Phone.Country == "" {
 		address.Phone.Prefix = country.PhoneNumberPrefix

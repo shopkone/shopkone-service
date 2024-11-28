@@ -2,7 +2,6 @@ package sOrder
 
 import (
 	"github.com/duke-git/lancet/v2/slice"
-	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/order/order/mOrder"
 	"shopkone-service/internal/module/order/order/sOrder/sOrderProduct"
@@ -10,6 +9,7 @@ import (
 	"shopkone-service/internal/module/order/order/sOrder/sOrderTax"
 	"shopkone-service/internal/module/product/product/sProduct/sProduct"
 	"shopkone-service/internal/module/product/product/sProduct/sVariant"
+	"shopkone-service/utility/handle"
 )
 
 // 简易的计算，不涉及优惠券等物品的使用
@@ -40,7 +40,7 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 			if inVariant.Discount.Type == mOrder.OrderDiscountTypePercentage {
 				variant.Price = variant.Price * (1 - inVariant.Discount.Price/100)
 			} else if inVariant.Discount.Type == mOrder.OrderDiscountTypeFixed {
-				variant.Price = variant.Price - inVariant.Discount.Price
+				variant.Price = handle.RoundMoney32(variant.Price - inVariant.Discount.Price)
 			}
 			if variant.Price < 0 {
 				variant.Price = 0
@@ -58,6 +58,7 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 			out.SumPrice += float32(find.Quantity) * variant.Price
 		}
 	})
+	out.SumPrice = handle.RoundMoney32(out.SumPrice)
 
 	// 计算订单成本价
 	slice.ForEach(variants, func(index int, item sVariant.VariantToOrderOut) {
@@ -68,6 +69,7 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 			out.CostPrice += float32(find.Quantity) * *item.CostPerItem
 		}
 	})
+	out.CostPrice = handle.RoundMoney32(out.CostPrice)
 
 	out.Total = out.SumPrice
 
@@ -135,22 +137,16 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 	if err != nil {
 		return vo.OrderCalPreRes{}, err
 	}
-	taxVariants := slice.Map(discountVariantPrice, func(index int, item sVariant.VariantToOrderOut) sVariant.VariantToOrderOut {
-		tax, ok := slice.FindBy(taxes, func(index int, tax sOrderTax.TaxCalOut) bool {
-			return tax.VariantID == item.ID
-		})
-		if ok {
-			item.Price = item.Price + tax.Tax
-		}
-		return item
+	out.Taxes = slice.Map(taxes, func(index int, item sOrderTax.TaxCalOut) vo.BasePreTaxDetail {
+		i := vo.BasePreTaxDetail{}
+		i.Rate = item.TaxRate
+		i.Price = item.Tax
+		i.Name = item.TaxName
+		out.Total = out.Total + handle.RoundMoney32(item.Tax)
+		return i
 	})
 
-	// 计算订单总价
-	slice.ForEach(taxVariants, func(index int, item sVariant.VariantToOrderOut) {
-		out.Total = out.Total + item.Price
-	})
-
-	g.Dump(out)
+	out.Total = handle.RoundMoney32(out.Total)
 
 	return out, err
 }

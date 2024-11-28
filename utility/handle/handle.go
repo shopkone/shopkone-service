@@ -72,6 +72,10 @@ func RoundMoney(money float64) float64 {
 	return float64(int(money*100)) / 100
 }
 
+func RoundMoney32(money float32) float32 {
+	return float32(int(money*100)) / 100
+}
+
 func ToKg(weight float32, uint consts.WeightUnit) float32 {
 	if uint == consts.WeightUnitGram {
 		return weight / 1000
