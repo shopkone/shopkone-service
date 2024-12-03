@@ -28,6 +28,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 	domainApi := api.NewDomainApi()
 	customerApi := api.NewCustomerApi()
 	orderApi := api.NewOrderApi()
+	designApi := api.NewDesignApi()
 
 	s.Group("/api", func(group *ghttp.RouterGroup) {
 		group.Middleware(middleware.UserMiddleware)
@@ -192,5 +193,9 @@ func registerAdminRoutes(s *ghttp.Server) {
 
 		// 订单
 		group.Bind(orderApi.OrderPreCalPrice)
+
+		// 设计主题
+		group.Bind(designApi.DesignDataList)
+		group.Bind(designApi.SchemaList)
 	})
 }

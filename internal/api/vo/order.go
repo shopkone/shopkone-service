@@ -63,3 +63,16 @@ type OrderCalPreRes struct {
 	Taxes            []BasePreTaxDetail       `json:"taxes"`
 	ShippingFee      OrderPreBaseShippingFee  `json:"shipping_fee"`
 }
+
+// 创建订单
+type OrderCreateReq struct {
+	g.Meta         `path:"/order/create" method:"post" summary:"创建订单" tags:"Order"`
+	VariantItems   []OrderPreBaseVariantItem `json:"variant_items" v:"required"`
+	Address        mAddress.Address          `json:"address" v:"required"`
+	BillingAddress mAddress.Address          `json:"billing_address"`
+	CustomerID     uint                      `json:"customer_id" v:"required"`
+	ShippingFee    OrderPreBaseShippingFee   `json:"shipping_fee" v:"required"`
+	Note           string                    `json:"note"`
+	Tags           []string                  `json:"tags"`
+	Discount       OrderPreBaseDiscount      `json:"discount"`
+}

@@ -128,7 +128,7 @@ func (s *sOrderShipping) FeeCalsPerProduct(in []FeeCalsPerProductIn, allVariant 
 			} else if minPlan.Fee.Name == i.FeeName {
 				i.FeeName = minPlan.Fee.Name
 			} else {
-				i.FeeName = ""
+				i.FeeName = "Shipping"
 			}
 			i.FeeID = 1 // 随便取的一个值
 		})

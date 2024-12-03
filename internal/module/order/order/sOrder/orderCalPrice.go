@@ -84,12 +84,16 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 
 	// 获取订单可以使用的运费方案
 	if in.CustomerID != 0 && in.Address.Country != "" {
+		// 不需要物流则过滤掉
+		feeVariants := slice.Filter(discountVariantPrice, func(index int, item sVariant.VariantToOrderOut) bool {
+			return item.ShippingRequired
+		})
 		feesIn := sOrderShipping.FeesByCountryProduct{
 			CountryCode:  in.Address.Country,
 			ZoneCode:     in.Address.Zone,
 			OrderPrice:   out.Total,
 			ProductPrice: out.SumPrice,
-			Variants: slice.Map(variants, func(index int, v sVariant.VariantToOrderOut) sOrderShipping.FeesProductVariant {
+			Variants: slice.Map(feeVariants, func(index int, v sVariant.VariantToOrderOut) sOrderShipping.FeesProductVariant {
 				findIn, ok := slice.FindBy(in.VariantItems, func(index int, item vo.OrderPreBaseVariantItem) bool {
 					return item.VariantID == v.ID
 				})
