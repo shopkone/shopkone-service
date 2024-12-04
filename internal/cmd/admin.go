@@ -197,5 +197,6 @@ func registerAdminRoutes(s *ghttp.Server) {
 		// 设计主题
 		group.Bind(designApi.DesignDataList)
 		group.Bind(designApi.SchemaList)
+		group.Bind(designApi.BlockUpdate)
 	})
 }

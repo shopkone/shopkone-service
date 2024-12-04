@@ -17,7 +17,7 @@ func NewDesignApi() *aDesign {
 func (a *aDesign) DesignDataList(ctx g.Ctx, req *vo.DesignDataListReq) (res *vo.DesignDataListRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 	shop := auth.Shop
 	return sDesign.NewDesign(shop.ID).ListData(ctx)
@@ -26,12 +26,17 @@ func (a *aDesign) DesignDataList(ctx g.Ctx, req *vo.DesignDataListReq) (res *vo.
 func (a *aDesign) SchemaList(ctx g.Ctx, req *vo.DesignSchemaListReq) (res []vo.DesignSchemaListRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 	shop := auth.Shop
 	return sDesign.NewDesign(shop.ID).ListSchema(ctx, req)
 }
 
-func (a *aDesign) SetDesignData(ctx g.Ctx, req *vo.DesignDataListReq) (res *vo.DesignDataListRes, err error) {
-	return res, err
+func (a *aDesign) BlockUpdate(ctx g.Ctx, req *vo.DesignUpdateBlockReq) (res vo.DesignUpdateBlockRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	return sDesign.NewDesign(shop.ID).BlockUpdate(ctx, req)
 }

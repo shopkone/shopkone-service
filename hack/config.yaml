@@ -39,3 +39,7 @@ aliyun:
   accessKeyId: LTAI5tDh3gwQBng8JKaqDusk
   accessKeySecret: WjJvRaeOv3DEJwKheMCNwM0Fm4zcTo
   endPoint: sts.us-west-1.aliyuncs.com
+
+# RenderHost
+render:
+  host: http://127.0.0.1:3100

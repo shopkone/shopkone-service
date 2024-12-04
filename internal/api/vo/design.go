@@ -68,17 +68,21 @@ type SettingSchemaOption struct {
 	Label string `json:"label"`
 }
 
+// 获取头部
 type DesignSchemaListReq struct {
 	g.Meta `path:"/design/schema/list" method:"post" tags:"Design" summary:"获取设计数据列表"`
 	Type   []string `json:"type"`
 }
 type DesignSchemaListRes SectionSchema
 
+// 更新block
 type DesignUpdateBlockReq struct {
 	g.Meta    `path:"/design/block/update" method:"post" tags:"Design" summary:"更新设计数据列表"`
-	SectionID string `json:"section_id" v:"required"`
-	BlockID   string `json:"block_id" v:"required"`
-	Data      g.Map  `json:"data"`
+	SectionID string      `json:"section_id" v:"required"`
+	BlockID   string      `json:"block_id" v:"required"`
+	PartName  string      `json:"part_name" v:"required"`
+	Key       string      `json:"key" v:"required"`
+	Value     interface{} `json:"value" v:"required"`
 }
 type DesignUpdateBlockRes struct {
 }

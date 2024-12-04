@@ -45,6 +45,10 @@ type AliYun struct {
 	EndPoint        string `yaml:"endPoint"`
 }
 
+type Render struct {
+	Host string `yaml:"host"`
+}
+
 type Config struct {
 	Mysql   Mysql   `yaml:"mysql"`
 	Email   Email   `yaml:"email"`
@@ -52,6 +56,7 @@ type Config struct {
 	Mongodb Mongodb `yaml:"mongodb"`
 	AliYun  AliYun  `yaml:"aliyun"`
 	Admin   Admin   `yaml:"admin"`
+	Render  Render  `yaml:"render"`
 }
 
 //go:embed config.yaml

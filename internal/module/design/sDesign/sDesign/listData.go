@@ -7,7 +7,8 @@ import (
 )
 
 func (s *sDesign) ListData(ctx g.Ctx) (res *vo.DesignDataListRes, err error) {
-	URL := "http://localhost:3100/design/data?shop_id=5"
+	URL := s.host + "/design/templates?shop_id=5"
+	g.Dump(URL)
 	r, err := g.Client().Get(ctx, URL)
 	if err != nil {
 		return nil, err
