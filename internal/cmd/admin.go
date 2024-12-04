@@ -198,5 +198,6 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(designApi.DesignDataList)
 		group.Bind(designApi.SchemaList)
 		group.Bind(designApi.BlockUpdate)
+		group.Bind(designApi.SectionRender)
 	})
 }

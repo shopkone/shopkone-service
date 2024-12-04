@@ -40,3 +40,16 @@ func (a *aDesign) BlockUpdate(ctx g.Ctx, req *vo.DesignUpdateBlockReq) (res vo.D
 	shop := auth.Shop
 	return sDesign.NewDesign(shop.ID).BlockUpdate(ctx, req)
 }
+
+func (a *aDesign) SectionRender(ctx g.Ctx, req *vo.DesignSectionRenderReq) (res vo.DesignSectionRenderRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	res.HTML, err = sDesign.NewDesign(shop.ID).SectionRender(ctx, req)
+	if err != nil {
+		return res, err
+	}
+	return res, err
+}

@@ -62,6 +62,7 @@ func (s *aAccountApi) Register(ctx g.Ctx, req *vo.RegisterReq) (res vo.RegisterR
 			UserId:  user.ID,
 			Country: "US",
 			Zone:    "",
+			Ctx:     ctx,
 		}
 		if _, err = sShop.NewShop(tx).CreateTrial(createTrialIn); err != nil {
 			return err

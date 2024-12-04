@@ -82,7 +82,17 @@ type DesignUpdateBlockReq struct {
 	BlockID   string      `json:"block_id" v:"required"`
 	PartName  string      `json:"part_name" v:"required"`
 	Key       string      `json:"key" v:"required"`
-	Value     interface{} `json:"value" v:"required"`
+	Value     interface{} `json:"value"`
 }
 type DesignUpdateBlockRes struct {
+}
+
+// 获取部分section
+type DesignSectionRenderReq struct {
+	g.Meta    `path:"/design/section/render" method:"post" tags:"Design" summary:"获取部分section"`
+	PartName  string `json:"part_name" v:"required"`
+	SectionID string `json:"section_id" v:"required"`
+}
+type DesignSectionRenderRes struct {
+	HTML string `json:"html"`
 }

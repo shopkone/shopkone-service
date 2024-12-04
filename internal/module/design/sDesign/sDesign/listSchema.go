@@ -8,8 +8,8 @@ import (
 )
 
 func (s *sDesign) ListSchema(ctx g.Ctx, req *vo.DesignSchemaListReq) (res []vo.DesignSchemaListRes, err error) {
-	URL := s.host + "/design/schemas?type=" + slice.Join(req.Type, ",")
-	r, err := g.Client().Get(ctx, URL)
+	URL := "/design/schemas?type=" + slice.Join(req.Type, ",")
+	r, err := s.GetClient().Get(ctx, URL)
 	if err != nil {
 		return nil, err
 	}

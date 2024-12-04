@@ -8,6 +8,7 @@ import (
 	"shopkone-service/internal/module/base/address/mAddress"
 	"shopkone-service/internal/module/base/address/sAddress"
 	"shopkone-service/internal/module/base/resource/sResource"
+	"shopkone-service/internal/module/design/sDesign/sDesign"
 	"shopkone-service/internal/module/setting/domains/sDomain/sDomain"
 	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/location/sLocation"
@@ -103,6 +104,8 @@ func (s *sShop) CreateTrial(in iShop.CreateTrialIn) (shopId uint, err error) {
 	if _, err = sLocation.NewLocation(s.orm, shop.ID).Create(locationCreateIn, shop.TimeZone); err != nil {
 		return 0, err
 	}
+	// 初始化主题
+	sDesign.NewDesign(shop.ID).DesignInit(in.Ctx)
 	// 更新缓存
 	if err = NewShopCache().UpdateShopCache(shop.ID, s.orm); err != nil {
 		return 0, err
