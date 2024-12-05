@@ -53,3 +53,12 @@ func (a *aDesign) SectionRender(ctx g.Ctx, req *vo.DesignSectionRenderReq) (res 
 	}
 	return res, err
 }
+
+func (a *aDesign) SectionUpdate(ctx g.Ctx, req *vo.DesignSectionUpdateReq) (res vo.DesignSectionUpdateRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	return sDesign.NewDesign(shop.ID).SectionUpdate(ctx, req)
+}

@@ -86,3 +86,11 @@ type ShopTaxSwitchShippingUpdateReq struct {
 }
 type ShopTaxSwitchShippingUpdateRes struct {
 }
+
+// 获取店铺的shopId
+type ShopIdReq struct {
+	g.Meta `path:"/shop/id" method:"post" summary:"Shop Id By Uuid" tags:"Shop"`
+}
+type ShopIdRes struct {
+	ShopId uint `json:"shop_id"`
+}

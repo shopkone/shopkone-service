@@ -118,3 +118,14 @@ func (s *aShopApi) ShopTaxSwitchShippingUpdate(ctx g.Ctx, req *vo.ShopTaxSwitchS
 	})
 	return res, err
 }
+
+// 根据shopUuid获取shopId
+func (s *aShopApi) ShopId(ctx g.Ctx, req *vo.ShopIdReq) (res vo.ShopIdRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	res.ShopId = shop.ID
+	return res, err
+}

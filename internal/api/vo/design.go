@@ -53,8 +53,8 @@ type SettingSchema struct {
 	Type    string                `json:"type,omitempty"`
 	Name    string                `json:"name,omitempty"`
 	ID      string                `json:"id,omitempty"`
-	Max     int                   `json:"max,omitempty"`
-	Min     int                   `json:"min,omitempty"`
+	Max     float64               `json:"max,omitempty"`
+	Min     float64               `json:"min,omitempty"`
 	Step    float64               `json:"step,omitempty"`
 	Unit    string                `json:"unit,omitempty"`
 	Label   string                `json:"label,omitempty"`
@@ -85,6 +85,17 @@ type DesignUpdateBlockReq struct {
 	Value     interface{} `json:"value"`
 }
 type DesignUpdateBlockRes struct {
+}
+
+// 更新section
+type DesignSectionUpdateReq struct {
+	g.Meta    `path:"/design/section/update" method:"post" tags:"Design" summary:"更新设计数据列表"`
+	SectionID string      `json:"section_id" v:"required"`
+	PartName  string      `json:"part_name" v:"required"`
+	Key       string      `json:"key" v:"required"`
+	Value     interface{} `json:"value"`
+}
+type DesignSectionUpdateRes struct {
 }
 
 // 获取部分section
