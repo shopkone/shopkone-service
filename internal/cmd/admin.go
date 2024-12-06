@@ -29,6 +29,7 @@ func registerAdminRoutes(s *ghttp.Server) {
 	customerApi := api.NewCustomerApi()
 	orderApi := api.NewOrderApi()
 	designApi := api.NewDesignApi()
+	onlineApi := api.NewOnlineApi()
 
 	s.Group("/api", func(group *ghttp.RouterGroup) {
 		group.Middleware(middleware.UserMiddleware)
@@ -201,5 +202,8 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(designApi.BlockUpdate)
 		group.Bind(designApi.SectionRender)
 		group.Bind(designApi.SectionUpdate)
+
+		// 在线商店
+		group.Bind(onlineApi.NavList)
 	})
 }

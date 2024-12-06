@@ -7,6 +7,7 @@ import (
 	"shopkone-service/internal/module/delivery/in-store-pick-up/mInStorePickup"
 	"shopkone-service/internal/module/delivery/local-delivery/mLocalDelivery"
 	"shopkone-service/internal/module/delivery/shipping/mShipping"
+	"shopkone-service/internal/module/online/mav/mNav"
 	"shopkone-service/internal/module/order/order/mOrder"
 	"shopkone-service/internal/module/product/collection/mCollection"
 	"shopkone-service/internal/module/product/inventory/mInventory"
@@ -115,4 +116,8 @@ var migrate = Migrate{
 	mCustomer.Customer{},
 	mCustomer.CustomerAddress{},
 	mCustomer.CustomerNoTaxArea{},
+
+	// 在线商城
+	mNav.Nav{},
+	mNav.NavItem{},
 }

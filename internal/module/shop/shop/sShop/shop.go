@@ -9,6 +9,7 @@ import (
 	"shopkone-service/internal/module/base/address/sAddress"
 	"shopkone-service/internal/module/base/resource/sResource"
 	"shopkone-service/internal/module/design/sDesign/sDesign"
+	"shopkone-service/internal/module/online/mav/sNav"
 	"shopkone-service/internal/module/setting/domains/sDomain/sDomain"
 	"shopkone-service/internal/module/setting/language/sLanguage"
 	"shopkone-service/internal/module/setting/location/sLocation"
@@ -102,6 +103,10 @@ func (s *sShop) CreateTrial(in iShop.CreateTrialIn) (shopId uint, err error) {
 		Address: address,
 	}
 	if _, err = sLocation.NewLocation(s.orm, shop.ID).Create(locationCreateIn, shop.TimeZone); err != nil {
+		return 0, err
+	}
+	// 初始化菜单
+	if err = sNav.NewNav(s.orm, shop.ID).NavInit(); err != nil {
 		return 0, err
 	}
 	// 初始化主题

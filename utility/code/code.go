@@ -36,3 +36,6 @@ func SettingError(code int, message string) error {
 func CustomerError(code int, message string) error {
 	return err(9000+code, message)
 }
+func OnlineError(code int, message string) error {
+	return err(10000+code, message)
+}
