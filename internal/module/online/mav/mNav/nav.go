@@ -5,14 +5,13 @@ import "shopkone-service/internal/module/base/orm/mOrm"
 type Nav struct {
 	mOrm.Model
 	Handle string
-	Title  string `gorm:"index;not null"`
+	Title  string    `gorm:"index;not null"`
+	Links  []NavItem `gorm:"serializer:json"`
 }
 
 type NavItem struct {
-	mOrm.Model
-	Levels   uint8
-	Title    string
-	Url      string
-	NavId    uint `gorm:"index;not null"`
-	ParentID uint
+	ID    string    `json:"id" v:"required"`
+	Title string    `json:"title" v:"required"`
+	Url   string    `json:"url"`
+	Links []NavItem `json:"links"`
 }

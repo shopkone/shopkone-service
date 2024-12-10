@@ -119,5 +119,4 @@ var migrate = Migrate{
 
 	// 在线商城
 	mNav.Nav{},
-	mNav.NavItem{},
 }

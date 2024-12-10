@@ -9,41 +9,39 @@ func (s *sNav) NavInit() (err error) {
 	mainMenu := mNav.Nav{
 		Title:  "Main Menu",
 		Handle: "main-menu",
-	}
-	mainMenuItems := []mNav.NavItem{
-		{
-			Title:  "Home",
-			Url:    "/",
-			Levels: 1,
-		},
-		{
-			Title:  "Collections",
-			Url:    "/collections",
-			Levels: 1,
-		},
-		{
-			Title:  "All products",
-			Url:    "/products",
-			Levels: 1,
+		Links: []mNav.NavItem{
+			{
+				Title: "Home",
+				Url:   "/",
+			},
+			{
+				Title: "Collections",
+				Url:   "/collections",
+			},
+			{
+				Title: "All products",
+				Url:   "/products",
+			},
 		},
 	}
-	if err = s.NavCreate(mainMenu, mainMenuItems); err != nil {
+	if _, err = s.NavCreate(mainMenu); err != nil {
 		return err
 	}
 
 	footerMenu := mNav.Nav{
 		Title:  "Footer",
 		Handle: "footer",
-	}
-	footerMenuItems := []mNav.NavItem{
-		{
-			Title:  "Search",
-			Url:    "/search",
-			Levels: 1,
+		Links: []mNav.NavItem{
+			{
+				Title: "About",
+				Url:   "/about",
+			},
+			{
+				Title: "Contact",
+				Url:   "/contact",
+			},
 		},
 	}
-	if err = s.NavCreate(footerMenu, footerMenuItems); err != nil {
-		return err
-	}
+	_, err = s.NavCreate(footerMenu)
 	return err
 }

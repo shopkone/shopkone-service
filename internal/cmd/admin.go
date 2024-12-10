@@ -205,5 +205,8 @@ func registerAdminRoutes(s *ghttp.Server) {
 
 		// 在线商店
 		group.Bind(onlineApi.NavList)
+		group.Bind(onlineApi.NavInfo)
+		group.Bind(onlineApi.NavUpdate)
+		group.Bind(onlineApi.NavCreate)
 	})
 }

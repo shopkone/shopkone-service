@@ -91,3 +91,7 @@ func ToKg(weight float32, uint consts.WeightUnit) float32 {
 	}
 	return weight
 }
+
+func GenId() uint {
+	return uint(uuid.New().ID())
+}
