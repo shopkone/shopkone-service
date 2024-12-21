@@ -15,6 +15,7 @@ func (s *sDesign) BlockUpdate(ctx g.Ctx, req *vo.DesignUpdateBlockReq) (res vo.D
 		"part_name":  req.PartName,
 		"section_id": req.SectionID,
 	}
-	_, err = s.GetClient().Put(ctx, URL, data)
+	r, err := s.GetClient().Put(ctx, URL, data)
+	defer r.Close()
 	return res, err
 }

@@ -7,6 +7,7 @@ import (
 	"shopkone-service/internal/module/setting/file/sFile"
 	"shopkone-service/internal/module/shop/shop/mShop"
 	"shopkone-service/internal/module/shop/shop/sShop"
+	"shopkone-service/internal/module/shop/transaction/sTransaction"
 	ctx2 "shopkone-service/utility/ctx"
 
 	"github.com/duke-git/lancet/v2/slice"
@@ -127,5 +128,30 @@ func (s *aShopApi) ShopId(ctx g.Ctx, req *vo.ShopIdReq) (res vo.ShopIdRes, err e
 	}
 	shop := auth.Shop
 	res.ShopId = shop.ID
+	return res, err
+}
+
+func (s *aShopApi) TransactionInfo(ctx g.Ctx, req *vo.ShopTransactionInfoReq) (res vo.ShopTransactionInfoRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
+		res, err = sTransaction.NewTransaction(sOrm.NewDb(&shop.ID), shop.ID).Info()
+		return err
+	})
+	return res, err
+}
+
+func (s *aShopApi) UpdateTransaction(ctx g.Ctx, req *vo.ShopUpdateTransactionReq) (res vo.ShopUpdateTransactionRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
+		return sTransaction.NewTransaction(tx, shop.ID).UpdateTransaction(*req)
+	})
 	return res, err
 }

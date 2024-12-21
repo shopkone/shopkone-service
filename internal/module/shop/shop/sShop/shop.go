@@ -15,10 +15,12 @@ import (
 	"shopkone-service/internal/module/setting/location/sLocation"
 	"shopkone-service/internal/module/setting/market/sMarket/sMarket"
 	"shopkone-service/internal/module/setting/tax/sTax/sTax"
+	"shopkone-service/internal/module/shop/policy/sPolicy"
 	"shopkone-service/internal/module/shop/shop/iShop"
 	"shopkone-service/internal/module/shop/shop/mShop"
 	"shopkone-service/internal/module/shop/staff/mStaff"
 	"shopkone-service/internal/module/shop/staff/sStaff"
+	"shopkone-service/internal/module/shop/transaction/sTransaction"
 	"shopkone-service/utility/handle"
 )
 
@@ -103,6 +105,14 @@ func (s *sShop) CreateTrial(in iShop.CreateTrialIn) (shopId uint, err error) {
 		Address: address,
 	}
 	if _, err = sLocation.NewLocation(s.orm, shop.ID).Create(locationCreateIn, shop.TimeZone); err != nil {
+		return 0, err
+	}
+	// 初始化服务条款
+	if err = sPolicy.NewPolicy(s.orm, shop.ID).PolicyInit(); err != nil {
+		return 0, err
+	}
+	// 初始化交易设置
+	if err = sTransaction.NewTransaction(s.orm, shopId).Init(); err != nil {
 		return 0, err
 	}
 	// 初始化菜单

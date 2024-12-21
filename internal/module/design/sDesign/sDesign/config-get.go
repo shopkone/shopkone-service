@@ -6,12 +6,11 @@ import (
 	"shopkone-service/internal/api/vo"
 )
 
-func (s *sDesign) ListData(ctx g.Ctx) (res *vo.DesignDataListRes, err error) {
-	URL := "/design/template/list"
-	r, err := s.GetClient().Get(ctx, URL)
+func (s *sDesign) ConfigGet(ctx g.Ctx, req *vo.DesignGetConfigReq) (res vo.DesignGetConfigRes, err error) {
+	r, err := s.GetClient().Get(ctx, "/design/config")
 	defer r.Close()
 	if err != nil {
-		return nil, err
+		return vo.DesignGetConfigRes{}, err
 	}
 	if err = json.Unmarshal(r.ReadAll(), &res); err != nil {
 		return res, err

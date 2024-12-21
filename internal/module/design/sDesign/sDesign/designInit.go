@@ -6,6 +6,7 @@ import (
 
 func (s *sDesign) DesignInit(ctx g.Ctx) (err error) {
 	URL := "/design/template/init"
-	_, err = s.GetClient().Post(ctx, URL)
+	r, err := s.GetClient().Post(ctx, URL)
+	defer r.Close()
 	return err
 }

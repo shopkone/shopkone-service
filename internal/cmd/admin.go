@@ -45,6 +45,8 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(shopApi.TaxSwitchShipping)           // 对运费收的税包含在运费中
 		group.Bind(shopApi.ShopTaxSwitchShippingUpdate) // 更新对运费收的税包含在运费中
 		group.Bind(shopApi.ShopId)                      // 获取店铺的id
+		group.Bind(shopApi.TransactionInfo)             // 获取店铺交易设置
+		group.Bind(shopApi.UpdateTransaction)           // 更新店铺交易设置
 
 		// 用户
 		group.Bind(userApi.Info)       // 获取用户信息
@@ -202,6 +204,8 @@ func registerAdminRoutes(s *ghttp.Server) {
 		group.Bind(designApi.BlockUpdate)
 		group.Bind(designApi.SectionRender)
 		group.Bind(designApi.SectionUpdate)
+		group.Bind(designApi.GetConfig)
+		group.Bind(designApi.ConfigUpdate)
 
 		// 在线商店
 		group.Bind(onlineApi.NavList)

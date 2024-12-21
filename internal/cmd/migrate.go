@@ -20,8 +20,10 @@ import (
 	"shopkone-service/internal/module/setting/location/mLocation"
 	"shopkone-service/internal/module/setting/market/mMarket"
 	"shopkone-service/internal/module/setting/tax/mTax"
+	"shopkone-service/internal/module/shop/policy/mPolicy"
 	"shopkone-service/internal/module/shop/shop/mShop"
 	"shopkone-service/internal/module/shop/staff/mStaff"
+	"shopkone-service/internal/module/shop/transaction/mTransaction"
 	"shopkone-service/internal/module/shop/user/mUser"
 )
 
@@ -42,6 +44,9 @@ var migrate = Migrate{
 	mInventory.Inventory{},
 	mInventory.InventoryChange{},
 	mInventory.LogisticsProvider{},
+
+	mTransaction.Transaction{},
+	mPolicy.Policy{},
 
 	// 商品
 	mProduct.Product{},

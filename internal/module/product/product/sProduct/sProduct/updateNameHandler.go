@@ -18,9 +18,6 @@ func (s *sProduct) UpdateNameHandler(variants []mProduct.Variant, productId uint
 	}
 	// 再添加
 	var handlers []mProduct.VariantNameHandler
-	if len(handlers) == 0 {
-		return nil
-	}
 	for _, variant := range variants {
 		for _, name := range variant.Name {
 			handlers = append(handlers, mProduct.VariantNameHandler{
@@ -31,6 +28,9 @@ func (s *sProduct) UpdateNameHandler(variants []mProduct.Variant, productId uint
 				Model:     mOrm.Model{ShopId: s.shopId},
 			})
 		}
+	}
+	if len(variants[0].Name) == 0 {
+		return nil
 	}
 	return s.orm.Create(&handlers).Error
 }

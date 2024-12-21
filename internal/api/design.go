@@ -62,3 +62,21 @@ func (a *aDesign) SectionUpdate(ctx g.Ctx, req *vo.DesignSectionUpdateReq) (res 
 	shop := auth.Shop
 	return sDesign.NewDesign(shop.ID).SectionUpdate(ctx, req)
 }
+
+func (a *aDesign) GetConfig(ctx g.Ctx, req *vo.DesignGetConfigReq) (res vo.DesignGetConfigRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	return sDesign.NewDesign(shop.ID).ConfigGet(ctx, req)
+}
+
+func (a *aDesign) ConfigUpdate(ctx g.Ctx, req *vo.DesignConfigUpdateReq) (res vo.DesignConfigUpdateRes, err error) {
+	auth, err := ctx2.NewCtx(ctx).GetAuth()
+	if err != nil {
+		return res, err
+	}
+	shop := auth.Shop
+	return res, sDesign.NewDesign(shop.ID).ConfigUpdate(ctx, *req)
+}

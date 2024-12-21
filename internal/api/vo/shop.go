@@ -4,6 +4,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"shopkone-service/internal/module/base/address/mAddress"
 	"shopkone-service/internal/module/shop/shop/mShop"
+	"shopkone-service/internal/module/shop/transaction/mTransaction"
 )
 
 // 获取店铺详情
@@ -93,4 +94,32 @@ type ShopIdReq struct {
 }
 type ShopIdRes struct {
 	ShopId uint `json:"shop_id"`
+}
+
+// 交易设置
+type ShopUpdateTransactionReq struct {
+	g.Meta                      `path:"/shop/update/transaction" method:"post" summary:"Shop Transaction" tags:"Shop"`
+	TargetType                  mTransaction.TransactionTargetType `json:"target_type" v:"required"`            // 目标客户
+	ReduceTime                  mTransaction.TransactionReduceTime `json:"reduce_time" v:"required"`            // 库存扣减时机
+	IsForceCheckProduct         bool                               `json:"is_force_check_product" v:"required"` // 是否强制检测商品库存
+	IsAutoFinish                bool                               `json:"is_auto_finish" v:"required"`         // 是否开启自动收货
+	AutoFinishDay               uint                               `json:"auto_finish_day"`                     // 自动收货时间
+	OrderAutoCancel             mTransaction.OrderAutoCancelType   `json:"order_auto_cancel" v:"required"`      // 订单自动取消时间
+	OrderAutoCancelCustomerHour uint                               `json:"order_auto_cancel_customer_hour"`     // 自定义时间
+}
+type ShopUpdateTransactionRes struct {
+}
+
+// 交易详情z
+type ShopTransactionInfoReq struct {
+	g.Meta `path:"/shop/transaction/info" method:"post" summary:"Shop Transaction Info" tags:"Shop"`
+}
+type ShopTransactionInfoRes struct {
+	TargetType                  mTransaction.TransactionTargetType `json:"target_type"`                     // 目标客户
+	ReduceTime                  mTransaction.TransactionReduceTime `json:"reduce_time"`                     // 库存扣减时机
+	IsForceCheckProduct         bool                               `json:"is_force_check_product"`          // 是否强制检测商品库存
+	IsAutoFinish                bool                               `json:"is_auto_finish"`                  // 是否开启自动收货
+	AutoFinishDay               uint                               `json:"auto_finish_day"`                 // 自动收货时间
+	OrderAutoCancel             mTransaction.OrderAutoCancelType   `json:"order_auto_cancel"`               // 订单自动取消时间
+	OrderAutoCancelCustomerHour uint                               `json:"order_auto_cancel_customer_hour"` // 自定义时间
 }

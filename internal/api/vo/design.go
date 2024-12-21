@@ -107,3 +107,20 @@ type DesignSectionRenderReq struct {
 type DesignSectionRenderRes struct {
 	HTML string `json:"html"`
 }
+
+/*------------------------------- 分隔线 -------------------------------*/
+type DesignGetConfigReq struct {
+	g.Meta `path:"/design/get-config" method:"post" tags:"Design" summary:"获取设计配置"`
+}
+type DesignGetConfigRes struct {
+	Schema []SectionSchema `json:"schema"`
+	Data   g.Map           `json:"data"`
+}
+
+type DesignConfigUpdateReq struct {
+	g.Meta `path:"/design/config/update" method:"post" tags:"Design" summary:"更新设计配置"`
+	Key    string `json:"key" v:"required"`
+	Value  any    `json:"value"`
+}
+type DesignConfigUpdateRes struct {
+}

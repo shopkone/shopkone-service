@@ -12,9 +12,9 @@ func (s *sDesign) SectionRender(ctx g.Ctx, req *vo.DesignSectionRenderReq) (html
 		"shop_id":    s.shopId,
 	}
 	r, err := s.GetClient().Get(ctx, "/section", data)
+	defer r.Close()
 	if err != nil {
 		return "", err
 	}
-	defer r.Close()
 	return r.ReadAllString(), err
 }
