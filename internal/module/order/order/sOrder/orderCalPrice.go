@@ -9,7 +9,6 @@ import (
 	"shopkone-service/internal/module/order/order/sOrder/sOrderTax"
 	"shopkone-service/internal/module/product/product/sProduct/sProduct"
 	"shopkone-service/internal/module/product/product/sProduct/sVariant"
-	"shopkone-service/utility/handle"
 )
 
 // 简易的计算，不涉及优惠券等物品的使用
@@ -40,7 +39,7 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 			if inVariant.Discount.Type == mOrder.OrderDiscountTypePercentage {
 				variant.Price = variant.Price * (1 - inVariant.Discount.Price/100)
 			} else if inVariant.Discount.Type == mOrder.OrderDiscountTypeFixed {
-				variant.Price = handle.RoundMoney32(variant.Price - inVariant.Discount.Price)
+				variant.Price = variant.Price - inVariant.Discount.Price
 			}
 			if variant.Price < 0 {
 				variant.Price = 0
@@ -55,10 +54,9 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 			return item.VariantID == variant.ID
 		})
 		if ok {
-			out.SumPrice += float32(find.Quantity) * variant.Price
+			out.SumPrice += find.Quantity * variant.Price
 		}
 	})
-	out.SumPrice = handle.RoundMoney32(out.SumPrice)
 
 	// 计算订单成本价
 	slice.ForEach(variants, func(index int, item sVariant.VariantToOrderOut) {
@@ -66,10 +64,9 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 			return inVariant.VariantID == item.ID
 		})
 		if ok && item.CostPerItem != nil {
-			out.CostPrice += float32(find.Quantity) * *item.CostPerItem
+			out.CostPrice += find.Quantity * *item.CostPerItem
 		}
 	})
-	out.CostPrice = handle.RoundMoney32(out.CostPrice)
 
 	out.Total = out.SumPrice
 
@@ -159,11 +156,9 @@ func (s *sOrder) OrderPreCalPrice(in *vo.OrderCalPreReq) (out vo.OrderCalPreRes,
 		i.Rate = item.TaxRate
 		i.Price = item.Tax
 		i.Name = item.TaxName
-		out.Total = out.Total + handle.RoundMoney32(item.Tax)
+		out.Total = out.Total + item.Tax
 		return i
 	})
-
-	out.Total = handle.RoundMoney32(out.Total)
 
 	return out, err
 }

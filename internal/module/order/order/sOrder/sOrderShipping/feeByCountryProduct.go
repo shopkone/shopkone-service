@@ -11,8 +11,8 @@ import (
 
 type FeesProductVariant struct {
 	ID         uint
-	Price      float32
-	Quantity   uint
+	Price      uint32
+	Quantity   uint32
 	Weight     *float32
 	WeightUnit consts.WeightUnit
 	ProductId  uint
@@ -22,14 +22,14 @@ type FeesByCountryProduct struct {
 	CountryCode  string
 	ZoneCode     string
 	Variants     []FeesProductVariant
-	OrderPrice   float32
-	ProductPrice float32
+	OrderPrice   uint32
+	ProductPrice uint32
 }
 
 type FeesByCountryProductOut struct {
 	FeeName  string
 	FeeID    uint
-	FeePrice float32
+	FeePrice uint32
 }
 
 func (s *sOrderShipping) FeesByCountryProduct(in FeesByCountryProduct) (out FeeCalsPerProductOut, err error) {

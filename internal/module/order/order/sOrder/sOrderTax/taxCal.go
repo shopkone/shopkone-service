@@ -21,7 +21,7 @@ type TaxCalOut struct {
 	VariantID uint
 	TaxRate   float64
 	TaxName   string
-	Tax       float32
+	Tax       uint32
 }
 
 func (s *sOrderTax) TaxCal(in TaxCalIn) (out []TaxCalOut, err error) {
@@ -70,7 +70,7 @@ func (s *sOrderTax) TaxCal(in TaxCalIn) (out []TaxCalOut, err error) {
 		}
 		quantity := inVariant.Quantity
 		// 找出价格
-		price := variant.Price * float32(quantity)
+		price := variant.Price * quantity
 		// 先找到符合的自定义税费
 		customerTax, ok := slice.FindBy(taxes.Customer, func(index int, item sCustomerTax.CustomerTaxByCountryProductOut) bool {
 			return item.CollectionID == collection.CollectionId
@@ -79,20 +79,20 @@ func (s *sOrderTax) TaxCal(in TaxCalIn) (out []TaxCalOut, err error) {
 		if ok {
 			i.TaxRate = customerTax.TaxRate
 			i.TaxName = customerTax.TaxName
-			i.Tax = price * float32(i.TaxRate) / 100
+			i.Tax = uint32(float64(price) * i.TaxRate / 100)
 			return i
 		}
 		// 找到区域，也直接使用
 		if taxes.Zone.Name != "" {
 			i.TaxRate = taxes.Zone.Rate
 			i.TaxName = taxes.Zone.Name
-			i.Tax = price * float32(i.TaxRate) / 100
+			i.Tax = uint32(float64(price) * i.TaxRate / 100)
 			return i
 		}
 		// 使用国家税率
 		i.TaxRate = taxes.Base.Rate
 		i.TaxName = taxes.Base.Name
-		i.Tax = price * float32(i.TaxRate) / 100
+		i.Tax = uint32(float64(price) * i.TaxRate / 100)
 		return i
 	})
 	out = slice.Filter(out, func(index int, item TaxCalOut) bool {

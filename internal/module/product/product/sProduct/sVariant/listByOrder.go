@@ -9,9 +9,9 @@ import (
 type VariantToOrderOut struct {
 	ProductID        uint
 	ID               uint
-	Price            float32
-	CostPerItem      *float32
-	CompareAtPrice   *float32
+	Price            uint32
+	CostPerItem      *uint32
+	CompareAtPrice   *uint32
 	WeightUint       consts.WeightUnit
 	Weight           *float32
 	Sku              string

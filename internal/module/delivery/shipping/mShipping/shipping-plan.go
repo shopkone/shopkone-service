@@ -87,11 +87,11 @@ type ShippingZoneFee struct {
 // ShippingZonFeeCondition 表示物流区域方案运费的条件
 type ShippingZonFeeCondition struct {
 	mOrm.Model
-	Fixed             float32 `json:"fixed" gorm:"default:0"`            // 固定费用
+	Fixed             uint32  `json:"fixed" gorm:"default:0"`            // 固定费用
 	First             float32 `json:"first" gorm:"default:0"`            // 首重/首件
-	FirstFee          float32 `json:"first_fee" gorm:"default:0"`        // 首重/首件的费用
+	FirstFee          uint32  `json:"first_fee" gorm:"default:0"`        // 首重/首件的费用
 	Next              float32 `json:"next" gorm:"default:0"`             // 续重/续件
-	NextFee           float32 `json:"next_fee" gorm:"default:0"`         // 续重/续件的费用
+	NextFee           uint32  `json:"next_fee" gorm:"default:0"`         // 续重/续件的费用
 	Max               float32 `json:"max" gorm:"default:0"`              // 最大值限制
 	Min               float32 `json:"min" gorm:"default:0"`              // 最小值限制
 	ShippingZoneFeeId uint    `json:"shipping_zone_fee_id" gorm:"index"` // 关联物流区域方案运费ID

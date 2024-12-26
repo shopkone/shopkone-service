@@ -10,8 +10,8 @@ type FeeFilterIn struct {
 	Condition    mShipping.ShippingZonFeeCondition
 	TotalWeight  float32
 	ProductCount int
-	OrderPrice   float32
-	ProductPrice float32
+	OrderPrice   uint32
+	ProductPrice uint32
 }
 
 // TODO:测试一下shopline如何处理不同名字的方案的
@@ -22,11 +22,11 @@ func (s *sOrderShipping) FeeFilter(in FeeFilterIn) bool {
 	switch fee.Rule {
 	case mShipping.ShippingZoneFeeRuleOrderPrice: // 订单总价
 		{
-			return inRange(condition.Max, condition.Min, in.OrderPrice)
+			return inRange(condition.Max, condition.Min, float32(in.OrderPrice))
 		}
 	case mShipping.ShippingZoneFeeRuleProductPrice: // 商品总价
 		{
-			return inRange(condition.Max, condition.Min, in.ProductPrice)
+			return inRange(condition.Max, condition.Min, float32(in.ProductPrice))
 		}
 	case mShipping.ShippingZoneFeeRuleProductCount:
 		{

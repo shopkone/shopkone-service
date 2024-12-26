@@ -18,7 +18,7 @@ type FeeCalsPerProductIn1 struct {
 	Fee       mShipping.ShippingZoneFee
 	Condition mShipping.ShippingZonFeeCondition
 	Variants  []FeesProductVariant
-	Price     float32
+	Price     uint32
 }
 
 type FeeCalsPerProductOut struct {

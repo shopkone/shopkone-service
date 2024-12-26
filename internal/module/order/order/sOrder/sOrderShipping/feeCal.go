@@ -13,7 +13,7 @@ type FeeCalInItem struct {
 	ProductCount int
 }
 
-func (s *sOrderShipping) FeeCalItem(in FeeCalInItem) (price float32) {
+func (s *sOrderShipping) FeeCalItem(in FeeCalInItem) (price uint32) {
 	fee := in.Fee
 	condition := in.Condition
 	productCount := in.ProductCount
@@ -28,22 +28,22 @@ func (s *sOrderShipping) FeeCalItem(in FeeCalInItem) (price float32) {
 			firstWeight := handle.ToKg(condition.First, fee.WeightUnit)
 			nextWeight := handle.ToKg(condition.Next, fee.WeightUnit)
 			firstPrice := condition.FirstFee
-			var remainPrice float32
+			var remainPrice uint32
 			remain := in.TotalWeight - firstWeight
 			if remain > 0 {
 				r := float32(math.Ceil(float64(remain / nextWeight)))
-				remainPrice = condition.NextFee * r
+				remainPrice = condition.NextFee * uint32(r)
 			}
 			return firstPrice + remainPrice
 		}
 	case mShipping.ShippingZoneFeeTypeCount:
 		{ // 按商品数量计费
 			firstPrice := condition.FirstFee
-			var remainPrice float32
+			var remainPrice uint32
 			remain := productCount - int(condition.First)
 			if remain > 0 {
 				r := float32(math.Ceil(float64(remain / int(condition.Next))))
-				remainPrice = condition.NextFee * r
+				remainPrice = condition.NextFee * uint32(r)
 			}
 			return firstPrice + remainPrice
 		}

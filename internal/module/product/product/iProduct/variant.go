@@ -29,5 +29,5 @@ type VariantListByIdOut struct {
 	Sku       string
 	ProductId uint
 	IsDeleted bool
-	Price     float32
+	Price     uint32
 }

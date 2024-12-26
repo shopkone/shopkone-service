@@ -14,9 +14,9 @@ type VariantInventory struct {
 
 type BaseVariant struct {
 	Id               uint                   `json:"id" dc:"变体ID"`
-	Price            float32                `json:"price" v:"required"` // 价格
-	CostPerItem      *float32               `json:"cost_per_item"`      // 每件成本
-	CompareAtPrice   *float32               `json:"compare_at_price"`   // 原价
+	Price            uint32                 `json:"price" v:"required"` // 价格
+	CostPerItem      *uint32                `json:"cost_per_item"`      // 每件成本
+	CompareAtPrice   *uint32                `json:"compare_at_price"`   // 原价
 	WeightUnit       consts.WeightUnit      `json:"weight_unit"`        // 重量单位
 	Weight           *float32               `json:"weight"`             // 重量
 	Sku              string                 `json:"sku"`                // SKU
@@ -35,7 +35,7 @@ type BaseVariantWithId struct {
 
 type VariantList struct {
 	Id       uint                   `json:"id"`
-	Price    float32                `json:"price"`
+	Price    uint32                 `json:"price"`
 	Quantity uint                   `json:"quantity"`
 	Sku      string                 `json:"sku"`
 	Name     []mProduct.VariantName `json:"name"`
@@ -54,8 +54,8 @@ type VariantListByIdsRes struct {
 	Name              string                   `json:"name"`
 	ProductTitle      string                   `json:"product_title"`
 	IsDeleted         bool                     `json:"is_deleted"`
-	Price             float32                  `json:"price"`
-	CostPerItem       *float32                 `json:"cost_per_item"`
+	Price             uint32                   `json:"price"`
+	CostPerItem       *uint32                  `json:"cost_per_item"`
 	Inventory         uint                     `json:"inventory"`
 	InventoryTracking bool                     `json:"inventory_tracking"`
 	InventoryPolicy   mProduct.InventoryPolicy `json:"inventory_policy"`

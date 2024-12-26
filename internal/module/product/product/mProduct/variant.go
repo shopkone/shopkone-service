@@ -22,9 +22,9 @@ type VariantName struct {
 // 商品变体
 type Variant struct {
 	mOrm.Model
-	Price            float32           `gorm:"not null"`        // 价格
-	CostPerItem      *float32          `gorm:"default:null"`    // 每件成本
-	CompareAtPrice   *float32          `gorm:"default:null"`    // 原价
+	Price            uint32            `gorm:"not null"`        // 价格
+	CostPerItem      *uint32           `gorm:"default:null"`    // 每件成本
+	CompareAtPrice   *uint32           `gorm:"default:null"`    // 原价
 	WeightUnit       consts.WeightUnit `gorm:"default:g"`       // 重量单位
 	Weight           *float32          `gorm:"default:null"`    // 重量
 	Sku              string            `gorm:"size:250"`        // SKU

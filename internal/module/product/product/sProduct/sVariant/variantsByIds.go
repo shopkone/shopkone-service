@@ -18,8 +18,8 @@ type VariantByIdsOut struct {
 	Id             uint
 	Image          string
 	Name           []mProduct.VariantName
-	Price          float32
-	CostPerItem    *float32
+	Price          uint32
+	CostPerItem    *uint32
 	Inventory      uint
 	TrackInventory bool
 	ProductId      uint

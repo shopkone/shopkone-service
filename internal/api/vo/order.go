@@ -8,17 +8,17 @@ import (
 
 // 运费
 type OrderPreBaseShippingFee struct {
-	Free          bool    `json:"free"`
-	Customer      bool    `json:"customer"`
-	Name          string  `json:"name"`
-	Price         float32 `json:"price"`
-	ShippingFeeID uint    `json:"shipping_fee_id"`
+	Free          bool   `json:"free"`
+	Customer      bool   `json:"customer"`
+	Name          string `json:"name"`
+	Price         uint32 `json:"price"`
+	ShippingFeeID uint   `json:"shipping_fee_id"`
 }
 
 // 优惠
 type OrderPreBaseDiscount struct {
 	ID    uint                     `json:"id"`
-	Price float32                  `json:"value"`
+	Price uint32                   `json:"value"`
 	Type  mOrder.OrderDiscountType `json:"type"`
 	Note  string                   `json:"note"`
 }
@@ -26,22 +26,22 @@ type OrderPreBaseDiscount struct {
 // 商品项
 type OrderPreBaseVariantItem struct {
 	VariantID uint                 `json:"variant_id" v:"required"`
-	Quantity  uint                 `json:"quantity" v:"required"`
+	Quantity  uint32               `json:"quantity" v:"required"`
 	Discount  OrderPreBaseDiscount `json:"discount"`
 }
 
 // 返回可用运费方案
 type BasePreShippingFeePlan struct {
-	Name  string  `json:"name"`
-	ID    uint    `json:"id"`
-	Price float32 `json:"price"`
+	Name  string `json:"name"`
+	ID    uint   `json:"id"`
+	Price uint32 `json:"price"`
 }
 
 // 返回税务详情
 type BasePreTaxDetail struct {
 	Name  string  `json:"name"`
 	Rate  float64 `json:"rate"`
-	Price float32 `json:"price"`
+	Price uint32  `json:"price"`
 }
 
 // 预计算订单价格
@@ -55,10 +55,10 @@ type OrderCalPreReq struct {
 }
 
 type OrderCalPreRes struct {
-	CostPrice        float32                  `json:"cost_price"`
-	DiscountPrice    float32                  `json:"discount_price"`
-	SumPrice         float32                  `json:"sum_price"`
-	Total            float32                  `json:"total"`
+	CostPrice        uint32                   `json:"cost_price"`
+	DiscountPrice    uint32                   `json:"discount_price"`
+	SumPrice         uint32                   `json:"sum_price"`
+	Total            uint32                   `json:"total"`
 	ShippingFeePlans []BasePreShippingFeePlan `json:"shipping_fee_plans"`
 	Taxes            []BasePreTaxDetail       `json:"taxes"`
 	ShippingFee      OrderPreBaseShippingFee  `json:"shipping_fee"`
