@@ -27,6 +27,7 @@ type ProductCollection struct {
 	MatchMode      CollectionMatchMode `gorm:"default:1"`      // 自动下的匹配模式
 	SeoId          uint                `gorm:"index;not null"` // seo id
 	CoverId        uint                `gorm:"default:null"`   // 封面图id
+	IsAllType      bool                `gorm:"default:false"`  // 是否包含所有
 }
 
 type CollectionProduct struct {

@@ -34,6 +34,10 @@ func NewShopCache() *sCache {
 	return &sCache{shop}
 }
 
+func NewTemplateCache() *sCache {
+	return &sCache{template}
+}
+
 func NewCache() *sCache {
 	return &sCache{other}
 }

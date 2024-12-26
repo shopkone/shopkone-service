@@ -24,6 +24,7 @@ type BlockData struct {
 
 type DesignDataListReq struct {
 	g.Meta `path:"/design/data/list" method:"post" tags:"Design" summary:"获取设计数据列表"`
+	Page   string `json:"page" v:"required"`
 }
 type DesignDataListRes struct {
 	g.Meta          `path:"/design/data/list" method:"post" tags:"Design" summary:"获取设计数据列表"`

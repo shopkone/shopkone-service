@@ -8,6 +8,7 @@ const (
 	STAFF_PREFIX_KEY         = "staff_"
 	CAPTCHA_PREFIX_KEY       = "captcha_"
 	TOKEN_PREFIX_KEY         = "shopkonetoken_"
+	TEEMPLATE_PREFIX_KEY     = "template_"
 )
 
 // 允许的前缀集合
@@ -18,4 +19,5 @@ var allowedPrefixes = map[string]struct{}{
 	STAFF_PREFIX_KEY:         {},
 	CAPTCHA_PREFIX_KEY:       {},
 	TOKEN_PREFIX_KEY:         {},
+	TEEMPLATE_PREFIX_KEY:     {},
 }

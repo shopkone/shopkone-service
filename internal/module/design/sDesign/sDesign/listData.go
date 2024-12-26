@@ -6,9 +6,9 @@ import (
 	"shopkone-service/internal/api/vo"
 )
 
-func (s *sDesign) ListData(ctx g.Ctx) (res *vo.DesignDataListRes, err error) {
+func (s *sDesign) ListData(ctx g.Ctx, page string) (res *vo.DesignDataListRes, err error) {
 	URL := "/design/template/list"
-	r, err := s.GetClient().Get(ctx, URL)
+	r, err := s.GetClient().Get(ctx, URL, g.Map{"page": page})
 	defer r.Close()
 	if err != nil {
 		return nil, err

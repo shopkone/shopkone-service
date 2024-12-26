@@ -20,7 +20,7 @@ func (s *sNav) NavInit() (err error) {
 			},
 			{
 				Title: "All products",
-				Url:   "/products",
+				Url:   "/collections/all",
 			},
 		},
 	}

@@ -20,7 +20,7 @@ func (a *aDesign) DesignDataList(ctx g.Ctx, req *vo.DesignDataListReq) (res *vo.
 		return res, err
 	}
 	shop := auth.Shop
-	return sDesign.NewDesign(shop.ID).ListData(ctx)
+	return sDesign.NewDesign(shop.ID).ListData(ctx, req.Page)
 }
 
 func (a *aDesign) SchemaList(ctx g.Ctx, req *vo.DesignSchemaListReq) (res []vo.DesignSchemaListRes, err error) {

@@ -12,6 +12,7 @@ var auth *gcache.Cache
 var user *gcache.Cache
 var shop *gcache.Cache
 var other *gcache.Cache
+var template *gcache.Cache
 
 type ICacheConnect interface {
 	Connect() error                      // 连接Redis
