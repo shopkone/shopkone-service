@@ -26,8 +26,9 @@ type Customer struct {
 	Language      string   `gorm:"size:10"`
 	Gender        GenderType
 	Birthday      *time.Time
-	TaxFreeAll    bool `gorm:"default:false"`
-	TaxFreeActive bool `gorm:"default:false"`
+	TaxFreeAll    bool   `gorm:"default:false"`
+	TaxFreeActive bool   `gorm:"default:false"`
+	Password      string `gorm:"size:255"`
 }
 
 type CustomerAddress struct {

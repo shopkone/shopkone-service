@@ -31,6 +31,7 @@ type BaseProduct struct {
 	ScheduledAt       int64                    `json:"scheduled_at"`
 	LabelImages       []LabelImage             `json:"label_images"`
 	Category          uint                     `json:"category" dc:"商品分类"`
+	Collections       []uint                   `json:"collections"`
 }
 
 type ProductCreateReq struct {

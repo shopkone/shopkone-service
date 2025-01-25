@@ -77,6 +77,10 @@ func (s *sProduct) Update(in vo.ProductUpdateReq, handleEmail string) (err error
 	if err != nil {
 		return err
 	}
+	// 关联系列
+	if err = s.RelativeCollection(in.Collections, data.ID); err != nil {
+		return err
+	}
 	// 更新变体名称（用于关联系列时使用）
 	return s.UpdateNameHandler(variants, in.Id)
 }

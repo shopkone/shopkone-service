@@ -24,6 +24,7 @@ const (
 	OrderStatusCancelled         OrderStatus = 5 // 已取消
 	OrderStatusRefunded          OrderStatus = 6 // 已退款
 	OrderStatusPartiallyRefunded OrderStatus = 7 // 部分退款
+	OrderStatusCart              OrderStatus = 8 // 加入购物车
 )
 
 type Order struct {

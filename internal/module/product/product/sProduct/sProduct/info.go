@@ -54,6 +54,10 @@ func (s *sProduct) Info(id uint) (res vo.ProductInfoRes, err error) {
 	res.ProductCreateReq = vo.ProductCreateReq{
 		BaseProduct: sTransfer.NewProductTransfer(s.shopId).ModelToProduct(product),
 	}
+	// 获取集合
+	if res.Collections, err = s.GetCollections(product.ID); err != nil {
+		return res, err
+	}
 	res.Seo = seo
 	res.Variants = variants
 	res.LabelImages = images

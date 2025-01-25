@@ -8,11 +8,11 @@ logger:
 # 数据库配置
 mysql:
   host: 127.0.0.1
-  port: 3306
-  user: root
+  port: 5432
+  user: postgres
   password: 123456
-  dbname: shopkone
-  timezone: Local
+  dbname: shopkimi
+  timezone: "Asia/Shanghai"
 
 # shopkone 邮箱配置
 email:

@@ -119,6 +119,7 @@ var migrate = Migrate{
 
 	// 客户
 	mCustomer.Customer{},
+	mCustomer.Cart{},
 	mCustomer.CustomerAddress{},
 	mCustomer.CustomerNoTaxArea{},
 

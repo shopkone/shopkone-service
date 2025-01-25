@@ -3,7 +3,7 @@ package sOrm
 import (
 	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"shopkone-service/hack"
 )
@@ -22,16 +22,16 @@ func ConnectMysql(migrate []interface{}) error {
 	}
 
 	dsn := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=%s",
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=%s",
+		conf.Mysql.Host,
 		conf.Mysql.User,
 		conf.Mysql.Password,
-		conf.Mysql.Host,
-		conf.Mysql.Port,
 		conf.Mysql.Dbname,
+		conf.Mysql.Port,
 		conf.Mysql.TimeZone,
 	)
 
-	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return fmt.Errorf("初始化数据库失败: %w", err)
 	}

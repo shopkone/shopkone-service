@@ -60,7 +60,9 @@ func (s *sProduct) Create(in vo.ProductCreateReq, email string) (res vo.ProductC
 		}
 	}
 	// 关联系列
-
+	if err = s.RelativeCollection(in.Collections, data.ID); err != nil {
+		return vo.ProductCreateRes{}, err
+	}
 	// 更新变体名称（用于关联系列时使用）
 	return res, s.UpdateNameHandler(variants, data.ID)
 }
