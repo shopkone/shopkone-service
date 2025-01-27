@@ -32,6 +32,19 @@ func (s *sProduct) List(in vo.ProductListReq) (res handle.PageRes[vo.ProductList
 	if in.IncludeIds != nil {
 		query = query.Where("id in (?)", *in.IncludeIds)
 	}
+	// 筛选状态
+	if in.Status != 0 {
+		query = query.Where("status = ?", in.Status)
+	}
+	// 搜索
+	if in.Keyword != "" && in.Type != "" {
+		if in.Type == "title" {
+			query = query.Where("title like ?", "%"+in.Keyword+"%")
+		}
+		if in.Type == "spu" {
+			query = query.Where("spu like ?", "%"+in.Keyword+"%")
+		}
+	}
 	// 获取总数
 	if err = query.Count(&res.Total).Error; err != nil {
 		return res, err
@@ -49,7 +62,12 @@ func (s *sProduct) List(in vo.ProductListReq) (res handle.PageRes[vo.ProductList
 	productIds := slice.Map(products, func(index int, item mProduct.Product) uint {
 		return item.ID
 	})
-	variants, err := variantService.ListByProductIds(productIds)
+	variantListIn := sVariant.ListByProductIdsIn{
+		Keyword:    in.Keyword,
+		ProductIDs: productIds,
+		Type:       in.Type,
+	}
+	variants, err := variantService.ListByProductIds(variantListIn)
 	// 获取变体库存列表
 	variantIds := slice.Map(variants, func(index int, item mProduct.Variant) uint {
 		return item.ID
@@ -111,6 +129,9 @@ func (s *sProduct) List(in vo.ProductListReq) (res handle.PageRes[vo.ProductList
 			temp.Image = currentVariantImages[0].Image
 		}
 		return temp
+	})
+	res.List = slice.Filter(res.List, func(index int, item vo.ProductListRes) bool {
+		return len(item.Variants) > 0
 	})
 	return res, err
 }
