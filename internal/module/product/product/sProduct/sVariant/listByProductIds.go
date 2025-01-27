@@ -17,7 +17,7 @@ func (s *sVariant) ListByProductIds(in ListByProductIdsIn) (res []mProduct.Varia
 	if in.Keyword != "" && in.Type != "" {
 		if in.Type == "variant_sku" {
 			query = query.Where("sku like ?", "%"+in.Keyword+"%")
-		} else if in.Type == "name" {
+		} else if in.Type == "variant_name" {
 			query = query.Where("name like ?", "%"+in.Keyword+"%")
 		}
 	}
