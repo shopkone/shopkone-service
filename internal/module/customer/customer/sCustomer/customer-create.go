@@ -1,7 +1,7 @@
 package sCustomer
 
 import (
-	"shopkone-service/internal/api/vo"
+	"shopkone-service/internal/module/base/address/mAddress"
 	"shopkone-service/internal/module/customer/customer/mCustomer"
 	"shopkone-service/internal/module/customer/customer/sCustomer/sCustomerAddress"
 	"shopkone-service/utility/code"
@@ -9,7 +9,19 @@ import (
 	"strings"
 )
 
-func (s *sCustomer) Create(in *vo.CustomerCreateReq) (id uint, err error) {
+type CustomerCreateIn struct {
+	FirstName string
+	LastName  string
+	Email     string
+	Note      string
+	Gender    mCustomer.GenderType
+	Birthday  int64
+	Address   mAddress.Address
+	Tags      []string
+	Phone     mAddress.Phone `json:"phone" dc:"电话"`
+}
+
+func (s *sCustomer) Create(in *CustomerCreateIn) (id uint, err error) {
 	// 校验必须至少存在一项
 	if in.FirstName == "" && in.LastName == "" && in.Phone.Num == "" && in.Email == "" {
 		return 0, code.ErrCusterCreateErr

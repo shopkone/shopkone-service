@@ -18,11 +18,23 @@ func NewCustomerApi() *aCustomer {
 	return &aCustomer{}
 }
 
+// 添加客户
 func (*aCustomer) Create(ctx g.Ctx, req *vo.CustomerCreateReq) (res vo.CustomerCreateRes, err error) {
 	auth, err := ctx2.NewCtx(ctx).GetAuth()
 	shop := auth.Shop
 	err = sOrm.NewDb(&auth.Shop.ID).Transaction(func(tx *gorm.DB) error {
-		res.ID, err = sCustomer.NewCustomer(tx, shop.ID).Create(req)
+		in := &sCustomer.CustomerCreateIn{
+			Address:   req.Address,
+			Birthday:  req.Birthday,
+			Email:     req.Email,
+			FirstName: req.FirstName,
+			Gender:    req.Gender,
+			LastName:  req.LastName,
+			Note:      req.Note,
+			Phone:     req.Phone,
+			Tags:      req.Tags,
+		}
+		res.ID, err = sCustomer.NewCustomer(tx, shop.ID).Create(in)
 		return err
 	})
 	return res, err
