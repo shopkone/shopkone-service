@@ -13,13 +13,18 @@ func (s *sProduct) UpdateProductOptions(productId uint, ProductOptions []vo.Prod
 		Delete(&mProduct.ProductOption{}).Error; err != nil {
 		return err
 	}
+
 	// 如果没有options则直接返回
 	if len(ProductOptions) == 0 {
 		return nil
 	}
+
 	// 创建新的 options
 	images := slice.Map(ProductOptions, func(index int, item vo.ProductOption) mProduct.ProductOption {
 		i := mProduct.ProductOption{}
+		item.Values = slice.Filter(item.Values, func(index int, item string) bool {
+			return item != ""
+		})
 		i.Values = item.Values
 		i.Label = item.Label
 		i.ImageId = item.ImageId
