@@ -20,7 +20,7 @@ func (s *sVariant) GenInventoriesByVariants(in GenIn) (res []iInventory.CreateIn
 		return res, nil
 	}
 	if len(in.EnabledLocationIds) == 0 {
-		return res, code.IdMissing
+		return res, code.NoEnabledLocation
 	}
 	variants := in.Variants
 	base := in.Base

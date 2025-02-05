@@ -76,10 +76,10 @@ type ProductListRes struct {
 }
 
 type ProductUpdateReq struct {
-	g.Meta `path:"/product/update" method:"post" tags:"Product" summary:"更新商品"`
-	ProductInfoRes
+	g.Meta             `path:"/product/update" method:"post" tags:"Product" summary:"更新商品"`
 	Variants           []BaseVariantWithId `json:"variants"`
 	EnabledLocationIds []uint              `json:"enabled_location_ids" dc:"启用库存的仓库id"`
+	ProductInfoRes
 }
 type ProductUpdateRes struct {
 }

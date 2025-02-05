@@ -14,4 +14,5 @@ var (
 	IdMissing           = baseError(11, "缺少参数")
 	SystemError         = baseError(12, "系统错误")
 	CacheKeyError       = baseError(13, "缓存键错误")
+	SeoIdMissing        = baseError(14, "缺少SEO ID")
 )

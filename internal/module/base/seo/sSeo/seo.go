@@ -40,7 +40,7 @@ func (s *sSeo) Info(id uint) (seo mSeo.Seo, err error) {
 
 func (s *sSeo) Update(seo mSeo.Seo) (err error) {
 	if seo.ID == 0 {
-		return code.IdMissing
+		return code.SeoIdMissing
 	}
 	err = s.orm.Model(&seo).
 		Where("id = ? and shop_id = ?", seo.ID, s.shopId).

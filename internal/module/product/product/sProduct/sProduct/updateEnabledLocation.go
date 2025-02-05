@@ -27,7 +27,7 @@ func (s *sProduct) UpdateEnabledLocationIds(productId uint, locationIds []uint, 
 		return item.ID
 	})
 	if len(variantIds) == 0 {
-		return code.IdMissing
+		return code.VariantIdLessOne
 	}
 
 	inventoryService := sInventory.NewInventory(s.orm, s.shopId)

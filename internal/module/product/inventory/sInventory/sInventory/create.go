@@ -17,7 +17,7 @@ func (s *sInventory) Create(in []iInventory.CreateInventoryIn, inType mInventory
 		return item.VariantId != 0
 	})
 	if len(noZeroVariantList) != len(in) {
-		s.Error = code.IdMissing
+		s.Error = code.VariantSomeIdRequired
 		return s
 	}
 	// 创建库存

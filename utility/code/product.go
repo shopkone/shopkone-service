@@ -27,4 +27,7 @@ var (
 	ProductNotTrackInventory                     = productError(24, "该商品不跟踪库存")
 	PartProductNoFound                           = productError(25, "部分商品不存在或已被删除")
 	ErrCollectionNotFound                        = productError(26, "商品系列不存在或已被删除")
+	VariantSomeIdRequired                        = productError(27, "变体ID不存在或已被删除")
+	VariantIdLessOne                             = productError(28, "变体ID不能小于1")
+	NoEnabledLocation                            = productError(29, "没有可用的地点")
 )
