@@ -1,11 +1,12 @@
 package sProduct
 
 import (
-	"gorm.io/gorm"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/product/product/iProduct"
 	"shopkone-service/internal/module/product/product/mProduct"
 	"shopkone-service/utility/handle"
+
+	"gorm.io/gorm"
 )
 
 type IProduct interface {
@@ -20,7 +21,7 @@ type IProduct interface {
 	// 更新商品文件
 	UpdateProductFiles(productId uint, fileIds []uint) (err error)
 	// 更新标签图片
-	UpdateLabelImages(productId uint, images []vo.LabelImage) (err error)
+	UpdateProductOptions(productId uint, images []vo.ProductOption) (err error)
 	// ListByIds 批量获取商品信息
 	ListByIds(in vo.ListByIdsReq) (res []vo.ListByIdsRes, err error)
 	// ListByIdsWithoutVariants 批量获取商品信息(不包含变体)

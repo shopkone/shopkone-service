@@ -1,12 +1,13 @@
 package sProduct
 
 import (
-	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/seo/sSeo"
 	"shopkone-service/internal/module/product/product/mProduct"
 	"shopkone-service/internal/module/product/product/sProduct/sTransfer"
 	"shopkone-service/internal/module/product/product/sProduct/sVariant"
+
+	"github.com/duke-git/lancet/v2/slice"
 )
 
 func (s *sProduct) Info(id uint) (res vo.ProductInfoRes, err error) {
@@ -37,17 +38,17 @@ func (s *sProduct) Info(id uint) (res vo.ProductInfoRes, err error) {
 		return item.FileId
 	})
 	// 获取标签图片
-	var labelImages []mProduct.ProductLabelImage
+	var ProductOptions []mProduct.ProductOption
 	if err = s.orm.
 		Where("product_id = ? AND shop_id = ?", id, s.shopId).
-		Find(&labelImages).Error; err != nil {
+		Find(&ProductOptions).Error; err != nil {
 		return vo.ProductInfoRes{}, err
 	}
-	images := slice.Map(labelImages, func(index int, item mProduct.ProductLabelImage) vo.LabelImage {
-		return vo.LabelImage{
+	images := slice.Map(ProductOptions, func(index int, item mProduct.ProductOption) vo.ProductOption {
+		return vo.ProductOption{
 			ImageId: item.ImageId,
 			Label:   item.Label,
-			Value:   item.Value,
+			Values:  item.Values,
 		}
 	})
 	// 组装数据
@@ -60,7 +61,7 @@ func (s *sProduct) Info(id uint) (res vo.ProductInfoRes, err error) {
 	}
 	res.Seo = seo
 	res.Variants = variants
-	res.LabelImages = images
+	res.ProductOptions = images
 	res.FileIds = fileIds
 	return res, err
 }

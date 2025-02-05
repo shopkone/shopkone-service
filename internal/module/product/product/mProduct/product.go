@@ -54,10 +54,10 @@ type ProductFiles struct {
 	Position  uint `gorm:"index;not null"`
 }
 
-type ProductLabelImage struct {
+type ProductOption struct {
 	mOrm.Model
-	ProductId uint   `gorm:"index;not null"`
-	Label     string `gorm:"index;not null"`
-	Value     string `gorm:"index;not null"`
-	ImageId   uint   `gorm:"index"`
+	ProductId uint     `gorm:"index;not null"`
+	Label     string   `gorm:"index;not null"`
+	Values    []string `gorm:"serializer:json"`
+	ImageId   uint     `gorm:"index"`
 }

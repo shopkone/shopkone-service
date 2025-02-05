@@ -51,7 +51,7 @@ var migrate = Migrate{
 	// 商品
 	mProduct.Product{},
 	mProduct.ProductFiles{},
-	mProduct.ProductLabelImage{},
+	mProduct.ProductOption{},
 	mProduct.Supplier{}, // 供应商
 
 	// 集合

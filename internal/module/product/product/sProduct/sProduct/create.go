@@ -54,8 +54,8 @@ func (s *sProduct) Create(in vo.ProductCreateReq, email string) (res vo.ProductC
 		}
 	}
 	// 创建标签图片
-	if len(in.LabelImages) > 0 {
-		if err = s.UpdateLabelImages(data.ID, in.LabelImages); err != nil {
+	if len(in.ProductOptions) > 0 {
+		if err = s.UpdateProductOptions(data.ID, in.ProductOptions); err != nil {
 			return vo.ProductCreateRes{}, err
 		}
 	}

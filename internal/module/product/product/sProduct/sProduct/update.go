@@ -38,7 +38,7 @@ func (s *sProduct) Update(in vo.ProductUpdateReq, handleEmail string) (err error
 		return err
 	}
 	// 更新商品标签图标
-	if err = s.UpdateLabelImages(in.Id, in.LabelImages); err != nil {
+	if err = s.UpdateProductOptions(in.Id, in.ProductOptions); err != nil {
 		return err
 	}
 	// 更新商品信息

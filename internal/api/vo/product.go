@@ -8,10 +8,10 @@ import (
 	"shopkone-service/utility/handle"
 )
 
-type LabelImage struct {
-	Value   string `json:"value"`
-	Label   string `json:"label"`
-	ImageId uint   `json:"image_id"`
+type ProductOption struct {
+	Label   string   `json:"label"`
+	Values  []string `json:"values"`
+	ImageId uint     `json:"image_id"`
 }
 
 type BaseProduct struct {
@@ -29,7 +29,7 @@ type BaseProduct struct {
 	Variants          []BaseVariant            `json:"variants" v:"required" dc:"商品变体"`
 	InventoryTracking bool                     `json:"inventory_tracking"` // 库存跟踪
 	ScheduledAt       int64                    `json:"scheduled_at"`
-	LabelImages       []LabelImage             `json:"label_images"`
+	ProductOptions    []ProductOption          `json:"product_options"`
 	Category          uint                     `json:"category" dc:"商品分类"`
 	Collections       []uint                   `json:"collections"`
 }
