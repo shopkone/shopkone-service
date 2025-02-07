@@ -41,6 +41,22 @@ func (s *sProduct) Update(in vo.ProductUpdateReq, handleEmail string) (err error
 	if err = s.UpdateProductOptions(in.Id, in.ProductOptions); err != nil {
 		return err
 	}
+	// 更新变体
+	variantUpdateIn := iProduct.VariantUpdateIn{
+		List:              in.Variants,
+		ProductId:         info.ID,
+		TrackInventory:    info.InventoryTracking,
+		HandleEmail:       handleEmail,
+		EnableLocationIds: in.EnabledLocationIds,
+	}
+	variants, err := sVariant.NewVariant(s.orm, s.shopId).Update(variantUpdateIn)
+	if err != nil {
+		return err
+	}
+	// 关联系列
+	if err = s.RelativeCollection(in.Collections, info.ID); err != nil {
+		return err
+	}
 	// 更新商品信息
 	data := sTransfer.NewProductTransfer(s.shopId).ProductToModel(in.BaseProduct, true)
 	if data.Status == mProduct.VariantStatusPublished && info.Status != mProduct.VariantStatusPublished {
@@ -49,6 +65,11 @@ func (s *sProduct) Update(in vo.ProductUpdateReq, handleEmail string) (err error
 	} else {
 		data.PublishedAt = nil
 	}
+	variantIDs, err := s.IdsByProduct(data.ID)
+	if err != nil {
+		return err
+	}
+	data.VariantOrder = variantIDs
 	if err = s.orm.Model(&info).
 		Select("title",
 			"description",
@@ -61,24 +82,9 @@ func (s *sProduct) Update(in vo.ProductUpdateReq, handleEmail string) (err error
 			"inventory_tracking",
 			"category",
 			"scheduled_at",
+			"variant_order",
 		).
 		Updates(data).Error; err != nil {
-		return err
-	}
-	// 更新变体
-	variantUpdateIn := iProduct.VariantUpdateIn{
-		List:              in.Variants,
-		ProductId:         data.ID,
-		TrackInventory:    data.InventoryTracking,
-		HandleEmail:       handleEmail,
-		EnableLocationIds: in.EnabledLocationIds,
-	}
-	variants, err := sVariant.NewVariant(s.orm, s.shopId).Update(variantUpdateIn)
-	if err != nil {
-		return err
-	}
-	// 关联系列
-	if err = s.RelativeCollection(in.Collections, data.ID); err != nil {
 		return err
 	}
 	// 更新变体名称（用于关联系列时使用）

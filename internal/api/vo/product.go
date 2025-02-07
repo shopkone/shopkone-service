@@ -9,6 +9,7 @@ import (
 )
 
 type ProductOption struct {
+	Id      uint     `json:"id"`
 	Label   string   `json:"label"`
 	Values  []string `json:"values"`
 	ImageId uint     `json:"image_id"`

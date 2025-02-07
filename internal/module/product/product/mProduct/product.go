@@ -45,6 +45,7 @@ type Product struct {
 	VariantType       VariantType     `gorm:"default:1"`
 	InventoryPolicy   InventoryPolicy `gorm:"default:1"`
 	Category          uint
+	VariantOrder      []uint `gorm:"serializer:json"` // 变体顺序
 }
 
 type ProductFiles struct {

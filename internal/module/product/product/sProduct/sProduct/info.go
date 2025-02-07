@@ -44,11 +44,12 @@ func (s *sProduct) Info(id uint) (res vo.ProductInfoRes, err error) {
 		Find(&ProductOptions).Error; err != nil {
 		return vo.ProductInfoRes{}, err
 	}
-	images := slice.Map(ProductOptions, func(index int, item mProduct.ProductOption) vo.ProductOption {
+	productOptions := slice.Map(ProductOptions, func(index int, item mProduct.ProductOption) vo.ProductOption {
 		return vo.ProductOption{
 			ImageId: item.ImageId,
 			Label:   item.Label,
 			Values:  item.Values,
+			Id:      item.ID,
 		}
 	})
 	// 组装数据
@@ -60,8 +61,16 @@ func (s *sProduct) Info(id uint) (res vo.ProductInfoRes, err error) {
 		return res, err
 	}
 	res.Seo = seo
-	res.Variants = variants
-	res.ProductOptions = images
+	res.Variants = slice.Map(product.VariantOrder, func(index int, id uint) vo.BaseVariant {
+		variant, _ := slice.FindBy(variants, func(index int, item vo.BaseVariant) bool {
+			return id == item.Id
+		})
+		return variant
+	})
+	res.Variants = slice.Filter(res.Variants, func(index int, item vo.BaseVariant) bool {
+		return item.Id != 0
+	})
+	res.ProductOptions = productOptions
 	res.FileIds = fileIds
 	return res, err
 }

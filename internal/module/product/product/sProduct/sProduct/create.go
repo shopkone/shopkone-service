@@ -1,6 +1,7 @@
 package sProduct
 
 import (
+	"github.com/duke-git/lancet/v2/slice"
 	"shopkone-service/internal/api/vo"
 	"shopkone-service/internal/module/base/seo/sSeo"
 	"shopkone-service/internal/module/product/inventory/mInventory"
@@ -58,6 +59,14 @@ func (s *sProduct) Create(in vo.ProductCreateReq, email string) (res vo.ProductC
 		if err = s.UpdateProductOptions(data.ID, in.ProductOptions); err != nil {
 			return vo.ProductCreateRes{}, err
 		}
+	}
+	// 关系商品变体顺序
+	variantIds := slice.Map(variants, func(index int, item mProduct.Variant) uint {
+		return item.ID
+	})
+	if err = s.orm.Model(data).Update("variant_order", variantIds).
+		Error; err != nil {
+		return res, err
 	}
 	// 关联系列
 	if err = s.RelativeCollection(in.Collections, data.ID); err != nil {
