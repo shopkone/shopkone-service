@@ -61,12 +61,7 @@ func (s *sProduct) Info(id uint) (res vo.ProductInfoRes, err error) {
 		return res, err
 	}
 	res.Seo = seo
-	res.Variants = slice.Map(product.VariantOrder, func(index int, id uint) vo.BaseVariant {
-		variant, _ := slice.FindBy(variants, func(index int, item vo.BaseVariant) bool {
-			return id == item.Id
-		})
-		return variant
-	})
+	res.Variants = variants
 	res.Variants = slice.Filter(res.Variants, func(index int, item vo.BaseVariant) bool {
 		return item.Id != 0
 	})

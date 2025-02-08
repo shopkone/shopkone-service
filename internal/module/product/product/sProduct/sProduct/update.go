@@ -65,11 +65,6 @@ func (s *sProduct) Update(in vo.ProductUpdateReq, handleEmail string) (err error
 	} else {
 		data.PublishedAt = nil
 	}
-	variantIDs, err := s.IdsByProduct(data.ID)
-	if err != nil {
-		return err
-	}
-	data.VariantOrder = variantIDs
 	if err = s.orm.Model(&info).
 		Select("title",
 			"description",

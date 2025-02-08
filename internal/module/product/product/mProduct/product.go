@@ -45,7 +45,6 @@ type Product struct {
 	VariantType       VariantType     `gorm:"default:1"`
 	InventoryPolicy   InventoryPolicy `gorm:"default:1"`
 	Category          uint
-	VariantOrder      []uint `gorm:"serializer:json"` // 变体顺序
 }
 
 type ProductFiles struct {
@@ -55,10 +54,15 @@ type ProductFiles struct {
 	Position  uint `gorm:"index;not null"`
 }
 
+type ProductOptionValue struct {
+	ID    uint   `json:"id" gorm:"serializer:json"`
+	Value string `json:"value" gorm:"serializer:json"`
+}
+
 type ProductOption struct {
 	mOrm.Model
-	ProductId uint     `gorm:"index;not null"`
-	Label     string   `gorm:"index;not null"`
-	Values    []string `gorm:"serializer:json"`
-	ImageId   uint     `gorm:"index"`
+	ProductId uint                 `gorm:"index;not null"`
+	Label     string               `gorm:"index;not null"`
+	Values    []ProductOptionValue `gorm:"serializer:json"`
+	ImageId   uint                 `gorm:"index"`
 }
